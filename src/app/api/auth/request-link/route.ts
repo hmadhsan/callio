@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createMagicLink } from '@/lib/auth';
 import { Resend } from 'resend';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
