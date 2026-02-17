@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 
 function slugify(value: string) {
@@ -155,8 +156,8 @@ export async function POST(request: NextRequest) {
           method: endpoint.method,
           path: endpoint.path,
           description: endpoint.description,
-          parameters: endpoint.parameters,
-          responseExample: endpoint.responseExample,
+          parameters: endpoint.parameters as Prisma.InputJsonValue,
+          responseExample: endpoint.responseExample as Prisma.InputJsonValue,
         })),
       });
     }
