@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BetaSignup {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  role      String   // Developer, API Provider, AI Startup, Other
+  company   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  apis     Api[]
+  sessions Session[]
+  apiKeys  ApiKey[]
+
+  @@index([email])
+}
+
+model MagicLinkToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([expiresAt])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Api {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  name             String
+  category         String
+  icon             String
+  featured         Boolean  @default(false)
+  shortDescription String
+  fullDescription  String
+  useCases         Json
+  documentation    String?
+  authentication   String
+  rateLimit        String
+  pricing          String
+  webhook          Boolean  @default(false)
+  openapiJson      Json?
+  providerId       String?
+  provider         User?    @relation(fields: [providerId], references: [id])
+  endpoints        Endpoint[]
+  apiKeys          ApiKey[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([category])
+  @@index([featured])
+  @@index([slug])
+}
+
+model Endpoint {
+  id              String   @id @default(cuid())
+  apiId           String
+  api             Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  method          String
+  path            String
+  description     String
+  parameters      Json
+  responseExample Json
+  createdAt       DateTime @default(now())
+
+  @@index([apiId])
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  apiId     String
+  api       Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  keyHash   String
+  keyLast4  String
+  createdAt DateTime @default(now())
+
+  @@index([apiId])
+  @@index([userId])
+}
