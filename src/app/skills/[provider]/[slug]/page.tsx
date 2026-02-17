@@ -5,11 +5,19 @@ import { getApiBySlug, getAllApis } from '@/lib/apiService';
 import AddToAgentButton from '@/components/AddToAgentButton';
 
 export async function generateStaticParams() {
-  const apis = await getAllApis();
-  return apis.map((api) => ({
-    provider: 'callio',
-    slug: api.slug,
-  }));
+  try {
+    if (!process.env.DATABASE_URL) {
+      return [];
+    }
+
+    const apis = await getAllApis();
+    return apis.map((api) => ({
+      provider: 'callio',
+      slug: api.slug,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 type SkillParams = { provider: string; slug: string };
