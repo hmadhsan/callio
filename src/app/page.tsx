@@ -1,10 +1,15 @@
-import { ChevronRight, Code2, Zap, Lock, GitBranch, Terminal, Github, Twitter } from 'lucide-react';
+import { ChevronRight, Code2, Zap, Lock, GitBranch, Terminal, Github, Twitter, Key } from 'lucide-react';
 import Link from 'next/link';
 import { getFeaturedApis } from '@/lib/apiService';
 import BetaSignupForm from '@/components/BetaSignupForm';
+import { cookies } from 'next/headers';
+import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 
 export default async function Home() {
   const featuredApis = await getFeaturedApis();
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  const user = await getUserFromSessionToken(token);
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
@@ -17,8 +22,19 @@ export default async function Home() {
             </div>
             <span className="text-lg font-bold">Callio</span>
           </div>
-          <div className="text-xs text-gray-500">
-            Early Access Beta
+          <div className="flex items-center gap-4">
+            {user && (
+              <Link 
+                href="/keys" 
+                className="flex items-center gap-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                <Key className="w-4 h-4" />
+                <span className="hidden sm:inline">My Keys</span>
+              </Link>
+            )}
+            <div className="text-xs text-gray-500">
+              Early Access Beta
+            </div>
           </div>
         </div>
       </nav>

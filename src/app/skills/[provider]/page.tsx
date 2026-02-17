@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Code2, Search } from 'lucide-react';
+import { Code2, Search, Key } from 'lucide-react';
 import { getAllApis } from '@/lib/apiService';
+import { cookies } from 'next/headers';
+import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 
 export async function generateStaticParams() {
   return [{ provider: 'callio' }];
@@ -18,6 +20,10 @@ export default async function SkillsProviderPage({ params }: { params: ProviderP
 
   const apis = await getAllApis();
   const categories = Array.from(new Set(apis.map((api) => api.category)));
+  
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  const user = await getUserFromSessionToken(token);
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
@@ -31,7 +37,18 @@ export default async function SkillsProviderPage({ params }: { params: ProviderP
               Callio
             </Link>
           </div>
-          <div className="text-xs text-gray-500">API Marketplace</div>
+          <div className="flex items-center gap-4">
+            {user && (
+              <Link 
+                href="/keys" 
+                className="flex items-center gap-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                <Key className="w-4 h-4" />
+                <span className="hidden sm:inline">My Keys</span>
+              </Link>
+            )}
+            <div className="text-xs text-gray-500">API Marketplace</div>
+          </div>
         </div>
       </nav>
 

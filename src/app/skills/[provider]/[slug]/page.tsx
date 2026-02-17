@@ -137,80 +137,15 @@ export default async function SkillDetailPage({ params }: { params: SkillParams 
         </div>
       </section>
 
-      {/* API Endpoints */}
-      <section className="border-b border-gray-200 py-12 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold mb-6">API Endpoints</h2>
-          <div className="space-y-4">
-            {api.endpoints.map((endpoint, idx) => (
-              <div key={idx} className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-start gap-4 mb-4">
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-bold ${
-                      endpoint.method === 'GET'
-                        ? 'bg-green-100 text-green-700'
-                        : endpoint.method === 'POST'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-orange-100 text-orange-700'
-                    }`}
-                  >
-                    {endpoint.method}
-                  </span>
-                  <code className="flex-1 text-sm font-mono text-gray-900 bg-gray-100 px-3 py-1 rounded">
-                    {endpoint.path}
-                  </code>
-                </div>
-                <p className="text-gray-700 mb-4">{endpoint.description}</p>
-
-                {endpoint.parameters.length > 0 && (
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-sm mb-2">Parameters</h4>
-                    <div className="space-y-2">
-                      {endpoint.parameters.map((param, pidx) => (
-                        <div key={pidx} className="flex gap-2 text-sm">
-                          <code className="font-mono text-blue-600">{param.name}</code>
-                          <span className="text-gray-400">·</span>
-                          <span className="text-gray-600">{param.type}</span>
-                          {param.required && (
-                            <>
-                              <span className="text-gray-400">·</span>
-                              <span className="text-red-600 font-medium">required</span>
-                            </>
-                          )}
-                          <span className="text-gray-400">·</span>
-                          <span className="text-gray-600">{param.description}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div>
-                  <h4 className="font-semibold text-sm mb-2">Response Example</h4>
-                  <pre className="bg-gray-900 text-gray-100 p-4 rounded text-xs overflow-x-auto">
-                    {JSON.stringify(endpoint.responseExample, null, 2)}
-                  </pre>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="border-t border-gray-200 py-16 bg-gray-50">
+      <section className="py-16 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to integrate {api.name}?</h2>
           <p className="text-lg text-gray-600 mb-8">
-            Add this API to your agent in seconds and start building powerful automations.
+            Generate your API key and start building in minutes
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch">
-            <div className="w-full sm:w-auto">
-              <AddToAgentButton
-                apiSlug={api.slug}
-                buttonClassName="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
-              />
-            </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <AddToAgentButton apiSlug={api.slug} />
             <Link
               href="/skills/callio"
               className="px-8 py-4 border border-gray-300 text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition text-center"
@@ -220,82 +155,6 @@ export default async function SkillDetailPage({ params }: { params: SkillParams 
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 py-12 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>
-                  <Link href="/skills/callio" className="hover:text-gray-900">
-                    APIs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/" className="hover:text-gray-900">
-                    Pricing
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/" className="hover:text-gray-900">
-                    Documentation
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>
-                  <Link href="/" className="hover:text-gray-900">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/" className="hover:text-gray-900">
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>
-                  <Link href="/" className="hover:text-gray-900">
-                    API Status
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/" className="hover:text-gray-900">
-                    Support
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li>
-                  <Link href="/" className="hover:text-gray-900">
-                    Privacy
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/" className="hover:text-gray-900">
-                    Terms
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-600">
-            © 2026 Callio. All rights reserved.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

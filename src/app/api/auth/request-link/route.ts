@@ -20,7 +20,15 @@ export async function POST(request: NextRequest) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     const loginUrl = `${appUrl}/auth/callback?token=${token}`;
 
+    const isProd = process.env.NODE_ENV === 'production';
     if (!process.env.RESEND_API_KEY || !process.env.RESEND_FROM_EMAIL) {
+      if (isProd) {
+        return NextResponse.json(
+          { error: 'Email service not configured.' },
+          { status: 500 }
+        );
+      }
+
       return NextResponse.json({
         success: true,
         loginUrl,
@@ -29,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const result = await resend.emails.send({
+    await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL,
       to: email,
       subject: 'Your Callio sign-in link',
@@ -43,13 +51,16 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    console.log('Resend result:', result);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Magic link error:', error);
-    return NextResponse.json({ 
-      error: 'Unable to send magic link', 
-      details: error instanceof Error ? error.message : 'Unknown error' 
-    }, { status: 500 });
+    const isProd = process.env.NODE_ENV === 'production';
+    return NextResponse.json(
+      {
+        error: 'Unable to send magic link',
+        details: isProd ? undefined : (error instanceof Error ? error.message : 'Unknown error'),
+      },
+      { status: 500 }
+    );
   }
 }
