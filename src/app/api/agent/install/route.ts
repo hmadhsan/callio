@@ -3,6 +3,9 @@ import prisma from '@/lib/prisma';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 import { generateApiKey } from '@/lib/keys';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   const user = await getUserFromSessionToken(token);
