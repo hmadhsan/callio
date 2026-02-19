@@ -94,6 +94,12 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
             <div className="text-sm font-semibold text-green-900 mb-3">How to use this key:</div>
             <div className="space-y-3 text-sm text-gray-700">
               <div className="bg-white rounded p-3 border border-green-100">
+                <div className="font-medium text-gray-900 mb-1">0. Save your provider key (one time)</div>
+                <p className="text-xs text-gray-600">
+                  Add your provider API key below so Callio can forward requests.
+                </p>
+              </div>
+              <div className="bg-white rounded p-3 border border-green-100">
                 <div className="font-medium text-gray-900 mb-1">1. Add to your AI agent config:</div>
                 <pre className="text-xs bg-gray-900 text-gray-100 p-2 rounded mt-2 overflow-x-auto">
 {`{
@@ -104,21 +110,18 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
               </div>
               
               <div className="bg-white rounded p-3 border border-green-100">
-                <div className="font-medium text-gray-900 mb-1">2. Use in API requests:</div>
+                <div className="font-medium text-gray-900 mb-1">2. Call via Callio proxy:</div>
                 <pre className="text-xs bg-gray-900 text-gray-100 p-2 rounded mt-2 overflow-x-auto">
 {`curl -H "Authorization: Bearer ${key}" \\
-     https://api.example.com/endpoint`}
+     https://YOUR_DOMAIN/api/proxy/${apiSlug}/v1/endpoint`}
                 </pre>
               </div>
 
               <div className="bg-white rounded p-3 border border-green-100">
-                <div className="font-medium text-gray-900 mb-1">3. Or in your code:</div>
+                <div className="font-medium text-gray-900 mb-1">3. Or target a full URL:</div>
                 <pre className="text-xs bg-gray-900 text-gray-100 p-2 rounded mt-2 overflow-x-auto">
-{`const response = await fetch(apiUrl, {
-  headers: {
-    'Authorization': 'Bearer ${key}'
-  }
-});`}
+{`curl -H "Authorization: Bearer ${key}" \\
+     "https://YOUR_DOMAIN/api/proxy/${apiSlug}?target=https://api.example.com/endpoint"`}
                 </pre>
               </div>
             </div>

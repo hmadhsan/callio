@@ -26,14 +26,20 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
+  firstName String?
+  lastName  String?
+  password  String?  // Hashed password for email/password auth
+  googleId  String?  // For Google OAuth
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   apis     Api[]
   sessions Session[]
   apiKeys  ApiKey[]
+  apiCredentials ApiCredential[]
 
   @@index([email])
+  @@index([googleId])
 }
 
 model MagicLinkToken {
@@ -70,15 +76,23 @@ model Api {
   fullDescription  String
   useCases         Json
   documentation    String?
+  baseUrl          String?
+  providerApiKey   String?
+  providerAuthHeader String?
+  providerAuthScheme String?
+  allowUnauthenticated Boolean @default(false)
   authentication   String
   rateLimit        String
   pricing          String
   webhook          Boolean  @default(false)
+  setupGuide       String?
+  setupUrl         String?
   openapiJson      Json?
   providerId       String?
   provider         User?    @relation(fields: [providerId], references: [id])
   endpoints        Endpoint[]
   apiKeys          ApiKey[]
+  credentials      ApiCredential[]
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -108,10 +122,25 @@ model ApiKey {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name      String
-  keyHash   String
+  keyHash   String   @unique
   keyLast4  String
   createdAt DateTime @default(now())
 
+  @@index([apiId])
+  @@index([userId])
+}
+
+model ApiCredential {
+  id          String   @id @default(cuid())
+  apiId       String
+  api         Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerKey String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, apiId])
   @@index([apiId])
   @@index([userId])
 }

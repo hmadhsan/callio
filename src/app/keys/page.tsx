@@ -3,7 +3,8 @@ import { cookies } from 'next/headers';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { Key, ExternalLink, Trash2 } from 'lucide-react';
+import { Code2, Link2 } from 'lucide-react';
+import KeyTableRow from '@/components/KeyTableRow';
 
 export default async function KeysPage() {
   const cookieStore = await cookies();
@@ -16,119 +17,117 @@ export default async function KeysPage() {
 
   const apiKeys = await prisma.apiKey.findMany({
     where: { userId: user.id },
-    include: {
-      api: {
-        select: {
-          name: true,
-          slug: true,
-          icon: true,
-        }
-      }
-    },
     orderBy: { createdAt: 'desc' },
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <Link 
-            href="/" 
-            className="text-purple-600 hover:text-purple-700 mb-4 inline-block"
-          >
-            ← Back to Home
-          </Link>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">
-            My API Keys
-          </h1>
-          <p className="text-gray-600">
-            Manage your generated API keys for installed agents
-          </p>
+    <div className="min-h-screen bg-white">
+      {/* Navbar */}
+      <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
+              <div className="w-7 h-7 bg-blue-600 rounded flex items-center justify-center">
+                <Code2 className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-lg font-bold">Callio</span>
+            </Link>
+            <div className="hidden md:flex items-center gap-6">
+              <Link 
+                href="/skills" 
+                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Skills
+              </Link>
+              <Link 
+                href="/browse" 
+                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                APIs
+              </Link>
+              <Link 
+                href="/docs" 
+                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Docs
+              </Link>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/keys" className="text-sm text-gray-700 hover:text-blue-600 transition-colors">
+              My Keys
+            </Link>
+            <Link 
+              href="/api/auth/logout" 
+              className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Sign out
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
+          <Link href="/dashboard" className="hover:text-gray-900">Dashboard</Link>
+          <span>›</span>
+          <span className="text-gray-900 font-medium">API Keys</span>
         </div>
 
-        {/* Keys List */}
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-3xl font-semibold text-gray-900">API Keys</h1>
+              <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">Personal</span>
+            </div>
+            <p className="text-gray-600">Manage your personal API keys for programmatic access to Callio</p>
+          </div>
+          <Link 
+            href="/api/keys/generate"
+            className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-800 transition"
+          >
+            + Generate New Key
+          </Link>
+        </div>
+
+        {/* Keys Table or Empty State */}
         {apiKeys.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-            <Key className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">No API Keys Yet</h2>
-            <p className="text-gray-600 mb-6">
-              Browse the marketplace and click "Add to Agent" to generate your first API key
-            </p>
-            <Link 
-              href="/skills/callio"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:opacity-90 transition-opacity"
+          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+            <div className="flex justify-center mb-4">
+              <Link2 className="w-12 h-12 text-gray-300" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">No API Keys</h2>
+            <p className="text-gray-600 mb-6">Generate your first API key to start using the Callio API.</p>
+            <Link
+              href="/api/keys/generate"
+              className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-800 transition"
             >
-              Browse APIs
-              <ExternalLink className="w-4 h-4" />
+              + Generate Your First Key
             </Link>
           </div>
         ) : (
-          <div className="grid gap-4">
-            {apiKeys.map((apiKey) => (
-              <div 
-                key={apiKey.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4 flex-1">
-                    {/* API Icon */}
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
-                      {apiKey.api.icon}
-                    </div>
-
-                    {/* API Info */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {apiKey.api.name}
-                      </h3>
-                      
-                      {/* Key Display */}
-                      <div className="flex items-center gap-2 mb-2">
-                        <code className="text-sm bg-gray-100 px-3 py-1 rounded border border-gray-200 font-mono">
-                          callio_••••••••{apiKey.keyLast4}
-                        </code>
-                        <span className="text-xs text-gray-500">
-                          Created {new Date(apiKey.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
-
-                      <Link
-                        href={`/skills/callio/${apiKey.api.slug}`}
-                        className="text-sm text-purple-600 hover:text-purple-700 inline-flex items-center gap-1"
-                      >
-                        View API details
-                        <ExternalLink className="w-3 h-3" />
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <form action={`/api/keys/${apiKey.id}/delete`} method="POST">
-                    <button
-                      type="submit"
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Revoke this API key"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </form>
-                </div>
-              </div>
-            ))}
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">API Key</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Created</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Used</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {apiKeys.map((apiKey) => (
+                  <KeyTableRow key={apiKey.id} apiKey={apiKey} />
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
-
-        {/* Info Box */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
-          <h3 className="font-semibold text-blue-900 mb-2">🔒 Security Note</h3>
-          <ul className="text-sm text-blue-800 space-y-1">
-            <li>• API keys are shown only once when generated - save them securely</li>
-            <li>• Keys are hashed and stored securely in the database</li>
-            <li>• Revoking a key will immediately disable access</li>
-            <li>• Never share your API keys publicly or commit them to version control</li>
-          </ul>
-        </div>
       </div>
     </div>
   );

@@ -1,12 +1,13 @@
 import { ChevronRight, Code2, Zap, Lock, GitBranch, Terminal, Github, Twitter, Key } from 'lucide-react';
 import Link from 'next/link';
-import { getFeaturedApis } from '@/lib/apiService';
+import { getAllApis } from '@/lib/apiService';
 import BetaSignupForm from '@/components/BetaSignupForm';
 import { cookies } from 'next/headers';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
+import SkillsApisTabs from '@/components/SkillsApisTabs';
 
 export default async function Home() {
-  const featuredApis = await getFeaturedApis();
+  const allApis = await getAllApis();
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE)?.value;
   const user = await getUserFromSessionToken(token);
@@ -15,26 +16,67 @@ export default async function Home() {
     <div className="min-h-screen bg-white text-gray-900">
       {/* Navigation */}
       <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-blue-600 rounded flex items-center justify-center">
-              <Code2 className="w-4 h-4" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
+              <div className="w-7 h-7 bg-blue-600 rounded flex items-center justify-center">
+                <Code2 className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-lg font-bold">Callio</span>
+            </Link>
+            <div className="hidden md:flex items-center gap-6">
+              <Link 
+                href="/skills" 
+                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Skills
+              </Link>
+              <Link 
+                href="/browse" 
+                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                APIs
+              </Link>
+              <Link 
+                href="/docs" 
+                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Docs
+              </Link>
             </div>
-            <span className="text-lg font-bold">Callio</span>
           </div>
           <div className="flex items-center gap-4">
-            {user && (
-              <Link 
-                href="/keys" 
-                className="flex items-center gap-2 text-sm text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                <Key className="w-4 h-4" />
-                <span className="hidden sm:inline">My Keys</span>
-              </Link>
+            {user ? (
+              <>
+                <Link 
+                  href="/keys" 
+                  className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  My Keys
+                </Link>
+                <Link 
+                  href="/api/auth/logout" 
+                  className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  Sign out
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link 
+                  href="/login" 
+                  className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  Sign in
+                </Link>
+                <Link 
+                  href="/signup" 
+                  className="text-sm px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                >
+                  Get started
+                </Link>
+              </>
             )}
-            <div className="text-xs text-gray-500">
-              Early Access Beta
-            </div>
           </div>
         </div>
       </nav>
@@ -77,7 +119,7 @@ export default async function Home() {
               <p className="text-sm text-gray-500 mb-4">Trusted by AI builders</p>
               <div className="flex justify-center gap-8 flex-wrap">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">50+</div>
+                  <div className="text-2xl font-bold text-gray-900">{allApis.length}</div>
                   <div className="text-xs text-gray-600">APIs Available</div>
                 </div>
                 <div className="text-center">
@@ -94,36 +136,69 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Featured APIs Section */}
-      <section className="border-t border-gray-200 py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Featured APIs</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Explore the most popular API integrations on Callio. Add any to your agent in minutes.
-            </p>
-          </div>
-          
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {featuredApis.map((api) => (
-              <Link key={api.id} href={`/skills/callio/${api.slug}`}>
-                <div className="p-5 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition cursor-pointer group">
-                  <div className="text-3xl mb-3 group-hover:scale-110 transition">
-                    {api.icon}
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">{api.name}</h3>
-                  <p className="text-sm text-gray-600">{api.description}</p>
-                </div>
-              </Link>
-            ))}
+      {/* Skills and APIs Tabs */}
+      <SkillsApisTabs apis={allApis.map(api => ({
+        id: api.id,
+        name: api.name,
+        slug: api.slug,
+        icon: api.icon,
+        description: api.shortDescription,
+        category: api.category
+      }))} />
+
+      {/* Quick Start Guide */}
+      <section className="border-t border-gray-200 py-20 bg-blue-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Get Started in 30 Seconds</h2>
+            <p className="text-lg text-gray-600">Three simple steps to access any API</p>
           </div>
 
-          <div className="text-center mt-12">
-            <Link href="/skills/callio">
-              <button className="px-6 py-2 bg-white border border-gray-300 text-gray-900 font-medium rounded-lg hover:bg-gray-50 transition">
-                Browse All 50+ APIs
-              </button>
-            </Link>
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+                <span className="text-white font-bold text-xl">1</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">Sign Up Free</h3>
+              <p className="text-gray-600">Create your account and get your Callio API key instantly</p>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+              <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mb-4">
+                <span className="text-white font-bold text-xl">2</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">Pick an API</h3>
+              <p className="text-gray-600">Browse our marketplace and choose from 50+ APIs</p>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
+              <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mb-4">
+                <span className="text-white font-bold text-xl">3</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">Start Calling</h3>
+              <p className="text-gray-600">Use your Callio key to call any API through our proxy</p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Terminal className="w-5 h-5 text-gray-600" />
+              <span className="text-sm font-semibold text-gray-600">EXAMPLE REQUEST</span>
+            </div>
+            <pre className="bg-gray-900 text-green-400 p-6 rounded-lg overflow-x-auto text-sm">
+{`curl -X GET \\
+  'https://callio.app/api/proxy/search-discovery/search?q=AI' \\
+  -H 'Authorization: Bearer YOUR_CALLIO_KEY'`}
+            </pre>
+            <div className="mt-4 flex items-center justify-between">
+              <p className="text-sm text-gray-600">One key. All APIs. Zero complexity.</p>
+              <Link 
+                href="/docs" 
+                className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1"
+              >
+                View Docs <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -43,6 +43,7 @@ export interface ApiDetail {
   pricing: string;
   documentation: string | null;
   webhook: boolean;
+  baseUrl: string | null;
 }
 
 export async function getFeaturedApis(): Promise<FeaturedApiCard[]> {
@@ -121,5 +122,6 @@ export async function getApiBySlug(slug: string): Promise<ApiDetail | null> {
     pricing: api.pricing,
     documentation: api.documentation,
     webhook: api.webhook,
+    baseUrl: api.baseUrl,
   };
 }

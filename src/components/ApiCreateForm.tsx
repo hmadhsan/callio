@@ -10,6 +10,8 @@ export default function ApiCreateForm() {
   const [shortDescription, setShortDescription] = useState('');
   const [fullDescription, setFullDescription] = useState('');
   const [documentation, setDocumentation] = useState('');
+  const [baseUrl, setBaseUrl] = useState('');
+  const [allowUnauthenticated, setAllowUnauthenticated] = useState(false);
   const [authentication, setAuthentication] = useState('API Key (Bearer token)');
   const [rateLimit, setRateLimit] = useState('');
   const [pricing, setPricing] = useState('');
@@ -37,6 +39,8 @@ export default function ApiCreateForm() {
           shortDescription,
           fullDescription,
           documentation,
+          baseUrl,
+          allowUnauthenticated,
           authentication,
           rateLimit,
           pricing,
@@ -64,6 +68,8 @@ export default function ApiCreateForm() {
       setShortDescription('');
       setFullDescription('');
       setDocumentation('');
+      setBaseUrl('');
+      setAllowUnauthenticated(false);
       setAuthentication('API Key (Bearer token)');
       setRateLimit('');
       setPricing('');
@@ -119,6 +125,29 @@ export default function ApiCreateForm() {
             placeholder="https://docs.example.com"
           />
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Base URL (for proxy)</label>
+        <input
+          value={baseUrl}
+          onChange={(e) => setBaseUrl(e.target.value)}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+          placeholder="https://api.provider.com"
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          Optional. If set, Callio proxy will forward requests to this base URL.
+        </p>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <input
+          type="checkbox"
+          checked={allowUnauthenticated}
+          onChange={(e) => setAllowUnauthenticated(e.target.checked)}
+          className="h-4 w-4"
+        />
+        <span className="text-sm text-gray-700">Public API (no provider key required)</span>
       </div>
 
       <div>
