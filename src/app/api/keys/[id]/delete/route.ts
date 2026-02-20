@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
-import { redirect } from 'next/navigation';
 
 export async function POST(
   request: NextRequest,
@@ -35,7 +34,7 @@ export async function POST(
       where: { id }
     });
 
-    return NextResponse.redirect(new URL('/keys', request.url));
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Error deleting API key:', error);
     return NextResponse.json({ error: 'Failed to delete API key' }, { status: 500 });

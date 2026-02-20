@@ -10,14 +10,17 @@ function generateApiKey() {
   return 'callio_' + randomBytes(32).toString('hex');
 }
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
 
   if (!user) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
+    const body = await request.json();
+    const name = body.name?.trim() || 'callio';
+    
     const key = generateApiKey();
     
     const apiKey = await prisma.apiKey.create({
@@ -25,14 +28,13 @@ export async function GET(request: NextRequest) {
         userId: user.id,
         key: key,
         keyLast4: key.slice(-4),
-        name: 'callio',
+        name: name,
       },
     });
 
-    // Redirect back to keys page
-    return NextResponse.redirect(new URL('/keys', request.url));
+    return NextResponse.json({ success: true, key: apiKey }, { status: 200 });
   } catch (error) {
     console.error('Error generating API key:', error);
-    return NextResponse.redirect(new URL('/keys?error=failed-to-generate', request.url));
+    return NextResponse.json({ error: 'Failed to generate key' }, { status: 500 });
   }
 }

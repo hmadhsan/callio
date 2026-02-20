@@ -117,12 +117,12 @@ model Endpoint {
 
 model ApiKey {
   id        String   @id @default(cuid())
-  apiId     String
-  api       Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  apiId     String?
+  api       Api?     @relation(fields: [apiId], references: [id], onDelete: Cascade)
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name      String
-  keyHash   String   @unique
+  key       String   @unique
   keyLast4  String
   createdAt DateTime @default(now())
 

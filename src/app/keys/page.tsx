@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { Code2, Link2 } from 'lucide-react';
 import KeyTableRow from '@/components/KeyTableRow';
+import GenerateKeyForm from '@/components/GenerateKeyForm';
 
 export default async function KeysPage() {
   const cookieStore = await cookies();
@@ -84,13 +85,10 @@ export default async function KeysPage() {
             </div>
             <p className="text-gray-600">Manage your personal API keys for programmatic access to Callio</p>
           </div>
-          <Link 
-            href="/api/keys/generate"
-            className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-800 transition"
-          >
-            + Generate New Key
-          </Link>
         </div>
+
+        {/* Generate New Key Form */}
+        <GenerateKeyForm />
 
         {/* Keys Table or Empty State */}
         {apiKeys.length === 0 ? (
@@ -100,12 +98,6 @@ export default async function KeysPage() {
             </div>
             <h2 className="text-lg font-semibold text-gray-900 mb-2">No API Keys</h2>
             <p className="text-gray-600 mb-6">Generate your first API key to start using the Callio API.</p>
-            <Link
-              href="/api/keys/generate"
-              className="inline-block px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-800 transition"
-            >
-              + Generate Your First Key
-            </Link>
           </div>
         ) : (
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
