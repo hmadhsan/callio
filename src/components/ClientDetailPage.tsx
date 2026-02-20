@@ -7,6 +7,7 @@ import AddToAgentButton from '@/components/AddToAgentButton';
 import ProviderKeyForm from '@/components/ProviderKeyForm';
 import CodeExamples from '@/components/CodeExamples';
 import ApiPlayground from '@/components/ApiPlayground';
+import UserNav from '@/components/UserNav';
 
 interface Parameter {
   name: string;
@@ -83,20 +84,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
               </Link>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <Link 
-              href="/login" 
-              className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
-            >
-              Sign in
-            </Link>
-            <Link 
-              href="/signup" 
-              className="text-sm px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
-            >
-              Get started
-            </Link>
-          </div>
+          <UserNav />
         </div>
       </nav>
 

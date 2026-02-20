@@ -5,6 +5,7 @@ import {
   Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow
 } from 'lucide-react';
 import WaitlistForm from '@/components/WaitlistForm';
+import UserNav from '@/components/UserNav';
 
 function CallioLogo({ size = 36 }: { size?: number }) {
   return (
@@ -86,14 +87,8 @@ export default function Home() {
             <Link href="/pricing" className="hover:text-[var(--accent)] transition">Pricing</Link>
             <Link href="/docs" className="hover:text-[var(--accent)] transition">Docs</Link>
             <Link href="/how-it-works" className="hover:text-[var(--accent)] transition">How it works</Link>
-            <Link href="/login" className="text-[var(--muted)] hover:text-[var(--ink)] transition">Log in</Link>
           </nav>
-          <Link
-            href="/signup"
-            className="text-sm font-semibold px-4 py-2 rounded-full bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)] transition"
-          >
-            Get Started
-          </Link>
+          <UserNav variant="landing" />
         </div>
       </header>
 

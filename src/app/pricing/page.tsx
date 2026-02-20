@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Check, Loader2 } from 'lucide-react';
+import UserNav from '@/components/UserNav';
 
 const plans = [
   {
@@ -164,9 +165,7 @@ export default function PricingPage() {
             <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Browse</Link>
             <Link href="/docs" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Docs</Link>
             <Link href="/dashboard" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Dashboard</Link>
-            <Link href="/login" className="text-sm px-4 py-1.5 bg-[var(--accent)] text-white rounded-lg hover:bg-[var(--accent-strong)] transition">
-              Sign In
-            </Link>
+            <UserNav />
           </div>
         </div>
       </nav>

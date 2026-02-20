@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getAllApis } from '@/lib/apiService';
 import { Search, ArrowRight, Filter } from 'lucide-react';
+import UserNav from '@/components/UserNav';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +27,7 @@ export default async function BrowsePage() {
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Dashboard</Link>
-            <Link href="/login" className="text-sm px-4 py-1.5 bg-[var(--accent)] text-white rounded-lg hover:bg-[var(--accent-strong)] transition">Sign In</Link>
+            <UserNav />
           </div>
         </div>
       </nav>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Terminal, Key, ArrowRight, Layers, Zap, Shield, Code2 } from 'lucide-react';
+import UserNav from '@/components/UserNav';
 
 export default function DocsPage() {
   return (
@@ -13,7 +14,7 @@ export default function DocsPage() {
           <div className="flex items-center gap-4">
             <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Browse</Link>
             <Link href="/dashboard" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Dashboard</Link>
-            <Link href="/login" className="text-sm px-4 py-1.5 bg-[var(--accent)] text-white rounded-lg hover:bg-[var(--accent-strong)] transition">Sign In</Link>
+            <UserNav />
           </div>
         </div>
       </nav>
