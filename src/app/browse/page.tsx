@@ -54,40 +54,30 @@ export default async function BrowsePage() {
           </div>
         </div>
 
-        {/* API Grid by Category */}
-        {categoryList.map(([category, categoryApis]) => (
-          <div key={category} className="mb-12">
-            <div className="flex items-center gap-3 mb-5">
-              <h2 className="text-xl font-semibold">{category}</h2>
-              <span className="text-xs font-mono bg-[var(--soft)] text-[var(--muted)] px-2 py-0.5 rounded-full">
-                {categoryApis.length}
-              </span>
-            </div>
-            <div className="flex flex-col gap-3">
-              {categoryApis.map((api) => (
-                <Link
-                  key={api.id}
-                  href={`/skills/callio/${api.slug}`}
-                  className="group bg-white rounded-xl border border-[var(--line)] p-5 hover:border-[var(--accent)] hover:shadow-md transition-all flex items-center gap-5"
-                >
-                  <span className="text-3xl flex-shrink-0">{api.icon}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold group-hover:text-[var(--accent)] transition">{api.name}</h3>
-                      <span className="text-xs text-[var(--muted)] font-mono">callio/{api.slug}</span>
-                    </div>
-                    <p className="text-sm text-[var(--muted)] line-clamp-1">{api.shortDescription}</p>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-[var(--muted)] flex-shrink-0">
-                    <span className="bg-[var(--soft)] px-2 py-0.5 rounded">{api.authentication}</span>
-                    <span className="bg-[var(--soft)] px-2 py-0.5 rounded">{api.endpointsCount} endpoints</span>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-[var(--muted)] group-hover:text-[var(--accent)] transition flex-shrink-0" />
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
+        {/* All APIs Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {apis.map((api) => (
+            <Link
+              key={api.id}
+              href={`/skills/callio/${api.slug}`}
+              className="group bg-white rounded-xl border border-[var(--line)] p-5 hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col"
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <span className="text-3xl">{api.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold group-hover:text-[var(--accent)] transition truncate">{api.name}</h3>
+                  <span className="text-xs text-[var(--muted)] font-mono">callio/{api.slug}</span>
+                </div>
+              </div>
+              <p className="text-sm text-[var(--muted)] line-clamp-2 mb-4 flex-1">{api.shortDescription}</p>
+              <div className="flex items-center gap-2 text-xs text-[var(--muted)] flex-wrap">
+                <span className="bg-[var(--soft)] px-2 py-0.5 rounded font-medium">{api.category}</span>
+                <span className="bg-[var(--soft)] px-2 py-0.5 rounded">{api.authentication}</span>
+                <span className="bg-[var(--soft)] px-2 py-0.5 rounded">{api.endpointsCount} endpoints</span>
+              </div>
+            </Link>
+          ))}
+        </div>
 
         {apis.length === 0 && (
           <div className="text-center py-20">
