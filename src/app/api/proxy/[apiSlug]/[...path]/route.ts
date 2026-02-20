@@ -160,8 +160,26 @@ async function handler(
       },
     }).catch((err: unknown) => console.error('Usage record error:', err));
 
-    // Return the upstream response
+    // Return the upstream response — intercept provider auth errors for better messaging
     const responseBody = await upstream.text();
+    
+    // If upstream returned 401/403 with auth error, it likely means the stored provider key is wrong
+    if (upstream.status === 401 || upstream.status === 403) {
+      try {
+        const errorData = JSON.parse(responseBody);
+        const errorMsg = errorData?.error?.message || errorData?.message || '';
+        if (errorMsg.includes('Incorrect API key') || errorMsg.includes('invalid_api_key') || errorMsg.includes('Invalid API Key')) {
+          return NextResponse.json({
+            error: 'Your saved provider key is invalid or expired. Please re-save the correct provider key on the API detail page.',
+            code: 'PROVIDER_KEY_INVALID',
+            upstream_error: errorMsg,
+          }, { status: 403 });
+        }
+      } catch {
+        // Not JSON, just pass through
+      }
+    }
+    
     const responseHeaders = new Headers();
     responseHeaders.set('content-type', upstream.headers.get('content-type') || 'application/json');
     responseHeaders.set('x-callio-proxy', 'true');

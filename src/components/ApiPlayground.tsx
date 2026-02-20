@@ -94,8 +94,20 @@ export default function ApiPlayground({
         }, {} as Record<string, string>);
 
       if (Object.keys(bodyParams).length > 0) {
+        // Parse JSON/number values for curl preview too
+        const parsedBody: Record<string, unknown> = {};
+        for (const [k, v] of Object.entries(bodyParams)) {
+          const t = v.trim();
+          if ((t.startsWith('[') && t.endsWith(']')) || (t.startsWith('{') && t.endsWith('}'))) {
+            try { parsedBody[k] = JSON.parse(t); continue; } catch { /* keep string */ }
+          }
+          if (/^-?\d+(\.\d+)?$/.test(t)) { parsedBody[k] = Number(t); continue; }
+          if (t === 'true') { parsedBody[k] = true; continue; }
+          if (t === 'false') { parsedBody[k] = false; continue; }
+          parsedBody[k] = v;
+        }
         curl += ` \\`;
-        curl += `\n  -d '${JSON.stringify(bodyParams)}'`;
+        curl += `\n  -d '${JSON.stringify(parsedBody)}'`;
       }
     }
 
@@ -119,6 +131,30 @@ export default function ApiPlayground({
         path = path.replace(`{${key}}`, value);
       });
 
+      // Build the request body, parsing JSON/number values from string inputs
+      let requestBody: string | undefined;
+      if (['POST', 'PUT', 'PATCH'].includes(selectedEndpoint.method)) {
+        const parsed: Record<string, unknown> = {};
+        for (const [key, value] of Object.entries(parameters)) {
+          if (!value) continue;
+          // Try parsing as JSON (arrays, objects)
+          const trimmed = value.trim();
+          if ((trimmed.startsWith('[') && trimmed.endsWith(']')) || (trimmed.startsWith('{') && trimmed.endsWith('}'))) {
+            try { parsed[key] = JSON.parse(trimmed); continue; } catch { /* keep as string */ }
+          }
+          // Try parsing as number
+          if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
+            parsed[key] = Number(trimmed);
+            continue;
+          }
+          // Try parsing booleans
+          if (trimmed === 'true') { parsed[key] = true; continue; }
+          if (trimmed === 'false') { parsed[key] = false; continue; }
+          parsed[key] = value;
+        }
+        requestBody = JSON.stringify(parsed);
+      }
+
       // Call through Callio's proxy
       const response = await fetch(`/api/proxy/${apiSlug}${path}`, {
         method: selectedEndpoint.method,
@@ -126,9 +162,7 @@ export default function ApiPlayground({
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${callioApiKey}`,
         },
-        body: ['POST', 'PUT', 'PATCH'].includes(selectedEndpoint.method)
-          ? JSON.stringify(parameters)
-          : undefined,
+        body: requestBody,
       });
 
       const data = await response.json();
@@ -140,10 +174,14 @@ export default function ApiPlayground({
           : (data.message || JSON.stringify(data) || 'Request failed');
         
         // Check if it's a provider key issue
-        if (errorMsg.includes('Provider key not configured') || data.error === 'Provider key not configured') {
-          errorMsg = data.message || `You haven't connected your provider account yet. Scroll down and click "Save Provider Key" to connect your account first, then try again.`;
-        } else if (errorMsg.includes('Invalid') || errorMsg.includes('Unauthorized')) {
-          errorMsg = `Invalid or expired Callio API key. Make sure you're using the key from "Add to Agent" button above.`;
+        if (errorMsg.includes('PROVIDER_KEY_MISSING') || data.code === 'PROVIDER_KEY_MISSING' || errorMsg.includes('Provider API key')) {
+          errorMsg = `You haven't saved your provider API key yet. Scroll down to "Connect your provider key" and save your actual provider key (e.g. sk-... for OpenAI). Do NOT use your callio_ key there.`;
+        } else if (data.code === 'PROVIDER_KEY_INVALID' || errorMsg.includes('provider key is invalid')) {
+          errorMsg = `Your saved provider key is wrong (you may have accidentally saved your Callio key instead). Scroll down and re-save the correct provider key (e.g. sk-... for OpenAI).`;
+        } else if (errorMsg.includes('Incorrect API key') || errorMsg.includes('invalid_api_key')) {
+          errorMsg = `Your provider key is invalid. You may have saved your Callio key instead of your real provider key. Scroll down and re-save the correct key (e.g. sk-... for OpenAI).`;
+        } else if (errorMsg.includes('Invalid or missing API key')) {
+          errorMsg = `Invalid or expired Callio API key. Make sure you're using the callio_... key from the "Add to Agent" button.`;
         }
         setError(errorMsg);
       } else {
