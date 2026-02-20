@@ -47,7 +47,7 @@ export default function WaitlistForm() {
           <Check className="w-6 h-6 text-white" />
         </div>
         <h3 className="text-xl font-semibold mb-2">Welcome to the waitlist!</h3>
-        <p className="text-[var(--muted)]">Check your email for early access details. We'll contact you soon.</p>
+        <p className="text-[var(--muted)]">We'll contact you soon via email.</p>
       </div>
     );
   }
@@ -65,19 +65,19 @@ export default function WaitlistForm() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@email.com"
               required
-              className="w-full pl-10 pr-4 py-3 border border-[var(--line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ink)]"
+              className="w-full pl-10 pr-4 py-3 border border-[var(--line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ink)] placeholder:text-gray-400"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Organization</label>
+          <label className="block text-sm font-medium mb-2">Name</label>
           <input
             type="text"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            placeholder="Your company"
-            className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ink)]"
+            placeholder="Your name"
+            className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ink)] placeholder:text-gray-400"
           />
         </div>
       </div>
