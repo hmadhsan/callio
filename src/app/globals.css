@@ -4,14 +4,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --page-bg: #f9f7f2;
-  --ink: #111213;
-  --muted: #5f6672;
-  --accent: #f97316;
-  --accent-strong: #ea580c;
-  --line: #e7e1d8;
-  --soft: #f1ebe1;
-  --soft-strong: #e7dfd3;
+  --page-bg: #fafafa;
+  --ink: #0a0a0a;
+  --muted: #6b7280;
+  --accent: #111111;
+  --accent-strong: #000000;
+  --line: #e5e7eb;
+  --soft: #f3f4f6;
+  --soft-strong: #e5e7eb;
   --font-display: "Instrument Serif", "Times New Roman", serif;
   --font-body: "Space Grotesk", "Segoe UI", sans-serif;
 }

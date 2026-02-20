@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--page-bg)] text-[var(--ink)]">
       {/* Top nav */}
-      <header className="sticky top-0 z-50 backdrop-blur-sm bg-[rgba(249,247,242,0.7)] border-b border-[var(--line)]">
+      <header className="sticky top-0 z-50 backdrop-blur-sm bg-[rgba(250,250,250,0.8)] border-b border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center font-semibold">
@@ -29,7 +29,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,170,70,0.22),transparent_55%),radial-gradient(circle_at_80%_10%,rgba(74,144,226,0.18),transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_55%),radial-gradient(circle_at_80%_10%,rgba(0,0,0,0.03),transparent_45%)]" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--line)] bg-white/80">
             <Sparkles className="w-4 h-4 text-[var(--accent)]" />
@@ -101,7 +101,7 @@ export default function Home() {
             href="https://cal.com/hammad-hassan-py6mdj/callio-demo?overlayCalendar=true"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--accent)] text-white text-lg font-semibold hover:bg-[var(--accent-strong)] transition shadow-[0_8px_30px_rgba(249,115,22,0.3)]"
+            className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--accent)] text-white text-lg font-semibold hover:bg-[var(--accent-strong)] transition shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
           >
             Schedule a demo <CalendarDays className="w-5 h-5" />
           </a>

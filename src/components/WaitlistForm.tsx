@@ -56,16 +56,16 @@ export default function WaitlistForm() {
     <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-[var(--line)] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
       <div className="grid md:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-sm font-medium mb-2">Work email</label>
+          <label className="block text-sm font-medium mb-2">Email</label>
           <div className="relative">
             <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.com"
+              placeholder="you@email.com"
               required
-              className="w-full pl-10 pr-4 py-3 border border-[var(--line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+              className="w-full pl-10 pr-4 py-3 border border-[var(--line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ink)]"
             />
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function WaitlistForm() {
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             placeholder="Your company"
-            className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+            className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ink)]"
           />
         </div>
       </div>
