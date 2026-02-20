@@ -55,7 +55,7 @@ async function handleProxy(request: NextRequest, params: { apiSlug: string; path
   const keyHash = hashApiKey(callioKey);
   const apiKey = await prisma.apiKey.findUnique({ where: { keyHash }, include: { api: true } });
 
-  if (!apiKey || apiKey.api.slug !== params.apiSlug) {
+  if (!apiKey || !apiKey.api || apiKey.api.slug !== params.apiSlug) {
     return NextResponse.json({ error: 'Invalid API key' }, { status: 401 });
   }
 

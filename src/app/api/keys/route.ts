@@ -24,11 +24,11 @@ export async function GET(request: NextRequest) {
   });
 
   return NextResponse.json({ 
-    keys: keys.map(k => ({
+    keys: keys.filter(k => k.api).map(k => ({
       id: k.id,
       keyLast4: k.keyLast4,
-      apiName: k.api.name,
-      apiSlug: k.api.slug,
+      apiName: k.api?.name,
+      apiSlug: k.api?.slug,
       createdAt: k.createdAt,
     }))
   });

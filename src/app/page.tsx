@@ -2,6 +2,7 @@ import { ChevronRight, Code2, Zap, Lock, GitBranch, Terminal, Github, Twitter, K
 import Link from 'next/link';
 import { getAllApis } from '@/lib/apiService';
 import BetaSignupForm from '@/components/BetaSignupForm';
+import WaitlistForm from '@/components/WaitlistForm';
 import { cookies } from 'next/headers';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 import SkillsApisTabs from '@/components/SkillsApisTabs';
@@ -369,7 +370,141 @@ export default async function Home() {
         </div>
       </section>
 
-      <BetaSignupForm />
+      {/* Book Demo Section */}
+      <section className="border-t border-gray-200 py-20 bg-gradient-to-b from-white to-blue-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              See Callio in Action
+            </h2>
+            <p className="text-lg text-gray-600">
+              Watch how agents interact with your API through Callio
+            </p>
+          </div>
+
+          {/* Interactive Demo - Book Style */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Code Example */}
+            <div className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl border border-gray-800">
+              <div className="bg-gray-800 px-6 py-4 border-b border-gray-700 flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                <span className="text-gray-400 text-sm ml-4 font-mono">terminal.js</span>
+              </div>
+              <div className="p-6 font-mono text-sm text-gray-300 overflow-x-auto">
+                <div className="mb-2">
+                  <span className="text-gray-500">{'>'} </span>
+                  <span className="text-green-400">curl</span>
+                  <span className="text-gray-300"> \\</span>
+                </div>
+                <div className="ml-4 mb-2">
+                  <span className="text-gray-300">-H </span>
+                  <span className="text-orange-400">'Authorization: Bearer callio_...'</span>
+                  <span className="text-gray-300"> \\</span>
+                </div>
+                <div className="ml-4 mb-4">
+                  <span className="text-gray-300">-X GET </span>
+                  <span className="text-blue-400">'https://callio.app/api/proxy/search-discovery/search'</span>
+                </div>
+
+                <div className="mb-4 text-green-400">
+                  {'{'} <span className="text-orange-400">"query"</span>: <span className="text-yellow-400">"machine learning"</span> {'}'}
+                </div>
+
+                <div className="border-t border-gray-700 pt-4 mt-4">
+                  <div className="text-green-400 mb-2">
+                    HTTP/1.1 200 OK
+                  </div>
+                  <div className="text-gray-400 text-xs mb-3">
+                    content-type: application/json
+                  </div>
+                  <div className="text-green-400">
+                    {'{'}
+                  </div>
+                  <div className="ml-4 text-gray-300">
+                    <div><span className="text-orange-400">"results"</span>: [</div>
+                    <div className="ml-4">
+                      <div className="mb-1">{'{'}
+                        <span className="text-orange-400">"title"</span>: <span className="text-yellow-400">"Deep Learning...",</span>
+                      </div>
+                      <div><span className="text-orange-400">"url"</span>: <span className="text-yellow-400">"..."</span> {'}'},</div>
+                    </div>
+                    <div>],</div>
+                    <div><span className="text-orange-400">"total"</span>: <span className="text-blue-400">1250</span></div>
+                  </div>
+                  <div className="text-green-400">
+                    {'}'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+                Unified API Gateway
+              </h3>
+              <p className="text-lg text-gray-600 mb-6">
+                One authentication method. One request format. Access hundreds of APIs without learning different SDKs or managing multiple API keys.
+              </p>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-white text-sm font-bold">✓</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Single API Key</h4>
+                    <p className="text-gray-600 text-sm">One Callio key gives you access to all APIs in the marketplace</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-white text-sm font-bold">✓</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Unified Proxy</h4>
+                    <p className="text-gray-600 text-sm">All requests go through the same endpoint - no learning curve</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-white text-sm font-bold">✓</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">Agent Ready</h4>
+                    <p className="text-gray-600 text-sm">AI agents can automatically discover and use any API</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-900">
+                  <strong>Key Benefit:</strong> Agents don't need custom code for each API. They understand Callio's unified interface and can handle any API automatically.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Waitlist Section */}
+      <section className="border-t border-gray-200 py-20 bg-white">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center mb-4">
+            Join Our Early Access Program
+          </h2>
+          <p className="text-center text-gray-600 mb-12 text-lg">
+            Be among the first to access Callio. Limited spots available for API providers and AI builders.
+          </p>
+          <div>
+            <WaitlistForm />
+          </div>
+        </div>
+      </section>
 
       {/* Social Proof */}
       <section className="border-t border-gray-200 py-16 bg-gray-50">
