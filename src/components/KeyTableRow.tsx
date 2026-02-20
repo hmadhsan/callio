@@ -1,27 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, Eye, EyeOff, Trash2, AlertTriangle } from 'lucide-react';
+import { Copy, Trash2, AlertTriangle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function KeyTableRow({ apiKey }: { apiKey: any }) {
-  const [showKey, setShowKey] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
-  const displayKey = showKey && apiKey?.key 
-    ? apiKey.key 
-    : apiKey?.key 
-      ? `${apiKey.key.slice(0, 7)}${'•'.repeat(Math.max(0, apiKey.key.length - 11))}${apiKey.key.slice(-4)}`
-      : 'callio_••••••••••••';
+  // Only show masked key (we don't store plain keys for security)
+  const displayKey = `callio_••••••••••••${apiKey?.keyLast4 || '****'}`;
 
   const handleCopy = async () => {
-    if (!apiKey?.key) return;
-    await navigator.clipboard.writeText(apiKey.key);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    // Message to copy since we don't have the plain key
+    await navigator.clipboard.writeText('Copy your API key from the generation dialog');
   };
 
   const handleDelete = async () => {
@@ -48,28 +41,12 @@ export default function KeyTableRow({ apiKey }: { apiKey: any }) {
     <>
       <tr className="hover:bg-gray-50 transition">
         <td className="px-6 py-4 whitespace-nowrap">
-          <span className="text-sm font-medium text-gray-900">{apiKey?.name || 'callio'}</span>
+          <span className="text-sm font-medium text-gray-900">{apiKey?.name || 'Default API Key'}</span>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="flex items-center gap-2">
-            <code className="text-sm font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-200">
-              {displayKey}
-            </code>
-            <button
-              onClick={() => setShowKey(!showKey)}
-              className="p-1 text-gray-400 hover:text-gray-600 transition"
-              title={showKey ? 'Hide' : 'Show'}
-            >
-              {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={handleCopy}
-              className="p-1 text-gray-400 hover:text-gray-600 transition"
-              title={copied ? 'Copied!' : 'Copy'}
-            >
-              <Copy className="w-4 h-4" />
-            </button>
-          </div>
+          <code className="text-sm font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-200">
+            {displayKey}
+          </code>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <span className="text-sm text-gray-600">{new Date(apiKey.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
@@ -106,7 +83,7 @@ export default function KeyTableRow({ apiKey }: { apiKey: any }) {
                 </p>
                 <div className="bg-gray-50 border border-gray-200 rounded p-3 mb-4">
                   <code className="text-xs font-mono text-gray-700 break-all">
-                    {apiKey?.key || 'Unknown key'}
+                    {displayKey}
                   </code>
                 </div>
                 <div className="flex gap-3 justify-end">
