@@ -31,10 +31,10 @@ export default function WaitlistForm() {
         setTimeout(() => setSubmitted(false), 5000);
       } else {
         const data = await response.json();
-        setError(data.error || 'Failed to join waitlist');
+        setError(data.detail || data.error || 'Failed to join waitlist');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError(err instanceof Error ? err.message : 'An error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
