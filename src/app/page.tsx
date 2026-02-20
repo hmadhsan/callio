@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CalendarDays, Sparkles, ArrowRight } from 'lucide-react';
+import { CalendarDays, Sparkles, ArrowRight, Zap, Lock, Rocket, Gauge } from 'lucide-react';
 import WaitlistForm from '@/components/WaitlistForm';
 import BookDemoForm from '@/components/BookDemoForm';
 
@@ -37,10 +37,10 @@ export default function Home() {
             <span className="text-xs font-semibold uppercase tracking-wide text-[var(--accent)]">API marketplace for agents</span>
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl font-display tracking-tight leading-tight">
-            One gateway for every API your agents need.
+            Connect all your APIs in one place.
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
-            Callio unifies authentication, discovery, and execution so you can ship agent workflows faster.
+            Give your agents access to any API they need. Authentication, discovery, and execution—all handled automatically.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <a
@@ -56,11 +56,35 @@ export default function Home() {
               Join waitlist <ArrowRight className="w-4 h-4" />
             </a>
           </div>
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm text-[var(--muted)]">
-            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">50+ APIs</div>
-            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Unified auth</div>
-            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Agent-ready</div>
-            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Fast setup</div>
+          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="group rounded-xl border border-[var(--line)] bg-gradient-to-br from-white to-[var(--soft)] hover:border-[var(--accent)] hover:shadow-lg transition px-4 py-5 cursor-default">
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="w-5 h-5 text-[var(--accent)]" />
+              </div>
+              <div className="text-sm font-semibold text-[var(--ink)]">50+ APIs</div>
+              <div className="text-xs text-[var(--muted)] mt-1">Ready to go</div>
+            </div>
+            <div className="group rounded-xl border border-[var(--line)] bg-gradient-to-br from-white to-[var(--soft)] hover:border-[var(--accent)] hover:shadow-lg transition px-4 py-5 cursor-default">
+              <div className="flex items-center gap-2 mb-2">
+                <Lock className="w-5 h-5 text-[var(--accent)]" />
+              </div>
+              <div className="text-sm font-semibold text-[var(--ink)]">Unified auth</div>
+              <div className="text-xs text-[var(--muted)] mt-1">One setup</div>
+            </div>
+            <div className="group rounded-xl border border-[var(--line)] bg-gradient-to-br from-white to-[var(--soft)] hover:border-[var(--accent)] hover:shadow-lg transition px-4 py-5 cursor-default">
+              <div className="flex items-center gap-2 mb-2">
+                <Rocket className="w-5 h-5 text-[var(--accent)]" />
+              </div>
+              <div className="text-sm font-semibold text-[var(--ink)]">Agent-ready</div>
+              <div className="text-xs text-[var(--muted)] mt-1">Out of box</div>
+            </div>
+            <div className="group rounded-xl border border-[var(--line)] bg-gradient-to-br from-white to-[var(--soft)] hover:border-[var(--accent)] hover:shadow-lg transition px-4 py-5 cursor-default">
+              <div className="flex items-center gap-2 mb-2">
+                <Gauge className="w-5 h-5 text-[var(--accent)]" />
+              </div>
+              <div className="text-sm font-semibold text-[var(--ink)]">Fast setup</div>
+              <div className="text-xs text-[var(--muted)] mt-1">Minutes, not days</div>
+            </div>
           </div>
         </div>
       </section>
