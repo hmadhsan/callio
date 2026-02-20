@@ -57,7 +57,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
-              <div className="w-7 h-7 bg-blue-600 rounded flex items-center justify-center">
+              <div className="w-7 h-7 bg-[var(--accent)] rounded flex items-center justify-center">
                 <Code2 className="w-4 h-4 text-white" />
               </div>
               <span className="text-lg font-bold">Callio</span>
@@ -65,19 +65,19 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
             <div className="hidden md:flex items-center gap-6">
               <Link 
                 href="/skills" 
-                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
               >
                 Skills
               </Link>
               <Link 
                 href="/browse" 
-                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
               >
                 APIs
               </Link>
               <Link 
                 href="/docs" 
-                className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
               >
                 Docs
               </Link>
@@ -86,7 +86,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           <div className="flex items-center gap-4">
             <Link 
               href="/login" 
-              className="text-sm text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
             >
               Sign in
             </Link>
@@ -122,7 +122,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
                 <div className="text-5xl">{api.icon}</div>
                 <div>
                   <h1 className="text-4xl font-bold mb-2">{api.name}</h1>
-                  <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                  <span className="inline-block px-3 py-1 bg-[var(--soft)] text-[var(--ink)] rounded-full text-sm font-medium">
                     {api.category}
                   </span>
                 </div>
@@ -162,7 +162,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
                 {endpoints.length > 0 && (
                   <button
                     onClick={() => setShowPlayground(true)}
-                    className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+                    className="w-full px-4 py-3 bg-[var(--accent)] hover:bg-[var(--accent-strong)] text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
                   >
                     <Play className="w-4 h-4" />
                     Try It
@@ -242,7 +242,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
             {/* Step 1 */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-bold text-lg">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--accent)] text-white font-bold text-lg">
                   1
                 </div>
               </div>
@@ -255,7 +255,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
             {/* Step 2 */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-bold text-lg">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--accent)] text-white font-bold text-lg">
                   2
                 </div>
               </div>
@@ -275,7 +275,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {api.useCases.map((useCase, idx) => (
               <div key={idx} className="flex gap-3 items-start p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <Check className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <Check className="w-5 h-5 text-[var(--ink)] flex-shrink-0 mt-0.5" />
                 <span className="text-gray-900">{useCase}</span>
               </div>
             ))}
@@ -299,12 +299,12 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           <p className="text-lg text-gray-600 mb-8">
             Test endpoints live or generate your API key and start building in minutes
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <AddToAgentButton apiSlug={api.slug} />
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch">
+            <AddToAgentButton apiSlug={api.slug} buttonClassName="w-full sm:w-auto px-8 py-4 bg-[var(--accent)] hover:bg-[var(--accent-strong)] disabled:bg-gray-300 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2" />
             {endpoints.length > 0 && (
               <button
                 onClick={() => setShowPlayground(true)}
-                className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 border-2 border-[var(--accent)] text-[var(--ink)] font-semibold rounded-lg hover:bg-[var(--soft)] transition flex items-center justify-center gap-2"
               >
                 <Play className="w-5 h-5" />
                 Try API Live
@@ -312,7 +312,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
             )}
             <Link
               href="/skills/callio"
-              className="px-8 py-4 border border-gray-300 text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition text-center"
+              className="w-full sm:w-auto px-8 py-4 border border-[var(--line)] text-[var(--ink)] font-semibold rounded-lg hover:bg-[var(--soft)] transition text-center flex items-center justify-center"
             >
               Browse More APIs
             </Link>
