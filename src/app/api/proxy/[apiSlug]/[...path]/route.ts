@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { hashApiKey } from '@/lib/keys';
+import { PLANS } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -101,7 +102,35 @@ async function handler(
       }
     }
 
+    // ── Usage limit check ──────────────────────────────────
+    const subscription = await prisma.subscription.findUnique({
+      where: { userId: apiKey.userId },
+    });
+    const plan = (subscription?.plan || 'free') as keyof typeof PLANS;
+    const limit = PLANS[plan]?.requestsPerMonth || PLANS.free.requestsPerMonth;
+
+    const periodStart = subscription?.currentPeriodStart
+      || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+    const usageCount = await prisma.usageRecord.count({
+      where: {
+        userId: apiKey.userId,
+        createdAt: { gte: periodStart },
+      },
+    });
+
+    if (usageCount >= limit) {
+      return NextResponse.json({
+        error: 'Monthly request limit reached',
+        plan,
+        used: usageCount,
+        limit,
+        upgrade: 'https://callio.dev/pricing',
+      }, { status: 429 });
+    }
+
     // Make the upstream request
+    const startTime = Date.now();
     const fetchOptions: RequestInit = {
       method: request.method,
       headers: upstreamHeaders,
@@ -117,6 +146,19 @@ async function handler(
     }
 
     const upstream = await fetch(targetUrl, fetchOptions);
+    const latencyMs = Date.now() - startTime;
+
+    // Record usage (non-blocking)
+    prisma.usageRecord.create({
+      data: {
+        userId: apiKey.userId,
+        apiSlug,
+        method: request.method,
+        path: pathStr,
+        status: upstream.status,
+        latencyMs,
+      },
+    }).catch((err: unknown) => console.error('Usage record error:', err));
 
     // Return the upstream response
     const responseBody = await upstream.text();

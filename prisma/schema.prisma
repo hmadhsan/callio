@@ -38,6 +38,8 @@ model User {
   sessions Session[]
   apiKeys  ApiKey[]
   apiCredentials ApiCredential[]
+  subscription   Subscription?
+  usageRecords   UsageRecord[]
 
   @@index([email])
   @@index([googleId])
@@ -144,4 +146,40 @@ model ApiCredential {
   @@unique([userId, apiId])
   @@index([apiId])
   @@index([userId])
+}
+
+// ── Stripe Billing ──────────────────────────────────────
+
+model Subscription {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId     String   @unique
+  stripeSubscriptionId String?  @unique
+  plan                 String   @default("free") // free, pro, team
+  status               String   @default("active") // active, past_due, canceled, trialing
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([stripeCustomerId])
+  @@index([plan])
+}
+
+model UsageRecord {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  apiSlug   String
+  method    String
+  path      String
+  status    Int
+  latencyMs Int
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([apiSlug])
+  @@index([createdAt])
 }

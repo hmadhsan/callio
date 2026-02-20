@@ -83,6 +83,7 @@ export default function Home() {
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-sm">
             <Link href="/browse" className="hover:text-[var(--accent)] transition">Browse APIs</Link>
+            <Link href="/pricing" className="hover:text-[var(--accent)] transition">Pricing</Link>
             <Link href="/docs" className="hover:text-[var(--accent)] transition">Docs</Link>
             <Link href="/how-it-works" className="hover:text-[var(--accent)] transition">How it works</Link>
             <Link href="/login" className="text-[var(--muted)] hover:text-[var(--ink)] transition">Log in</Link>
@@ -374,6 +375,7 @@ export default function Home() {
                 <div className="text-white font-semibold mb-3">Product</div>
                 <div className="space-y-2">
                   <Link href="/browse" className="block hover:text-white transition">Browse APIs</Link>
+                  <Link href="/pricing" className="block hover:text-white transition">Pricing</Link>
                   <Link href="/how-it-works" className="block hover:text-white transition">How it works</Link>
                   <Link href="/docs" className="block hover:text-white transition">Docs</Link>
                   <a href="https://cal.com/hammad-hassan-py6mdj/callio-demo?overlayCalendar=true" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition">Book a demo</a>
