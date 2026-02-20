@@ -59,21 +59,21 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
   if (key) {
     return (
       <div className="w-full">
-        <div className="bg-[var(--soft)] border border-[var(--line)] rounded-lg p-6 text-left">
-          <div className="text-lg font-semibold text-[var(--ink)] mb-2">✓ API Key Generated!</div>
-          <div className="text-sm text-[var(--muted)] mb-4">
-            Copy this key now and save it somewhere safe. You will not see it again.
-          </div>
+        <div className="bg-[var(--soft)] border border-[var(--line)] rounded-xl p-6 text-left">
+          <div className="text-lg font-semibold text-[var(--ink)] mb-1">✓ API Key Generated!</div>
+          <p className="text-sm text-[var(--muted)] mb-5">
+            Copy this key now — you won&apos;t see it again.
+          </p>
           
           {/* Key Display */}
-          <div className="flex items-center gap-2 mb-6">
-            <code className="flex-1 text-sm bg-white border border-[var(--line)] rounded px-3 py-2 break-all font-mono">
+          <div className="flex items-center gap-2 mb-8">
+            <code className="flex-1 text-xs sm:text-sm bg-white border border-[var(--line)] rounded-lg px-3.5 py-2.5 break-all font-mono">
               {key}
             </code>
             <button
               type="button"
               onClick={handleCopy}
-              className="px-3 py-2 bg-[var(--accent)] hover:bg-[var(--accent-strong)] text-white text-sm font-semibold rounded flex items-center gap-2"
+              className="shrink-0 px-4 py-2.5 bg-[var(--accent)] hover:bg-[var(--accent-strong)] text-white text-sm font-semibold rounded-lg flex items-center gap-2 transition"
             >
               {copied ? (
                 <>
@@ -90,18 +90,19 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
           </div>
 
           {/* Usage Instructions */}
-          <div className="border-t border-[var(--line)] pt-4">
-            <div className="text-sm font-semibold text-[var(--ink)] mb-3">How to use this key:</div>
-            <div className="space-y-3 text-sm text-gray-700">
-              <div className="bg-white rounded p-3 border border-[var(--line)]">
-                <div className="font-medium text-[var(--ink)] mb-1">0. Save your provider key (one time)</div>
-                <p className="text-xs text-[var(--muted)]">
-                  Add your provider API key below so Callio can forward requests.
+          <div className="border-t border-[var(--line)] pt-6">
+            <div className="text-sm font-bold text-[var(--ink)] mb-5">How to use this key:</div>
+            <div className="space-y-4">
+              <div className="bg-white rounded-lg p-4 border border-[var(--line)]">
+                <div className="text-sm font-medium text-[var(--ink)] mb-1">0. Save your provider key <span className="text-xs font-normal text-[var(--muted)]">(one time)</span></div>
+                <p className="text-xs text-[var(--muted)] leading-relaxed">
+                  Scroll down and add your provider API key so Callio can forward requests on your behalf.
                 </p>
               </div>
-              <div className="bg-white rounded p-3 border border-[var(--line)]">
-                <div className="font-medium text-[var(--ink)] mb-1">1. Add to your AI agent config:</div>
-                <pre className="text-xs bg-gray-900 text-gray-100 p-2 rounded mt-2 overflow-x-auto">
+
+              <div className="bg-white rounded-lg p-4 border border-[var(--line)]">
+                <div className="text-sm font-medium text-[var(--ink)] mb-2">1. Add to your AI agent config:</div>
+                <pre className="text-xs bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto leading-relaxed">
 {`{
   "apiKey": "${key}",
   "provider": "callio"
@@ -109,19 +110,19 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
                 </pre>
               </div>
               
-              <div className="bg-white rounded p-3 border border-[var(--line)]">
-                <div className="font-medium text-[var(--ink)] mb-1">2. Call via Callio proxy:</div>
-                <pre className="text-xs bg-gray-900 text-gray-100 p-2 rounded mt-2 overflow-x-auto">
+              <div className="bg-white rounded-lg p-4 border border-[var(--line)]">
+                <div className="text-sm font-medium text-[var(--ink)] mb-2">2. Call via Callio proxy:</div>
+                <pre className="text-xs bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto leading-relaxed">
 {`curl -H "Authorization: Bearer ${key}" \\
-     https://YOUR_DOMAIN/api/proxy/${apiSlug}/v1/endpoint`}
+     https://callio.dev/api/proxy/${apiSlug}/v1/endpoint`}
                 </pre>
               </div>
 
-              <div className="bg-white rounded p-3 border border-[var(--line)]">
-                <div className="font-medium text-[var(--ink)] mb-1">3. Or target a full URL:</div>
-                <pre className="text-xs bg-gray-900 text-gray-100 p-2 rounded mt-2 overflow-x-auto">
+              <div className="bg-white rounded-lg p-4 border border-[var(--line)]">
+                <div className="text-sm font-medium text-[var(--ink)] mb-2">3. Or target a full URL:</div>
+                <pre className="text-xs bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto leading-relaxed">
 {`curl -H "Authorization: Bearer ${key}" \\
-     "https://YOUR_DOMAIN/api/proxy/${apiSlug}?target=https://api.example.com/endpoint"`}
+     "https://callio.dev/api/proxy/${apiSlug}?target=URL"`}
                 </pre>
               </div>
             </div>
