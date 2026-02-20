@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     const { token } = await createMagicLink(email);
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://callio.dev';
     const magicUrl = `${appUrl}/auth/callback?token=${token}`;
 
     // In production, send via Resend

@@ -79,7 +79,8 @@ export default function ApiPlayground({
       path = path.replace(`{${key}}`, value);
     });
     
-    const proxyUrl = `http://localhost:3000/api/proxy/${apiSlug}${path}`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://callio.dev';
+    const proxyUrl = `${origin}/api/proxy/${apiSlug}${path}`;
     let curl = `curl -X ${selectedEndpoint.method} "${proxyUrl}" \\`;
     curl += `\n  -H "Authorization: Bearer ${callioApiKey || 'YOUR_CALLIO_API_KEY'}" \\`;
     curl += `\n  -H "Content-Type: application/json"`;
