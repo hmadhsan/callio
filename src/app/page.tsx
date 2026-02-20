@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { CalendarDays, Sparkles, ArrowRight, Zap, Lock, Rocket, Gauge } from 'lucide-react';
 import WaitlistForm from '@/components/WaitlistForm';
-import BookDemoForm from '@/components/BookDemoForm';
 
 export default function Home() {
   return (
@@ -44,7 +43,9 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <a
-              href="#demo"
+              href="https://cal.com/hammad-hassan-py6mdj/callio-demo?overlayCalendar=true"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition inline-flex items-center gap-2"
             >
               Book a demo <CalendarDays className="w-4 h-4" />
@@ -91,31 +92,23 @@ export default function Home() {
 
       {/* Book a demo */}
       <section id="demo" className="py-20 sm:py-24">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-10 items-center">
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-display">Book a live demo</h2>
-            <p className="mt-4 text-[var(--muted)] text-lg">
-              See how Callio turns any API into an agent-ready toolchain. Tell us what you're building and we'll tailor the walkthrough.
-            </p>
-            <div className="mt-8 rounded-2xl border border-[var(--line)] bg-white p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
-              <BookDemoForm />
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-[var(--line)] bg-[var(--soft)] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
-            <div className="text-sm uppercase tracking-widest text-[var(--muted)]">Live session preview</div>
-            <div className="mt-4 rounded-xl bg-[#101418] text-[#e7eef9] p-5 font-mono text-sm">
-              <div className="text-[#8ea0c3]">$ callio connect search</div>
-              <div className="mt-2">Authenticated OK</div>
-              <div className="mt-2">Routing to search-discovery API...</div>
-              <div className="mt-3 text-[#7df2b1]">200 OK</div>
-              <div className="mt-3 text-[#9ab2d6]">{"{ \"results\": 1,250, \"latency\": \"92ms\" }"}</div>
-            </div>
-            <div className="mt-6 grid gap-3 text-sm text-[var(--muted)]">
-              <div>- Custom API onboarding walkthrough</div>
-              <div>- Security + auth flow review</div>
-              <div>- Agent execution demo with your use case</div>
-            </div>
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
+          <h2 className="text-3xl sm:text-4xl font-display">Book a live demo</h2>
+          <p className="mt-4 text-[var(--muted)] text-lg max-w-xl mx-auto">
+            See Callio in action. Pick a time that works for you and we'll walk you through everything.
+          </p>
+          <a
+            href="https://cal.com/hammad-hassan-py6mdj/callio-demo?overlayCalendar=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--accent)] text-white text-lg font-semibold hover:bg-[var(--accent-strong)] transition shadow-[0_8px_30px_rgba(249,115,22,0.3)]"
+          >
+            Schedule a demo <CalendarDays className="w-5 h-5" />
+          </a>
+          <div className="mt-8 grid sm:grid-cols-3 gap-4 text-sm text-[var(--muted)]">
+            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Custom walkthrough for your use case</div>
+            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Security + auth flow review</div>
+            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Live agent execution demo</div>
           </div>
         </div>
       </section>
