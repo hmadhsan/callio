@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if key matches API (if key exists)
-    if (apiKeyRecord && apiKeyRecord.api.slug !== apiSlug) {
+    if (apiKeyRecord?.api && apiKeyRecord.api.slug !== apiSlug) {
       return NextResponse.json({ error: 'API key does not match this API' }, { status: 401 });
     }
 
