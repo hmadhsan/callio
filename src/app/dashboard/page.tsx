@@ -91,7 +91,7 @@ export default async function DashboardPage() {
                     <p className="text-sm text-gray-600 mb-4">Use this key to authenticate with the Callio proxy in your agent.</p>
                     {primaryKey ? (
                       <div className="bg-gray-100 p-3 rounded font-mono text-xs break-all">
-                        {primaryKey.key}
+                        {`callio_••••••••••••${primaryKey.keyLast4}`}
                       </div>
                     ) : (
                       <div className="bg-gray-100 p-3 rounded text-sm text-gray-600">
