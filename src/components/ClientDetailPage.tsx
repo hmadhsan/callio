@@ -287,20 +287,20 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           <p className="text-lg text-gray-600 mb-8">
             Test endpoints live or generate your API key and start building in minutes
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch">
-            <AddToAgentButton apiSlug={api.slug} buttonClassName="w-full sm:w-auto px-8 py-4 bg-[var(--accent)] hover:bg-[var(--accent-strong)] disabled:bg-gray-300 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2" />
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <AddToAgentButton apiSlug={api.slug} buttonClassName="px-8 py-3.5 bg-[var(--accent)] hover:bg-[var(--accent-strong)] disabled:bg-gray-300 text-white text-sm font-semibold rounded-lg transition flex items-center justify-center gap-2 min-w-[180px]" />
             {endpoints.length > 0 && (
               <button
                 onClick={() => setShowPlayground(true)}
-                className="w-full sm:w-auto px-8 py-4 border-2 border-[var(--accent)] text-[var(--ink)] font-semibold rounded-lg hover:bg-[var(--soft)] transition flex items-center justify-center gap-2"
+                className="px-8 py-3.5 border border-[var(--line)] text-[var(--ink)] text-sm font-semibold rounded-lg hover:bg-[var(--soft)] transition flex items-center justify-center gap-2 min-w-[180px]"
               >
-                <Play className="w-5 h-5" />
+                <Play className="w-4 h-4" />
                 Try API Live
               </button>
             )}
             <Link
               href="/skills/callio"
-              className="w-full sm:w-auto px-8 py-4 border border-[var(--line)] text-[var(--ink)] font-semibold rounded-lg hover:bg-[var(--soft)] transition text-center flex items-center justify-center"
+              className="px-8 py-3.5 border border-[var(--line)] text-[var(--ink)] text-sm font-semibold rounded-lg hover:bg-[var(--soft)] transition flex items-center justify-center min-w-[180px]"
             >
               Browse More APIs
             </Link>
