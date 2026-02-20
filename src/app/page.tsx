@@ -1,6 +1,21 @@
 import Link from 'next/link';
-import { CalendarDays, Sparkles, ArrowRight, Zap, Lock, Rocket, Gauge } from 'lucide-react';
+import { CalendarDays, Sparkles, ArrowRight, Zap, Lock, Rocket, Gauge, Check } from 'lucide-react';
 import WaitlistForm from '@/components/WaitlistForm';
+
+function CallioLogo({ size = 36 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="10" fill="#0a0a0a" />
+      <path
+        d="M20 8C13.373 8 8 13.373 8 20s5.373 12 12 12c2.1 0 4.08-.54 5.8-1.49"
+        stroke="white"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <circle cx="28" cy="14" r="3" fill="white" />
+    </svg>
+  );
+}
 
 export default function Home() {
   return (
@@ -8,10 +23,8 @@ export default function Home() {
       {/* Top nav */}
       <header className="sticky top-0 z-50 backdrop-blur-sm bg-[rgba(250,250,250,0.8)] border-b border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center font-semibold">
-              C
-            </div>
+          <Link href="/" className="flex items-center gap-2.5">
+            <CallioLogo size={34} />
             <span className="text-lg font-semibold tracking-tight">Callio</span>
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-sm">
@@ -105,10 +118,10 @@ export default function Home() {
           >
             Schedule a demo <CalendarDays className="w-5 h-5" />
           </a>
-          <div className="mt-8 grid sm:grid-cols-3 gap-4 text-sm text-[var(--muted)]">
-            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Custom walkthrough for your use case</div>
-            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Security + auth flow review</div>
-            <div className="rounded-xl border border-[var(--line)] bg-white/70 px-4 py-3">Live agent execution demo</div>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted)]">
+            <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--ink)]" /> Tailored to your use case</span>
+            <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--ink)]" /> 30-min session</span>
+            <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--ink)]" /> No commitment</span>
           </div>
         </div>
       </section>
