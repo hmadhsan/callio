@@ -39,7 +39,7 @@ export const PLANS = {
   },
   pro: {
     name: 'Pro',
-    monthlyPrice: 29,
+    monthlyPrice: 20,
     requestsPerMonth: 10_000,
     features: [
       '10,000 API requests/month',

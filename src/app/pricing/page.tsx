@@ -26,7 +26,7 @@ const plans = [
   {
     id: 'pro',
     name: 'Pro',
-    price: 29,
+    price: 20,
     period: '/month',
     description: 'For developers building real products',
     features: [
