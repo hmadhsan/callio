@@ -40,31 +40,31 @@ export default function KeyTableRow({ apiKey }: { apiKey: any }) {
   return (
     <>
       <tr className="hover:bg-gray-50 transition">
-        <td className="px-6 py-4 whitespace-nowrap">
-          <span className="text-sm font-medium text-gray-900">{apiKey?.name || 'Default API Key'}</span>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap">
+        <td className="px-4 py-4 whitespace-nowrap">
           <code className="text-sm font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-200">
             {displayKey}
           </code>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
+        <td className="px-4 py-4 whitespace-nowrap">
+          <span className="text-sm font-medium text-gray-900">{apiKey?.name || 'Default API Key'}</span>
+        </td>
+        <td className="px-4 py-4 whitespace-nowrap">
+          <span className="text-sm text-gray-600">{apiKey?.api?.name || '—'}</span>
+        </td>
+        <td className="px-4 py-4 whitespace-nowrap">
           <span className="text-sm text-gray-600">{new Date(apiKey.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <span className="text-sm text-gray-600">Never</span>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <span className="inline-block px-2 py-1 bg-gray-900 text-white text-xs font-medium rounded">Active</span>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <button
-            onClick={() => setShowDeleteModal(true)}
-            className="text-red-600 hover:text-red-700 transition"
-            title="Delete key"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+        <td className="px-4 py-4 whitespace-nowrap text-right">
+          <div className="flex items-center justify-end gap-3">
+            <span className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">Active</span>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="text-red-500 hover:text-red-700 transition"
+              title="Delete key"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
         </td>
       </tr>
 

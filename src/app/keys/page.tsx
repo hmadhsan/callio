@@ -57,8 +57,8 @@ export default async function KeysPage() {
           <GenerateKeyForm />
 
           {apiKeys.length > 0 ? (
-            <div className="mt-6 border border-[var(--line)] rounded-lg overflow-hidden">
-              <table className="w-full text-sm">
+            <div className="mt-6 border border-[var(--line)] rounded-lg overflow-x-auto">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="bg-[var(--soft)]">
                   <tr>
                     <th className="text-left px-4 py-3 font-medium text-[var(--muted)]">Key</th>

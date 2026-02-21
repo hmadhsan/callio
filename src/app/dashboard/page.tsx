@@ -95,12 +95,13 @@ export default async function DashboardPage() {
           <GenerateKeyForm />
 
           {apiKeys.length > 0 ? (
-            <div className="mt-5 border border-[var(--line)] rounded-lg overflow-hidden">
-              <table className="w-full text-sm">
+            <div className="mt-5 border border-[var(--line)] rounded-lg overflow-x-auto">
+              <table className="w-full text-sm min-w-[600px]">
                 <thead className="bg-[var(--soft)]">
                   <tr>
                     <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">Key</th>
                     <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">Name</th>
+                    <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">API</th>
                     <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">Created</th>
                     <th className="text-right px-4 py-2 font-medium text-[var(--muted)]">Actions</th>
                   </tr>
