@@ -17,7 +17,6 @@ export default async function BrowsePage() {
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <CallioLogo size={30} />
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Dashboard</Link>
             <UserNav />
           </div>
         </div>
