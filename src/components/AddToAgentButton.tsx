@@ -13,9 +13,11 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
   const [error, setError] = useState('');
   const [key, setKey] = useState('');
   const [copied, setCopied] = useState(false);
+  const [upgradeNeeded, setUpgradeNeeded] = useState(false);
 
   const handleInstall = async () => {
     setError('');
+    setUpgradeNeeded(false);
     setLoading(true);
 
     try {
@@ -29,6 +31,13 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
 
       if (response.status === 401) {
         window.location.href = '/login';
+        return;
+      }
+
+      if (response.status === 403 && data.upgrade) {
+        setUpgradeNeeded(true);
+        setError(data.error);
+        setLoading(false);
         return;
       }
 
@@ -64,7 +73,7 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
           <p className="text-sm text-[var(--muted)] mb-5">
             Copy this key now — you won&apos;t see it again.
           </p>
-          
+
           {/* Key Display */}
           <div className="flex items-center gap-2 mb-8">
             <code className="flex-1 text-xs sm:text-sm bg-white border border-[var(--line)] rounded-lg px-3.5 py-2.5 break-all font-mono">
@@ -103,17 +112,17 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
               <div className="bg-white rounded-lg p-4 border border-[var(--line)]">
                 <div className="text-sm font-medium text-[var(--ink)] mb-2">1. Add to your AI agent config:</div>
                 <pre className="text-xs bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto leading-relaxed">
-{`{
+                  {`{
   "apiKey": "${key}",
   "provider": "callio"
 }`}
                 </pre>
               </div>
-              
+
               <div className="bg-white rounded-lg p-4 border border-[var(--line)]">
                 <div className="text-sm font-medium text-[var(--ink)] mb-2">2. Call via Callio proxy:</div>
                 <pre className="text-xs bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto leading-relaxed">
-{`curl -H "Authorization: Bearer ${key}" \\
+                  {`curl -H "Authorization: Bearer ${key}" \\
      https://callio.dev/api/proxy/${apiSlug}/v1/endpoint`}
                 </pre>
               </div>
@@ -121,7 +130,7 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
               <div className="bg-white rounded-lg p-4 border border-[var(--line)]">
                 <div className="text-sm font-medium text-[var(--ink)] mb-2">3. Or target a full URL:</div>
                 <pre className="text-xs bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto leading-relaxed">
-{`curl -H "Authorization: Bearer ${key}" \\
+                  {`curl -H "Authorization: Bearer ${key}" \\
      "https://callio.dev/api/proxy/${apiSlug}?target=URL"`}
                 </pre>
               </div>
@@ -152,7 +161,19 @@ export default function AddToAgentButton({ apiSlug, buttonClassName }: AddToAgen
           'Add to Agent'
         )}
       </button>
-      {error && <div className="mt-2 text-sm text-red-600">{error}</div>}
+      {upgradeNeeded && (
+        <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-5 text-center">
+          <div className="text-amber-600 font-semibold mb-1">🔒 Key Limit Reached</div>
+          <p className="text-sm text-amber-700 mb-3">{error}</p>
+          <a
+            href="/pricing"
+            className="inline-block px-5 py-2 bg-[var(--accent)] text-white text-sm font-semibold rounded-lg hover:bg-[var(--accent-strong)] transition"
+          >
+            Upgrade Plan →
+          </a>
+        </div>
+      )}
+      {error && !upgradeNeeded && <div className="mt-2 text-sm text-red-600">{error}</div>}
     </div>
   );
 }

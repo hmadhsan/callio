@@ -14,7 +14,7 @@ const plans = [
     period: 'forever',
     description: 'Perfect for trying out Callio',
     features: [
-      '100 API requests/month',
+      '50 API requests/month',
       '2 API keys',
       'Access to all APIs',
       'MCP integration',
@@ -31,8 +31,8 @@ const plans = [
     period: '/month',
     description: 'For developers building real products',
     features: [
-      '25,000 API requests/month',
-      'Unlimited API keys',
+      '5,000 API requests/month',
+      '10 API keys',
       'Access to all APIs',
       'Full usage analytics',
       'Priority support',
@@ -49,7 +49,7 @@ const plans = [
     period: '/month',
     description: 'For teams scaling AI agents',
     features: [
-      '200,000 API requests/month',
+      '50,000 API requests/month',
       'Unlimited API keys',
       'Access to all APIs',
       'Advanced analytics',
@@ -72,7 +72,7 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
     fetch('/api/auth/me')
       .then((r) => r.ok ? r.json() : null)
       .then((data) => setLoggedIn(!!data?.user))
-      .catch(() => {});
+      .catch(() => { });
 
     const onAuthChange = (e: Event) => {
       setLoggedIn(!!(e as CustomEvent).detail?.user);
@@ -112,11 +112,10 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
 
   return (
     <div
-      className={`rounded-2xl border p-8 flex flex-col ${
-        plan.highlighted
+      className={`rounded-2xl border p-8 flex flex-col ${plan.highlighted
           ? 'border-[var(--accent)] shadow-lg ring-1 ring-[var(--accent)] relative'
           : 'border-[var(--line)]'
-      }`}
+        }`}
     >
       {plan.highlighted && (
         <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--accent)] text-white text-xs font-semibold px-3 py-1 rounded-full">
@@ -140,11 +139,10 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
       {effectiveHref ? (
         <Link
           href={effectiveHref}
-          className={`w-full text-center py-3 rounded-lg font-semibold transition ${
-            plan.highlighted
+          className={`w-full text-center py-3 rounded-lg font-semibold transition ${plan.highlighted
               ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]'
               : 'border border-[var(--line)] hover:bg-[var(--soft)]'
-          }`}
+            }`}
         >
           {effectiveCta}
         </Link>
@@ -152,11 +150,10 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
         <button
           onClick={handleCheckout}
           disabled={loading}
-          className={`w-full py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2 ${
-            plan.highlighted
+          className={`w-full py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2 ${plan.highlighted
               ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)] disabled:opacity-50'
               : 'border border-[var(--line)] hover:bg-[var(--soft)] disabled:opacity-50'
-          }`}
+            }`}
         >
           {loading ? (
             <>

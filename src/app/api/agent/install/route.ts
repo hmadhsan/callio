@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 import { generateApiKey } from '@/lib/keys';
+import { PLANS } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -26,6 +27,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'API not found' }, { status: 404 });
     }
 
+    // ── Plan key-limit check ──────────────────────────────────
+    const subscription = await prisma.subscription.findUnique({
+      where: { userId: user.id },
+    });
+    const plan = (subscription?.plan || 'free') as keyof typeof PLANS;
+    const maxKeys = PLANS[plan]?.maxKeys ?? PLANS.free.maxKeys;
+
+    if (maxKeys !== Infinity) {
+      const existingKeyCount = await prisma.apiKey.count({
+        where: { userId: user.id },
+      });
+      if (existingKeyCount >= maxKeys) {
+        return NextResponse.json({
+          error: `Your ${PLANS[plan]?.name || 'Free'} plan allows a maximum of ${maxKeys} API key${maxKeys === 1 ? '' : 's'}. Please upgrade to add more APIs.`,
+          upgrade: true,
+        }, { status: 403 });
+      }
+    }
+
     // Generate a per-API key
     const { raw, keyHash, keyLast4 } = generateApiKey();
 
@@ -48,3 +68,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
   }
 }
+

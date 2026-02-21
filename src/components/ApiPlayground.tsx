@@ -115,6 +115,7 @@ export default function ApiPlayground({
   const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [limitReached, setLimitReached] = useState<{ used: number; limit: number; plan: string } | null>(null);
 
   if (!selectedEndpoint) {
     return (
@@ -183,6 +184,7 @@ export default function ApiPlayground({
     setLoading(true);
     setError('');
     setResponse(null);
+    setLimitReached(null);
 
     try {
       // Build the path with parameters
@@ -237,7 +239,10 @@ export default function ApiPlayground({
         data = { raw: responseText || '(empty response)' };
       }
 
-      if (!response.ok) {
+      if (response.status === 429 && data.upgrade) {
+        setLimitReached({ used: data.used, limit: data.limit, plan: data.plan });
+        setError('Monthly request limit reached');
+      } else if (!response.ok) {
         // Convert error to string, handle various formats
         let errorMsg = typeof data.error === 'string'
           ? data.error
@@ -528,6 +533,27 @@ export default function ApiPlayground({
                   <pre className="text-sm text-gray-300 font-mono whitespace-pre-wrap break-words">
                     {JSON.stringify(response.data, null, 2)}
                   </pre>
+                ) : limitReached ? (
+                  <div className="space-y-3">
+                    <div className="bg-amber-900/30 border border-amber-600 rounded-lg p-5 text-center">
+                      <p className="text-lg font-bold text-amber-300 mb-2">🔒 Request Limit Reached</p>
+                      <p className="text-sm text-amber-200 mb-1">
+                        You&apos;ve used <span className="font-bold">{limitReached.used}</span> of <span className="font-bold">{limitReached.limit}</span> requests this month.
+                      </p>
+                      <p className="text-sm text-amber-200/70 mb-4">
+                        Current plan: <span className="font-semibold capitalize">{limitReached.plan}</span>
+                      </p>
+                      <div className="w-full bg-gray-700 rounded-full h-2.5 mb-4">
+                        <div className="bg-amber-500 h-2.5 rounded-full" style={{ width: '100%' }} />
+                      </div>
+                      <a
+                        href="/pricing"
+                        className="inline-block px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-gray-900 text-sm font-bold rounded-lg transition"
+                      >
+                        Upgrade Plan →
+                      </a>
+                    </div>
+                  </div>
                 ) : error ? (
                   <div className="space-y-3">
                     <div className="bg-red-900/30 border border-red-700 rounded-lg p-4">

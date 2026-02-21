@@ -27,10 +27,10 @@ export const PLANS = {
   free: {
     name: 'Free',
     monthlyPrice: 0,
-    requestsPerMonth: 100,
+    requestsPerMonth: 50,
     maxKeys: 2,
     features: [
-      '100 API requests/month',
+      '50 API requests/month',
       '2 API keys',
       'Access to all APIs',
       'MCP integration',
@@ -41,11 +41,11 @@ export const PLANS = {
   pro: {
     name: 'Pro',
     monthlyPrice: 20,
-    requestsPerMonth: 25_000,
-    maxKeys: Infinity,
+    requestsPerMonth: 5_000,
+    maxKeys: 10,
     features: [
-      '25,000 API requests/month',
-      'Unlimited API keys',
+      '5,000 API requests/month',
+      '10 API keys',
       'Access to all APIs',
       'Full usage analytics',
       'Priority support',
@@ -56,10 +56,10 @@ export const PLANS = {
   team: {
     name: 'Team',
     monthlyPrice: 99,
-    requestsPerMonth: 200_000,
+    requestsPerMonth: 50_000,
     maxKeys: Infinity,
     features: [
-      '200,000 API requests/month',
+      '50,000 API requests/month',
       'Unlimited API keys',
       'Access to all APIs',
       'Advanced analytics',

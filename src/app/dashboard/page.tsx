@@ -5,9 +5,10 @@ import { getAllApis } from '@/lib/apiService';
 import prisma from '@/lib/prisma';
 import GenerateKeyForm from '@/components/GenerateKeyForm';
 import KeyTableRow from '@/components/KeyTableRow';
-import { Key, Layers, Plus, ArrowRight, Settings } from 'lucide-react';
+import { Key, Layers, Plus, ArrowRight, Settings, Zap } from 'lucide-react';
 import UserNav from '@/components/UserNav';
 import CallioLogo from '@/components/CallioLogo';
+import { PLANS } from '@/lib/stripe';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,24 @@ export default async function DashboardPage() {
   });
 
   const apis = await getAllApis();
+
+  // Fetch subscription and usage
+  const subscription = await prisma.subscription.findUnique({
+    where: { userId: user.id },
+  });
+  const planId = (subscription?.plan || 'free') as keyof typeof PLANS;
+  const planConfig = PLANS[planId];
+  const maxKeys = planConfig.maxKeys;
+
+  const periodStart = subscription?.currentPeriodStart
+    || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+  const usageCount = await prisma.usageRecord.count({
+    where: { userId: user.id, createdAt: { gte: periodStart } },
+  });
+
+  const usagePercent = Math.min(Math.round((usageCount / planConfig.requestsPerMonth) * 100), 100);
+  const barColor = usagePercent >= 90 ? 'bg-red-500' : usagePercent >= 70 ? 'bg-amber-500' : 'bg-green-500';
 
   return (
     <div className="min-h-screen bg-[var(--page-bg)]">
@@ -58,27 +77,48 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6 mb-10">
-          {/* Stats Cards */}
+          {/* API Keys Card */}
           <div className="bg-white rounded-xl border border-[var(--line)] p-5">
             <div className="flex items-center gap-3 mb-2">
               <Key className="w-5 h-5 text-[var(--accent)]" />
               <span className="text-sm text-[var(--muted)]">API Keys</span>
             </div>
-            <p className="text-3xl font-bold">{apiKeys.length}</p>
+            <p className="text-3xl font-bold">
+              {apiKeys.length}
+              <span className="text-sm font-normal text-[var(--muted)]"> / {maxKeys === Infinity ? '∞' : maxKeys}</span>
+            </p>
           </div>
+
+          {/* Usage Card */}
           <div className="bg-white rounded-xl border border-[var(--line)] p-5">
             <div className="flex items-center gap-3 mb-2">
-              <Layers className="w-5 h-5 text-[var(--accent)]" />
-              <span className="text-sm text-[var(--muted)]">Available APIs</span>
+              <Zap className="w-5 h-5 text-[var(--accent)]" />
+              <span className="text-sm text-[var(--muted)]">Requests This Month</span>
             </div>
-            <p className="text-3xl font-bold">{apis.length}</p>
+            <p className="text-3xl font-bold">
+              {usageCount}
+              <span className="text-sm font-normal text-[var(--muted)]"> / {planConfig.requestsPerMonth.toLocaleString()}</span>
+            </p>
+            <div className="w-full bg-gray-100 rounded-full h-2 mt-3">
+              <div className={`${barColor} h-2 rounded-full transition-all`} style={{ width: `${usagePercent}%` }} />
+            </div>
           </div>
+
+          {/* Plan Card */}
           <div className="bg-white rounded-xl border border-[var(--line)] p-5">
             <div className="flex items-center gap-3 mb-2">
               <Settings className="w-5 h-5 text-[var(--accent)]" />
-              <span className="text-sm text-[var(--muted)]">Account</span>
+              <span className="text-sm text-[var(--muted)]">Plan</span>
             </div>
-            <p className="text-sm font-medium truncate">{user.email}</p>
+            <p className="text-2xl font-bold capitalize">{planConfig.name}</p>
+            {planId === 'free' && (
+              <Link
+                href="/pricing"
+                className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--accent)] hover:underline"
+              >
+                Upgrade <ArrowRight className="w-3 h-3" />
+              </Link>
+            )}
           </div>
         </div>
 
