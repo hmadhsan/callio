@@ -5,7 +5,8 @@ import { getAllApis } from '@/lib/apiService';
 import prisma from '@/lib/prisma';
 import GenerateKeyForm from '@/components/GenerateKeyForm';
 import KeyTableRow from '@/components/KeyTableRow';
-import { Key, Layers, Plus, ArrowRight, Settings, LogOut } from 'lucide-react';
+import { Key, Layers, Plus, ArrowRight, Settings } from 'lucide-react';
+import UserNav from '@/components/UserNav';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,7 +36,7 @@ export default async function DashboardPage() {
           <div className="flex items-center gap-4">
             <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Browse</Link>
             <Link href="/keys" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Keys</Link>
-            <span className="text-sm text-[var(--muted)]">{user.email}</span>
+            <UserNav />
           </div>
         </div>
       </nav>
