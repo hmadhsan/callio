@@ -1,5 +1,5 @@
 {
-  "name": "@callio/mcp-server",
+  "name": "callio-mcp-server",
   "version": "1.0.0",
   "description": "Callio MCP Server — Give AI agents access to 50+ APIs through one tool",
   "main": "index.js",

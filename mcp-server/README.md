@@ -23,7 +23,7 @@ Add to your Claude Code MCP config (`~/.claude/claude_desktop_config.json`):
   "mcpServers": {
     "callio": {
       "command": "npx",
-      "args": ["-y", "@callio/mcp-server"],
+      "args": ["-y", "github:hmadhsan/callio/mcp-server"],
       "env": {
         "CALLIO_API_KEY": "callio_your_key_here"
       }
@@ -41,7 +41,7 @@ Add to your Cursor MCP settings (`.cursor/mcp.json` in your project or global co
   "mcpServers": {
     "callio": {
       "command": "npx",
-      "args": ["-y", "@callio/mcp-server"],
+      "args": ["-y", "github:hmadhsan/callio/mcp-server"],
       "env": {
         "CALLIO_API_KEY": "callio_your_key_here"
       }
@@ -59,7 +59,7 @@ Add to your Antigravity MCP configuration:
   "mcpServers": {
     "callio": {
       "command": "npx",
-      "args": ["-y", "@callio/mcp-server"],
+      "args": ["-y", "github:hmadhsan/callio/mcp-server"],
       "env": {
         "CALLIO_API_KEY": "callio_your_key_here"
       }
@@ -73,7 +73,7 @@ Add to your Antigravity MCP configuration:
 The server uses **stdio transport**. Run:
 
 ```bash
-CALLIO_API_KEY=callio_xxx npx @callio/mcp-server
+CALLIO_API_KEY=callio_xxx npx github:hmadhsan/callio/mcp-server
 ```
 
 ## Available Tools

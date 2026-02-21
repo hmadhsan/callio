@@ -8,7 +8,7 @@ export default function McpPage() {
   "mcpServers": {
     "callio": {
       "command": "npx",
-      "args": ["-y", "@callio/mcp-server"],
+      "args": ["-y", "github:hmadhsan/callio/mcp-server"],
       "env": {
         "CALLIO_API_KEY": "callio_your_key_here"
       }

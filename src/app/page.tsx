@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {
-  CalendarDays, Sparkles, Zap, Lock, Rocket, Gauge, Check,
+  CalendarDays, Sparkles, Zap, Lock, Rocket, Gauge, Check, ArrowRight,
   Search, Shield, Cpu, Globe, MessageSquare, Database, BarChart3, CreditCard,
   Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow
 } from 'lucide-react';
@@ -232,6 +232,73 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── MCP Setup ── */}
+      <section className="py-20 sm:py-24 bg-[#0a0a0a] text-white border-t border-[var(--line)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/20 text-violet-300 text-xs font-semibold uppercase tracking-wide mb-5">
+                <Sparkles className="w-3.5 h-3.5" />
+                MCP Server
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-display">Connect Claude Code, Cursor &amp; more</h2>
+              <p className="mt-4 text-[#a1a1aa] text-lg">
+                Install our MCP server and your AI agent gets instant access to 50+ APIs. Search, browse, and call any API using natural language.
+              </p>
+              <div className="mt-6 space-y-3">
+                {[
+                  { tool: 'Claude Code', path: '~/.claude/claude_desktop_config.json' },
+                  { tool: 'Cursor', path: '.cursor/mcp.json' },
+                  { tool: 'Antigravity', path: 'MCP Settings panel' },
+                ].map((t) => (
+                  <div key={t.tool} className="flex items-center gap-3 text-sm">
+                    <Check className="w-4 h-4 text-violet-400 flex-shrink-0" />
+                    <span className="text-white font-medium">{t.tool}</span>
+                    <span className="text-[#6b7280]">→</span>
+                    <code className="text-[#a1a1aa] text-xs">{t.path}</code>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/mcp"
+                  className="px-6 py-3 rounded-full bg-violet-600 text-white font-semibold hover:bg-violet-500 transition inline-flex items-center gap-2"
+                >
+                  Setup guide <ArrowRight className="w-4 h-4" />
+                </Link>
+                <a
+                  href="https://github.com/hmadhsan/callio/tree/main/mcp-server"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 rounded-full border border-[#333] text-[#a1a1aa] hover:text-white hover:border-[#555] transition font-semibold inline-flex items-center gap-2"
+                >
+                  View source <Terminal className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+            <div className="rounded-2xl bg-[#141414] border border-[#222] p-6 font-mono text-sm leading-relaxed overflow-x-auto">
+              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#222]">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+                <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+                <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+                <span className="ml-2 text-[#555] text-xs">mcp config</span>
+              </div>
+              <div className="text-[#6b7280]">{`{`}</div>
+              <div className="ml-4"><span className="text-[#a78bfa]">&quot;mcpServers&quot;</span>: {`{`}</div>
+              <div className="ml-8"><span className="text-[#a78bfa]">&quot;callio&quot;</span>: {`{`}</div>
+              <div className="ml-12"><span className="text-[#a78bfa]">&quot;command&quot;</span>: <span className="text-[#34d399]">&quot;npx&quot;</span>,</div>
+              <div className="ml-12"><span className="text-[#a78bfa]">&quot;args&quot;</span>: [<span className="text-[#34d399]">&quot;-y&quot;</span>, <span className="text-[#34d399]">&quot;github:hmadhsan/callio/mcp-server&quot;</span>],</div>
+              <div className="ml-12"><span className="text-[#a78bfa]">&quot;env&quot;</span>: {`{`}</div>
+              <div className="ml-16"><span className="text-[#a78bfa]">&quot;CALLIO_API_KEY&quot;</span>: <span className="text-[#fbbf24]">&quot;callio_your_key&quot;</span></div>
+              <div className="ml-12">{`}`}</div>
+              <div className="ml-8">{`}`}</div>
+              <div className="ml-4">{`}`}</div>
+              <div className="text-[#6b7280]">{`}`}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── API Showcase ── */}
       <section id="apis" className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
@@ -377,6 +444,7 @@ export default function Home() {
                   <Link href="/browse" className="block hover:text-white transition">Browse APIs</Link>
                   <Link href="/pricing" className="block hover:text-white transition">Pricing</Link>
                   <Link href="/how-it-works" className="block hover:text-white transition">How it works</Link>
+                  <Link href="/mcp" className="block hover:text-white transition">MCP Server</Link>
                   <Link href="/docs" className="block hover:text-white transition">Docs</Link>
                   <a href="https://cal.com/hammad-hassan-py6mdj/callio-demo?overlayCalendar=true" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition">Book a demo</a>
                 </div>
