@@ -34,7 +34,7 @@ export default function McpPage() {
       {/* Hero */}
       <section className="py-20 border-b border-[var(--line)]">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-50 border border-violet-200 text-violet-700 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--soft)] border border-[var(--line)] text-[var(--ink)] text-sm font-medium mb-6">
             <Sparkles className="w-4 h-4" />
             Model Context Protocol
           </div>

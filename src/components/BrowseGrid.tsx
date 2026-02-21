@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, X, Sparkles } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 interface Api {
   id: string;
@@ -127,11 +127,6 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
             href={`/skills/callio/${api.slug}`}
             className="group bg-white rounded-xl border border-[var(--line)] p-5 hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col relative"
           >
-            {api.featured && (
-              <div className="absolute top-3 right-3">
-                <Sparkles className="w-4 h-4 text-amber-500" />
-              </div>
-            )}
 
             <div className="flex items-start gap-3 mb-3">
               <span className="text-2xl flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[var(--soft)] rounded-lg">
