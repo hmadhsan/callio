@@ -44,6 +44,8 @@ export default function UserNav({ variant = 'default' }: UserNavProps) {
     setOpen(false);
     await fetch('/api/auth/logout', { method: 'POST' });
     setUser(null);
+    // Broadcast auth change so all auth-aware components update instantly
+    window.dispatchEvent(new CustomEvent('callio:auth-change', { detail: { user: null } }));
     router.push('/');
     router.refresh();
   };

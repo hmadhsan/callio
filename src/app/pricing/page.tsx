@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Check, Loader2 } from 'lucide-react';
 import UserNav from '@/components/UserNav';
@@ -65,6 +65,24 @@ const plans = [
 
 function PricingCard({ plan }: { plan: typeof plans[0] }) {
   const [loading, setLoading] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => setLoggedIn(!!data?.user))
+      .catch(() => {});
+
+    const onAuthChange = (e: Event) => {
+      setLoggedIn(!!(e as CustomEvent).detail?.user);
+    };
+    window.addEventListener('callio:auth-change', onAuthChange);
+    return () => window.removeEventListener('callio:auth-change', onAuthChange);
+  }, []);
+
+  // Override Free plan CTA when logged in
+  const effectiveHref = (plan.id === 'free' && loggedIn) ? '/dashboard' : plan.href;
+  const effectiveCta = (plan.id === 'free' && loggedIn) ? 'Go to Dashboard' : plan.cta;
 
   const handleCheckout = async () => {
     setLoading(true);
@@ -118,16 +136,16 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
           </li>
         ))}
       </ul>
-      {plan.href ? (
+      {effectiveHref ? (
         <Link
-          href={plan.href}
+          href={effectiveHref}
           className={`w-full text-center py-3 rounded-lg font-semibold transition ${
             plan.highlighted
               ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]'
               : 'border border-[var(--line)] hover:bg-[var(--soft)]'
           }`}
         >
-          {plan.cta}
+          {effectiveCta}
         </Link>
       ) : (
         <button

@@ -30,6 +30,14 @@ export default function AuthAwareCTA({
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
+
+    // Listen for auth changes (e.g. logout from UserNav)
+    const onAuthChange = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setLoggedIn(!!detail?.user);
+    };
+    window.addEventListener('callio:auth-change', onAuthChange);
+    return () => window.removeEventListener('callio:auth-change', onAuthChange);
   }, []);
 
   const href = loggedIn ? loggedInHref : loggedOutHref;
