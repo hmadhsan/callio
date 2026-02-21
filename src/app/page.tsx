@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import {
-  CalendarDays, Sparkles, ArrowRight, Zap, Lock, Rocket, Gauge, Check,
+  CalendarDays, Sparkles, Zap, Lock, Rocket, Gauge, Check,
   Search, Shield, Cpu, Globe, MessageSquare, Database, BarChart3, CreditCard,
   Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow
 } from 'lucide-react';
 import UserNav from '@/components/UserNav';
 import CallioLogoComponent from '@/components/CallioLogo';
+import AuthAwareCTA from '@/components/AuthAwareCTA';
 
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
@@ -89,12 +90,9 @@ export default function Home() {
             Give your agents access to any API — search, payments, email, data, and more. Authentication, discovery, and execution handled automatically.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <Link
-              href="/signup"
-              className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition inline-flex items-center gap-2"
-            >
-              Get Started Free <ArrowRight className="w-4 h-4" />
-            </Link>
+            <AuthAwareCTA
+              className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition"
+            />
             <Link
               href="/browse"
               className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
@@ -334,13 +332,9 @@ export default function Home() {
               <Mail className="w-4 h-4" />
               founders@callio.dev
             </a>
-            <Link
-              href="/signup"
-              className="inline-flex items-center gap-2 px-8 py-3.5 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition text-sm"
-            >
-              Get Started Free
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <AuthAwareCTA
+              className="px-8 py-3.5 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition text-sm"
+            />
           </div>
         </div>
       </section>
