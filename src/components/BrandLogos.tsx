@@ -2,8 +2,22 @@
 
 export function ClaudeLogo({ className = 'w-10 h-10' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z" />
+    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" rx="20" fill="#D97757" />
+      <g transform="translate(50,50)">
+        {/* Starburst rays */}
+        {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle) => (
+          <line
+            key={angle}
+            x1="0" y1="0"
+            x2={Math.cos((angle * Math.PI) / 180) * 28}
+            y2={Math.sin((angle * Math.PI) / 180) * 28}
+            stroke="#FAE8D4"
+            strokeWidth="5.5"
+            strokeLinecap="round"
+          />
+        ))}
+      </g>
     </svg>
   );
 }
@@ -18,10 +32,20 @@ export function CursorLogo({ className = 'w-10 h-10' }: { className?: string }) 
 
 export function AntigravityLogo({ className = 'w-10 h-10' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2L4 6.5V17.5L12 22L20 17.5V6.5L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-      <path d="M12 8L8 15H16L12 8Z" fill="currentColor" opacity="0.9" />
-      <circle cx="12" cy="6" r="1.5" fill="currentColor" />
+    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" rx="20" fill="#1A1A2E" />
+      <defs>
+        <linearGradient id="ag-grad" x1="30" y1="75" x2="55" y2="20" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#2B8CFF" />
+          <stop offset="40%" stopColor="#00C853" />
+          <stop offset="70%" stopColor="#FF9800" />
+          <stop offset="100%" stopColor="#FF3D00" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M50 18C50 18 38 45 28 70C26 75 29 78 33 76C37 74 42 68 50 68C58 68 63 74 67 76C71 78 74 75 72 70C62 45 50 18 50 18Z"
+        fill="url(#ag-grad)"
+      />
     </svg>
   );
 }

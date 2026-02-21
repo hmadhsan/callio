@@ -72,7 +72,7 @@ export default function McpPage() {
           <div className="grid sm:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl border border-[var(--line)] p-6 text-center flex flex-col items-center">
               <div className="w-12 h-12 mb-3 flex items-center justify-center">
-                <ClaudeLogo className="w-10 h-10 text-[#D4A27F]" />
+                <ClaudeLogo className="w-12 h-12 rounded-xl" />
               </div>
               <h3 className="font-semibold text-lg mb-1">Claude Code</h3>
               <p className="text-sm text-[var(--muted)] mb-2">Anthropic&apos;s coding agent</p>
@@ -80,7 +80,7 @@ export default function McpPage() {
             </div>
             <div className="bg-white rounded-xl border border-[var(--line)] p-6 text-center flex flex-col items-center">
               <div className="w-12 h-12 mb-3 flex items-center justify-center">
-                <CursorLogo className="w-10 h-10 text-[#000]" />
+                <CursorLogo className="w-10 h-10" />
               </div>
               <h3 className="font-semibold text-lg mb-1">Cursor</h3>
               <p className="text-sm text-[var(--muted)] mb-2">AI-powered code editor</p>
@@ -88,7 +88,7 @@ export default function McpPage() {
             </div>
             <div className="bg-white rounded-xl border border-[var(--line)] p-6 text-center flex flex-col items-center">
               <div className="w-12 h-12 mb-3 flex items-center justify-center">
-                <AntigravityLogo className="w-10 h-10 text-[#6C3FC5]" />
+                <AntigravityLogo className="w-12 h-12 rounded-xl" />
               </div>
               <h3 className="font-semibold text-lg mb-1">Antigravity</h3>
               <p className="text-sm text-[var(--muted)] mb-2">AI development platform</p>
