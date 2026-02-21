@@ -82,7 +82,7 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.error || 'Failed to start checkout');
+        alert(data.detail || data.error || 'Failed to start checkout');
       }
     } catch {
       alert('Network error');

@@ -4,12 +4,11 @@ let _stripe: Stripe | null = null;
 
 export function getStripe(): Stripe {
   if (!_stripe) {
-    const key = process.env.STRIPE_SECRET_KEY;
+    const key = process.env.STRIPE_SECRET_KEY?.trim();
     if (!key) {
       throw new Error('STRIPE_SECRET_KEY is not set');
     }
     _stripe = new Stripe(key, {
-      apiVersion: '2024-12-18.acacia' as Stripe.LatestApiVersion,
       typescript: true,
     });
   }
@@ -49,7 +48,7 @@ export const PLANS = {
       'Usage analytics',
       'Webhook forwarding',
     ],
-    stripePriceId: process.env.STRIPE_PRO_PRICE_ID || null,
+    stripePriceId: process.env.STRIPE_PRO_PRICE_ID?.trim() || null,
   },
   team: {
     name: 'Team',
@@ -65,7 +64,7 @@ export const PLANS = {
       'Team members (coming soon)',
       'Custom rate limits',
     ],
-    stripePriceId: process.env.STRIPE_TEAM_PRICE_ID || null,
+    stripePriceId: process.env.STRIPE_TEAM_PRICE_ID?.trim() || null,
   },
 } as const;
 
