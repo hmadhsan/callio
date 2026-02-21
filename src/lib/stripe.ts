@@ -28,6 +28,8 @@ export const PLANS = {
     name: 'Free',
     monthlyPrice: 0,
     requestsPerMonth: 100,
+    maxKeys: 1,
+    premiumApis: false,
     features: [
       '100 API requests/month',
       '1 API key',
@@ -40,6 +42,8 @@ export const PLANS = {
     name: 'Pro',
     monthlyPrice: 20,
     requestsPerMonth: 10_000,
+    maxKeys: Infinity,
+    premiumApis: true,
     features: [
       '10,000 API requests/month',
       'Unlimited API keys',
@@ -54,6 +58,8 @@ export const PLANS = {
     name: 'Team',
     monthlyPrice: 99,
     requestsPerMonth: 100_000,
+    maxKeys: Infinity,
+    premiumApis: true,
     features: [
       '100,000 API requests/month',
       'Unlimited API keys',

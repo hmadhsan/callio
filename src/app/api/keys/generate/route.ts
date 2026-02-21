@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 import { generateApiKey } from '@/lib/keys';
+import { PLANS } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -13,6 +14,25 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Check plan key limit
+    const subscription = await prisma.subscription.findUnique({
+      where: { userId: user.id },
+    });
+    const plan = (subscription?.plan || 'free') as keyof typeof PLANS;
+    const maxKeys = PLANS[plan]?.maxKeys ?? PLANS.free.maxKeys;
+
+    if (maxKeys !== Infinity) {
+      const existingKeyCount = await prisma.apiKey.count({
+        where: { userId: user.id },
+      });
+      if (existingKeyCount >= maxKeys) {
+        return NextResponse.json({
+          error: `Your ${PLANS[plan]?.name || 'Free'} plan allows ${maxKeys} API key${maxKeys === 1 ? '' : 's'}. Upgrade to create more.`,
+          upgrade: 'https://callio.dev/pricing',
+        }, { status: 403 });
+      }
     }
 
     const { name } = await request.json();

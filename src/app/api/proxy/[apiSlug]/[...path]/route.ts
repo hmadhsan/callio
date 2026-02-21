@@ -109,6 +109,16 @@ async function handler(
     const plan = (subscription?.plan || 'free') as keyof typeof PLANS;
     const limit = PLANS[plan]?.requestsPerMonth || PLANS.free.requestsPerMonth;
 
+    // ── Plan-based API access check (free = public APIs only) ──
+    const canAccessPremium = PLANS[plan]?.premiumApis ?? false;
+    if (!canAccessPremium && !api.allowUnauthenticated) {
+      return NextResponse.json({
+        error: 'This API requires a Pro or Team plan. Free accounts can only use public APIs.',
+        plan,
+        upgrade: 'https://callio.dev/pricing',
+      }, { status: 403 });
+    }
+
     const periodStart = subscription?.currentPeriodStart
       || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
@@ -129,6 +139,18 @@ async function handler(
       }, { status: 429 });
     }
 
+    // Reserve a usage slot before making the upstream call (prevents race condition)
+    const usageRecord = await prisma.usageRecord.create({
+      data: {
+        userId: apiKey.userId,
+        apiSlug,
+        method: request.method,
+        path: pathStr,
+        status: 0,
+        latencyMs: 0,
+      },
+    });
+
     // Make the upstream request
     const startTime = Date.now();
     const fetchOptions: RequestInit = {
@@ -148,17 +170,11 @@ async function handler(
     const upstream = await fetch(targetUrl, fetchOptions);
     const latencyMs = Date.now() - startTime;
 
-    // Record usage (non-blocking)
-    prisma.usageRecord.create({
-      data: {
-        userId: apiKey.userId,
-        apiSlug,
-        method: request.method,
-        path: pathStr,
-        status: upstream.status,
-        latencyMs,
-      },
-    }).catch((err: unknown) => console.error('Usage record error:', err));
+    // Update usage record with actual status and latency (non-blocking)
+    prisma.usageRecord.update({
+      where: { id: usageRecord.id },
+      data: { status: upstream.status, latencyMs },
+    }).catch((err: unknown) => console.error('Usage record update error:', err));
 
     // Return the upstream response — intercept provider auth errors for better messaging
     const responseBody = await upstream.text();
