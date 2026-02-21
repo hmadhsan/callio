@@ -41,6 +41,64 @@ const methodColors: Record<string, string> = {
   PATCH: 'bg-purple-100 text-purple-700',
 };
 
+// Detect if a parameter is a chat messages field
+const isChatMessages = (param: Parameter) =>
+  param.name === 'messages' && param.type === 'array';
+
+// Detect if a parameter is a simple string-list array (emails, to, cc, bcc, urls, ids, etc.)
+const isSimpleListArray = (param: Parameter) =>
+  param.type === 'array' &&
+  ['to', 'cc', 'bcc', 'emails', 'urls', 'ids', 'text', 'texts', 'inputs'].includes(param.name);
+
+// Detect boolean parameters
+const isBooleanParam = (param: Parameter) =>
+  param.type === 'boolean';
+
+// Transform a raw user input into the correct value for the API
+const transformParamValue = (param: Parameter, rawValue: string): unknown => {
+  if (!rawValue) return undefined;
+  const trimmed = rawValue.trim();
+
+  // Chat messages: plain text → [{role: 'user', content: '...'}]
+  if (isChatMessages(param)) {
+    if (trimmed.startsWith('[')) {
+      try { return JSON.parse(trimmed); } catch { /* fall through */ }
+    }
+    return [{ role: 'user', content: rawValue }];
+  }
+
+  // Simple list arrays: comma-separated → ["a", "b", "c"]
+  if (isSimpleListArray(param)) {
+    if (trimmed.startsWith('[')) {
+      try { return JSON.parse(trimmed); } catch { /* fall through */ }
+    }
+    return rawValue.split(',').map(s => s.trim()).filter(Boolean);
+  }
+
+  // Generic arrays/objects: try JSON parse
+  if (param.type === 'array' || param.type === 'object') {
+    if ((trimmed.startsWith('[') && trimmed.endsWith(']')) || (trimmed.startsWith('{') && trimmed.endsWith('}'))) {
+      try { return JSON.parse(trimmed); } catch { /* keep as string */ }
+    }
+    return rawValue;
+  }
+
+  // Numbers
+  if ((param.type === 'number' || param.type === 'integer') && /^-?\d+(\.\d+)?$/.test(trimmed)) {
+    return Number(trimmed);
+  }
+
+  // Booleans
+  if (param.type === 'boolean') {
+    if (trimmed === 'true') return true;
+    if (trimmed === 'false') return false;
+    return undefined;
+  }
+
+  return rawValue;
+};
+
+
 export default function ApiPlayground({
   apiSlug,
   endpoints,
@@ -80,7 +138,7 @@ export default function ApiPlayground({
     Object.entries(parameters).forEach(([key, value]) => {
       path = path.replace(`{${key}}`, value);
     });
-    
+
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://callio.dev';
     let proxyUrl = `${origin}/api/proxy/${apiSlug}${path}`;
     // For GET requests, append parameters as query string
@@ -99,26 +157,15 @@ export default function ApiPlayground({
     curl += `\n  -H "Content-Type: application/json"`;
 
     if (['POST', 'PUT', 'PATCH'].includes(selectedEndpoint.method)) {
-      const bodyParams = selectedEndpoint.parameters
-        .filter(p => !p.name.includes('{') && !p.name.includes('}'))
-        .reduce((acc, p) => {
-          acc[p.name] = parameters[p.name] || 'example_value';
-          return acc;
-        }, {} as Record<string, string>);
+      const parsedBody: Record<string, unknown> = {};
+      for (const p of selectedEndpoint.parameters) {
+        if (p.name.includes('{') || p.name.includes('}')) continue;
+        const raw = parameters[p.name] || '';
+        const val = transformParamValue(p, raw || 'example_value');
+        if (val !== undefined) parsedBody[p.name] = val;
+      }
 
-      if (Object.keys(bodyParams).length > 0) {
-        // Parse JSON/number values for curl preview too
-        const parsedBody: Record<string, unknown> = {};
-        for (const [k, v] of Object.entries(bodyParams)) {
-          const t = v.trim();
-          if ((t.startsWith('[') && t.endsWith(']')) || (t.startsWith('{') && t.endsWith('}'))) {
-            try { parsedBody[k] = JSON.parse(t); continue; } catch { /* keep string */ }
-          }
-          if (/^-?\d+(\.\d+)?$/.test(t)) { parsedBody[k] = Number(t); continue; }
-          if (t === 'true') { parsedBody[k] = true; continue; }
-          if (t === 'false') { parsedBody[k] = false; continue; }
-          parsedBody[k] = v;
-        }
+      if (Object.keys(parsedBody).length > 0) {
         curl += ` \\`;
         curl += `\n  -d '${JSON.stringify(parsedBody)}'`;
       }
@@ -144,26 +191,15 @@ export default function ApiPlayground({
         path = path.replace(`{${key}}`, value);
       });
 
-      // Build the request body, parsing JSON/number values from string inputs
+      // Build the request body using smart parameter transforms
       let requestBody: string | undefined;
       if (['POST', 'PUT', 'PATCH'].includes(selectedEndpoint.method)) {
         const parsed: Record<string, unknown> = {};
-        for (const [key, value] of Object.entries(parameters)) {
-          if (!value) continue;
-          // Try parsing as JSON (arrays, objects)
-          const trimmed = value.trim();
-          if ((trimmed.startsWith('[') && trimmed.endsWith(']')) || (trimmed.startsWith('{') && trimmed.endsWith('}'))) {
-            try { parsed[key] = JSON.parse(trimmed); continue; } catch { /* keep as string */ }
-          }
-          // Try parsing as number
-          if (/^-?\d+(\.\d+)?$/.test(trimmed)) {
-            parsed[key] = Number(trimmed);
-            continue;
-          }
-          // Try parsing booleans
-          if (trimmed === 'true') { parsed[key] = true; continue; }
-          if (trimmed === 'false') { parsed[key] = false; continue; }
-          parsed[key] = value;
+        for (const p of selectedEndpoint.parameters) {
+          const raw = parameters[p.name];
+          if (!raw) continue;
+          const val = transformParamValue(p, raw);
+          if (val !== undefined) parsed[p.name] = val;
         }
         requestBody = JSON.stringify(parsed);
       }
@@ -203,10 +239,10 @@ export default function ApiPlayground({
 
       if (!response.ok) {
         // Convert error to string, handle various formats
-        let errorMsg = typeof data.error === 'string' 
-          ? data.error 
+        let errorMsg = typeof data.error === 'string'
+          ? data.error
           : (data.message || JSON.stringify(data) || 'Request failed');
-        
+
         // Check if it's a provider key issue
         if (errorMsg.includes('PROVIDER_KEY_MISSING') || data.code === 'PROVIDER_KEY_MISSING' || errorMsg.includes('Provider API key')) {
           errorMsg = `You haven't saved your provider API key yet. Scroll down to "Connect your provider key" and save your actual provider key (e.g. sk-... for OpenAI). Do NOT use your callio_ key there.`;
@@ -286,11 +322,10 @@ export default function ApiPlayground({
                       setResponse(null);
                       setError('');
                     }}
-                    className={`w-full text-left px-3 py-3 rounded-lg transition border ${
-                      selectedEndpoint.id === endpoint.id
-                        ? 'bg-white border-blue-300 shadow-sm'
-                        : 'bg-transparent border-transparent hover:bg-gray-100'
-                    }`}
+                    className={`w-full text-left px-3 py-3 rounded-lg transition border ${selectedEndpoint.id === endpoint.id
+                      ? 'bg-white border-blue-300 shadow-sm'
+                      : 'bg-transparent border-transparent hover:bg-gray-100'
+                      }`}
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <span className={`px-2 py-1 rounded text-xs font-bold ${methodColors[endpoint.method] || 'bg-gray-100 text-gray-700'}`}>
@@ -349,25 +384,80 @@ export default function ApiPlayground({
                     {selectedEndpoint.parameters.map((param) => (
                       <div key={param.name}>
                         <label className="flex items-center gap-2 text-sm font-medium text-gray-900 mb-2">
-                          {param.name}
+                          {isChatMessages(param) ? 'message' : param.name}
                           {param.required && <span className="text-red-500 text-lg">*</span>}
                           <span className="text-xs text-gray-500 font-normal">
-                            {param.type}
+                            {isChatMessages(param) ? 'text' : isSimpleListArray(param) ? 'comma-separated' : param.type}
                           </span>
                         </label>
-                        <input
-                          type={param.type === 'number' ? 'number' : 'text'}
-                          value={parameters[param.name] || ''}
-                          onChange={(e) =>
-                            setParameters({
-                              ...parameters,
-                              [param.name]: e.target.value,
-                            })
-                          }
-                          placeholder={param.description}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <p className="text-xs text-gray-500 mt-2">{param.description}</p>
+
+                        {/* Chat messages: simple textarea */}
+                        {isChatMessages(param) ? (
+                          <textarea
+                            value={parameters[param.name] || ''}
+                            onChange={(e) =>
+                              setParameters({
+                                ...parameters,
+                                [param.name]: e.target.value,
+                              })
+                            }
+                            placeholder="Type your message here..."
+                            rows={3}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+                          />
+                        ) : isBooleanParam(param) ? (
+                          /* Boolean: dropdown */
+                          <select
+                            value={parameters[param.name] || ''}
+                            onChange={(e) =>
+                              setParameters({
+                                ...parameters,
+                                [param.name]: e.target.value,
+                              })
+                            }
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                          >
+                            <option value="">— not set —</option>
+                            <option value="true">true</option>
+                            <option value="false">false</option>
+                          </select>
+                        ) : isSimpleListArray(param) ? (
+                          /* Simple list arrays: plain text input */
+                          <input
+                            type="text"
+                            value={parameters[param.name] || ''}
+                            onChange={(e) =>
+                              setParameters({
+                                ...parameters,
+                                [param.name]: e.target.value,
+                              })
+                            }
+                            placeholder={param.description || `e.g. value1, value2, value3`}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        ) : (
+                          /* Default input */
+                          <input
+                            type={param.type === 'number' || param.type === 'integer' ? 'number' : 'text'}
+                            value={parameters[param.name] || ''}
+                            onChange={(e) =>
+                              setParameters({
+                                ...parameters,
+                                [param.name]: e.target.value,
+                              })
+                            }
+                            placeholder={param.description}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        )}
+
+                        <p className="text-xs text-gray-500 mt-2">
+                          {isChatMessages(param)
+                            ? 'Just type your message — we\'ll format it for the API automatically'
+                            : isSimpleListArray(param)
+                              ? `Separate multiple values with commas`
+                              : param.description}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -422,11 +512,10 @@ export default function ApiPlayground({
                 <div className="flex items-center gap-3">
                   {response && (
                     <>
-                      <span className={`px-3 py-1 text-xs font-bold rounded ${
-                        response.status >= 200 && response.status < 300
-                          ? 'bg-green-900/50 text-green-200'
-                          : 'bg-red-900/50 text-red-200'
-                      }`}>
+                      <span className={`px-3 py-1 text-xs font-bold rounded ${response.status >= 200 && response.status < 300
+                        ? 'bg-green-900/50 text-green-200'
+                        : 'bg-red-900/50 text-red-200'
+                        }`}>
                         {response.status}
                       </span>
                       <span className="text-xs text-gray-400">{response.responseTime}ms</span>
