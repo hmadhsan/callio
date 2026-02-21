@@ -4,7 +4,6 @@ import {
   Search, Shield, Cpu, Globe, MessageSquare, Database, BarChart3, CreditCard,
   Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow
 } from 'lucide-react';
-import WaitlistForm from '@/components/WaitlistForm';
 import UserNav from '@/components/UserNav';
 import CallioLogoComponent from '@/components/CallioLogo';
 
@@ -38,7 +37,7 @@ const FAQS = [
   },
   {
     q: 'Is there a free tier?',
-    a: 'Yes. We\'ll have a generous free tier for developers. Join the waitlist to be first in line when we launch.',
+    a: 'Yes. We have a generous free tier for developers. Sign up to get started instantly.',
   },
   {
     q: 'Can I add my own API to Callio?',
@@ -320,15 +319,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Waitlist ── */}
-      <section id="waitlist" className="py-20 sm:py-24 bg-[var(--accent)] text-white">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8">
-          <h2 className="text-3xl sm:text-4xl font-display text-center">Join the waitlist</h2>
-          <p className="mt-4 text-center text-white/70 text-lg">
-            Early access for API providers and AI builders. We&apos;ll contact you when your spot opens.
+      {/* ── Contact Us ── */}
+      <section id="contact" className="py-20 sm:py-24 bg-[var(--accent)] text-white">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
+          <h2 className="text-3xl sm:text-4xl font-display">Get in touch</h2>
+          <p className="mt-4 text-white/70 text-lg">
+            Have questions, feedback, or want to list your API? We&apos;d love to hear from you.
           </p>
-          <div className="mt-10">
-            <WaitlistForm />
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="mailto:founders@callio.dev"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--accent)] font-semibold rounded-full hover:bg-white/90 transition text-sm"
+            >
+              <Mail className="w-4 h-4" />
+              founders@callio.dev
+            </a>
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 px-8 py-3.5 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition text-sm"
+            >
+              Get Started Free
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -371,7 +383,7 @@ export default function Home() {
               <div>
                 <div className="text-white font-semibold mb-3">Company</div>
                 <div className="space-y-2">
-                  <a href="#waitlist" className="block hover:text-white transition">Waitlist</a>
+                  <a href="#contact" className="block hover:text-white transition">Contact</a>
                   <a href="mailto:founders@callio.dev" className="block hover:text-white transition">Contact</a>
                 </div>
               </div>
