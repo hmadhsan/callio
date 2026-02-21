@@ -124,10 +124,24 @@ export default function Home() {
               <div className="text-[var(--muted)]">Uptime SLA</div>
             </div>
           </div>
+
+          {/* Works with bar */}
+          <div className="mt-10 flex items-center gap-3 text-sm text-[var(--muted)]">
+            <span>Works with</span>
+            <span className="font-semibold text-[var(--ink)]">OpenAI Codex</span>
+            <span className="text-[var(--line)]">·</span>
+            <span className="font-semibold text-[var(--ink)]">Claude Code</span>
+            <span className="text-[var(--line)]">·</span>
+            <span className="font-semibold text-[var(--ink)]">Cursor</span>
+            <span className="text-[var(--line)]">·</span>
+            <span className="font-semibold text-[var(--ink)]">LangChain</span>
+            <span className="text-[var(--line)]">·</span>
+            <span className="font-semibold text-[var(--ink)]">CrewAI</span>
+            <span className="text-[var(--line)]">·</span>
+            <span>& more</span>
+          </div>
         </div>
       </section>
-
-      {/* ── How it works ── */}
       <section id="how" className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-14">
