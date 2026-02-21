@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, X, Sparkles } from 'lucide-react';
+import { Search, X, Sparkles, Lock, Crown } from 'lucide-react';
 
 interface Api {
   id: string;
@@ -15,12 +15,14 @@ interface Api {
   webhook: boolean;
   featured: boolean;
   pricing: string;
+  allowUnauthenticated: boolean;
   endpointsCount: number;
 }
 
 export default function BrowseGrid({ apis }: { apis: Api[] }) {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [tierFilter, setTierFilter] = useState<'all' | 'free' | 'premium'>('all');
 
   // Extract unique categories, sorted alphabetically
   const categories = useMemo(() => {
@@ -31,6 +33,12 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
   // Filter APIs based on search and category
   const filtered = useMemo(() => {
     let result = apis;
+
+    if (tierFilter === 'free') {
+      result = result.filter((a) => a.allowUnauthenticated);
+    } else if (tierFilter === 'premium') {
+      result = result.filter((a) => !a.allowUnauthenticated);
+    }
 
     if (activeCategory) {
       result = result.filter((a) => a.category === activeCategory);
@@ -48,7 +56,7 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
     }
 
     return result;
-  }, [apis, search, activeCategory]);
+  }, [apis, search, activeCategory, tierFilter]);
 
   // Count per category
   const categoryCounts = useMemo(() => {
@@ -79,6 +87,26 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
             <X className="w-4 h-4" />
           </button>
         )}
+      </div>
+
+      {/* Tier Filter */}
+      <div className="flex gap-2 mb-4">
+        {(['all', 'free', 'premium'] as const).map((tier) => {
+          const count = tier === 'all' ? apis.length : tier === 'free' ? apis.filter(a => a.allowUnauthenticated).length : apis.filter(a => !a.allowUnauthenticated).length;
+          return (
+            <button
+              key={tier}
+              onClick={() => setTierFilter(tier)}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition border ${
+                tierFilter === tier
+                  ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+                  : 'bg-white text-[var(--muted)] border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--ink)]'
+              }`}
+            >
+              {tier === 'all' ? 'All' : tier === 'free' ? '🟢 Free' : '👑 Premium'} ({count})
+            </button>
+          );
+        })}
       </div>
 
       {/* Category Pills */}
@@ -130,6 +158,13 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
                 <Sparkles className="w-4 h-4 text-amber-500" />
               </div>
             )}
+            {!api.allowUnauthenticated && (
+              <div className={`absolute top-3 ${api.featured ? 'right-9' : 'right-3'}`}>
+                <span className="inline-flex items-center gap-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  <Crown className="w-3 h-3" /> Pro
+                </span>
+              </div>
+            )}
             <div className="flex items-start gap-3 mb-3">
               <span className="text-2xl flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[var(--soft)] rounded-lg">
                 {api.icon}
@@ -165,7 +200,7 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
         <div className="text-center py-16">
           <p className="text-[var(--muted)] text-lg mb-2">No APIs match your search.</p>
           <button
-            onClick={() => { setSearch(''); setActiveCategory(null); }}
+            onClick={() => { setSearch(''); setActiveCategory(null); setTierFilter('all'); }}
             className="text-sm text-[var(--accent)] hover:underline"
           >
             Clear filters

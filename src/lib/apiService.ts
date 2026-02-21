@@ -19,6 +19,7 @@ export interface ApiListItem {
   webhook: boolean;
   featured: boolean;
   pricing: string;
+  allowUnauthenticated: boolean;
   endpointsCount: number;
 }
 
@@ -89,6 +90,7 @@ export async function getAllApis(): Promise<ApiListItem[]> {
     webhook: api.webhook,
     featured: api.featured,
     pricing: api.pricing,
+    allowUnauthenticated: api.allowUnauthenticated,
     endpointsCount: api._count.endpoints,
   }));
 }

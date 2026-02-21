@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, Check, ExternalLink, Zap, Lock, Globe, Play } from 'lucide-react';
+import { ChevronLeft, Check, ExternalLink, Zap, Lock, Globe, Play, Crown } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
 import AddToAgentButton from '@/components/AddToAgentButton';
 import ProviderKeyForm from '@/components/ProviderKeyForm';
@@ -51,6 +51,33 @@ interface ClientDetailPageProps {
 
 export default function ClientDetailPage({ api, endpoints }: ClientDetailPageProps) {
   const [showPlayground, setShowPlayground] = useState(false);
+  const [userPlan, setUserPlan] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!api.allowUnauthenticated) {
+      // Check user's plan for premium API banner
+      fetch('/api/auth/me')
+        .then((r) => r.ok ? r.json() : null)
+        .then(async (data) => {
+          if (!data?.user) {
+            setUserPlan('free');
+            return;
+          }
+          // Check subscription
+          try {
+            const res = await fetch('/api/usage');
+            const usage = await res.json();
+            setUserPlan(usage.plan || 'free');
+          } catch {
+            setUserPlan('free');
+          }
+        })
+        .catch(() => setUserPlan('free'));
+    }
+  }, [api.allowUnauthenticated]);
+
+  const isPremiumApi = !api.allowUnauthenticated;
+  const needsUpgrade = isPremiumApi && userPlan === 'free';
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
@@ -175,6 +202,31 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           </div>
         </div>
       </section>
+
+      {/* Premium API Upgrade Banner */}
+      {needsUpgrade && (
+        <section className="border-b border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 flex items-center justify-center">
+                  <Crown className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-violet-900">This is a Premium API</p>
+                  <p className="text-sm text-violet-700">Upgrade to Pro or Team to use {api.name} in your agents.</p>
+                </div>
+              </div>
+              <Link
+                href="/pricing"
+                className="px-5 py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-violet-700 hover:to-indigo-700 transition text-sm"
+              >
+                Upgrade Now
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Authentication Setup Guide - Show for APIs that require credentials */}
       {!api.allowUnauthenticated && api.setupGuide && (
