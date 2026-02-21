@@ -1,22 +1,14 @@
 import Link from 'next/link';
 import { getAllApis } from '@/lib/apiService';
-import { Search, ArrowRight, Filter } from 'lucide-react';
 import UserNav from '@/components/UserNav';
 import CallioLogo from '@/components/CallioLogo';
+import BrowseGrid from '@/components/BrowseGrid';
 
 export const dynamic = 'force-dynamic';
 
 export default async function BrowsePage() {
   const apis = await getAllApis();
-
-  // Group by category
-  const categories = apis.reduce<Record<string, typeof apis>>((acc, api) => {
-    if (!acc[api.category]) acc[api.category] = [];
-    acc[api.category].push(api);
-    return acc;
-  }, {});
-
-  const categoryList = Object.entries(categories).sort(([a], [b]) => a.localeCompare(b));
+  const categoryCount = new Set(apis.map((a) => a.category)).size;
 
   return (
     <div className="min-h-screen bg-[var(--page-bg)]">
@@ -33,57 +25,17 @@ export default async function BrowsePage() {
 
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-bold mb-3" style={{ fontFamily: 'var(--font-display)' }}>
-            Browse APIs
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+            Discover APIs
           </h1>
           <p className="text-[var(--muted)] text-lg max-w-2xl">
-            Discover and integrate APIs for your AI agents. One key, any API.
+            {apis.length} APIs across {categoryCount} categories. One key, any API.
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="flex gap-6 mb-10">
-          <div className="bg-white rounded-xl border border-[var(--line)] px-5 py-3">
-            <span className="text-2xl font-bold">{apis.length}</span>
-            <span className="text-[var(--muted)] text-sm ml-2">APIs available</span>
-          </div>
-          <div className="bg-white rounded-xl border border-[var(--line)] px-5 py-3">
-            <span className="text-2xl font-bold">{categoryList.length}</span>
-            <span className="text-[var(--muted)] text-sm ml-2">Categories</span>
-          </div>
-        </div>
-
-        {/* All APIs Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {apis.map((api) => (
-            <Link
-              key={api.id}
-              href={`/skills/callio/${api.slug}`}
-              className="group bg-white rounded-xl border border-[var(--line)] p-5 hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col"
-            >
-              <div className="flex items-start gap-3 mb-3">
-                <span className="text-3xl">{api.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold group-hover:text-[var(--accent)] transition truncate">{api.name}</h3>
-                  <span className="text-xs text-[var(--muted)] font-mono">callio/{api.slug}</span>
-                </div>
-              </div>
-              <p className="text-sm text-[var(--muted)] line-clamp-2 mb-4 flex-1">{api.shortDescription}</p>
-              <div className="flex items-center gap-2 text-xs text-[var(--muted)] flex-wrap">
-                <span className="bg-[var(--soft)] px-2 py-0.5 rounded font-medium">{api.category}</span>
-                <span className="bg-[var(--soft)] px-2 py-0.5 rounded">{api.authentication}</span>
-                <span className="bg-[var(--soft)] px-2 py-0.5 rounded">{api.endpointsCount} endpoints</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {apis.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-[var(--muted)] text-lg">No APIs available yet. Check back soon.</p>
-          </div>
-        )}
+        {/* Client-side interactive grid */}
+        <BrowseGrid apis={apis} />
       </div>
     </div>
   );

@@ -17,6 +17,8 @@ export interface ApiListItem {
   shortDescription: string;
   authentication: string;
   webhook: boolean;
+  featured: boolean;
+  pricing: string;
   endpointsCount: number;
 }
 
@@ -85,6 +87,8 @@ export async function getAllApis(): Promise<ApiListItem[]> {
     shortDescription: api.shortDescription,
     authentication: api.authentication,
     webhook: api.webhook,
+    featured: api.featured,
+    pricing: api.pricing,
     endpointsCount: api._count.endpoints,
   }));
 }
