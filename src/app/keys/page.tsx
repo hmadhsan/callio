@@ -6,6 +6,7 @@ import GenerateKeyForm from '@/components/GenerateKeyForm';
 import KeyTableRow from '@/components/KeyTableRow';
 import { ArrowLeft, Key, Shield } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
+import UserNav from '@/components/UserNav';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,6 +31,7 @@ export default async function KeysPage() {
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Dashboard</Link>
             <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Browse</Link>
+            <UserNav />
           </div>
         </div>
       </nav>
