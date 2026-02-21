@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Terminal, Copy, Zap, ArrowRight, Check, Box, Cpu, Sparkles } from 'lucide-react';
 import UserNav from '@/components/UserNav';
 import CallioLogo from '@/components/CallioLogo';
+import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
 
 export default function McpPage() {
   const configJson = `{
@@ -69,18 +70,30 @@ export default function McpPage() {
             Works with your favorite AI tools
           </h2>
           <div className="grid sm:grid-cols-3 gap-6">
-            {[
-              { name: 'Claude Code', desc: "Anthropic's coding agent", icon: '🤖', configPath: '~/.claude/claude_desktop_config.json' },
-              { name: 'Cursor', desc: 'AI-powered code editor', icon: '⚡', configPath: '.cursor/mcp.json' },
-              { name: 'Antigravity', desc: 'AI development platform', icon: '🚀', configPath: 'MCP Settings' },
-            ].map((tool) => (
-              <div key={tool.name} className="bg-white rounded-xl border border-[var(--line)] p-6 text-center">
-                <div className="text-3xl mb-3">{tool.icon}</div>
-                <h3 className="font-semibold text-lg mb-1">{tool.name}</h3>
-                <p className="text-sm text-[var(--muted)] mb-2">{tool.desc}</p>
-                <code className="text-xs text-violet-600 bg-violet-50 px-2 py-1 rounded">{tool.configPath}</code>
+            <div className="bg-white rounded-xl border border-[var(--line)] p-6 text-center flex flex-col items-center">
+              <div className="w-12 h-12 mb-3 flex items-center justify-center">
+                <ClaudeLogo className="w-10 h-10 text-[#D4A27F]" />
               </div>
-            ))}
+              <h3 className="font-semibold text-lg mb-1">Claude Code</h3>
+              <p className="text-sm text-[var(--muted)] mb-2">Anthropic&apos;s coding agent</p>
+              <code className="text-xs text-violet-600 bg-violet-50 px-2 py-1 rounded">~/.claude/claude_desktop_config.json</code>
+            </div>
+            <div className="bg-white rounded-xl border border-[var(--line)] p-6 text-center flex flex-col items-center">
+              <div className="w-12 h-12 mb-3 flex items-center justify-center">
+                <CursorLogo className="w-10 h-10 text-[#000]" />
+              </div>
+              <h3 className="font-semibold text-lg mb-1">Cursor</h3>
+              <p className="text-sm text-[var(--muted)] mb-2">AI-powered code editor</p>
+              <code className="text-xs text-violet-600 bg-violet-50 px-2 py-1 rounded">.cursor/mcp.json</code>
+            </div>
+            <div className="bg-white rounded-xl border border-[var(--line)] p-6 text-center flex flex-col items-center">
+              <div className="w-12 h-12 mb-3 flex items-center justify-center">
+                <AntigravityLogo className="w-10 h-10 text-[#6C3FC5]" />
+              </div>
+              <h3 className="font-semibold text-lg mb-1">Antigravity</h3>
+              <p className="text-sm text-[var(--muted)] mb-2">AI development platform</p>
+              <code className="text-xs text-violet-600 bg-violet-50 px-2 py-1 rounded">MCP Settings</code>
+            </div>
           </div>
         </div>
       </section>
