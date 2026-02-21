@@ -1,0 +1,19 @@
+{
+  "name": "@callio/mcp-server",
+  "version": "1.0.0",
+  "description": "Callio MCP Server — Give AI agents access to 50+ APIs through one tool",
+  "main": "index.js",
+  "bin": {
+    "callio-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": ["mcp", "callio", "api", "ai-agents", "claude", "cursor", "antigravity"],
+  "author": "Callio",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0"
+  }
+}

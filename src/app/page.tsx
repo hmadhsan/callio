@@ -67,6 +67,7 @@ export default function Home() {
           <CallioLogoComponent size={34} />
           <nav className="hidden sm:flex items-center gap-6 text-sm">
             <Link href="/browse" className="hover:text-[var(--accent)] transition">Browse APIs</Link>
+            <Link href="/mcp" className="hover:text-[var(--accent)] transition">MCP</Link>
             <Link href="/pricing" className="hover:text-[var(--accent)] transition">Pricing</Link>
             <Link href="/docs" className="hover:text-[var(--accent)] transition">Docs</Link>
             <Link href="/how-it-works" className="hover:text-[var(--accent)] transition">How it works</Link>
@@ -138,7 +139,7 @@ export default function Home() {
             <span className="text-[var(--line)]">·</span>
             <span className="font-semibold text-[var(--ink)]">CrewAI</span>
             <span className="text-[var(--line)]">·</span>
-            <span>& more</span>
+            <Link href="/mcp" className="hover:text-[var(--accent)] transition underline underline-offset-2">& more</Link>
           </div>
         </div>
       </section>
