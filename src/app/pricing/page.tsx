@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Check, Loader2 } from 'lucide-react';
 import UserNav from '@/components/UserNav';
+import CallioLogo from '@/components/CallioLogo';
 
 const plans = [
   {
@@ -158,9 +159,7 @@ export default function PricingPage() {
       {/* Nav */}
       <nav className="border-b border-[var(--line)] bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="font-bold text-lg tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
-            Callio
-          </Link>
+          <CallioLogo size={30} />
           <div className="flex items-center gap-4">
             <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Browse</Link>
             <Link href="/docs" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Docs</Link>

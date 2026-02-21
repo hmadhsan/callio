@@ -6,21 +6,7 @@ import {
 } from 'lucide-react';
 import WaitlistForm from '@/components/WaitlistForm';
 import UserNav from '@/components/UserNav';
-
-function CallioLogo({ size = 36 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="40" height="40" rx="10" fill="#0a0a0a" />
-      <path
-        d="M20 8C13.373 8 8 13.373 8 20s5.373 12 12 12c2.1 0 4.08-.54 5.8-1.49"
-        stroke="white"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      <circle cx="28" cy="14" r="3" fill="white" />
-    </svg>
-  );
-}
+import CallioLogoComponent from '@/components/CallioLogo';
 
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
@@ -78,10 +64,7 @@ export default function Home() {
       {/* Nav */}
       <header className="sticky top-0 z-50 backdrop-blur-sm bg-[rgba(250,250,250,0.8)] border-b border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <CallioLogo size={34} />
-            <span className="text-lg font-semibold tracking-tight">Callio</span>
-          </Link>
+          <CallioLogoComponent size={34} />
           <nav className="hidden sm:flex items-center gap-6 text-sm">
             <Link href="/browse" className="hover:text-[var(--accent)] transition">Browse APIs</Link>
             <Link href="/pricing" className="hover:text-[var(--accent)] transition">Pricing</Link>

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Lock, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 import { Suspense } from 'react';
+import { CallioMark } from '@/components/CallioLogo';
 
 function LoginForm() {
   const router = useRouter();
@@ -75,7 +76,8 @@ function LoginForm() {
     <div className="min-h-screen bg-[var(--page-bg)] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-block mb-6">
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
+            <CallioMark size={34} />
             <span className="text-2xl font-bold tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>Callio</span>
           </Link>
           <h1 className="text-2xl font-bold mb-2">Welcome back</h1>
