@@ -29,6 +29,7 @@ interface ApiPlaygroundProps {
   apiSlug: string;
   endpoints: EndpointInfo[];
   baseUrl: string;
+  allowUnauthenticated?: boolean;
   onClose?: () => void;
 }
 
@@ -44,6 +45,7 @@ export default function ApiPlayground({
   apiSlug,
   endpoints,
   baseUrl,
+  allowUnauthenticated,
   onClose,
 }: ApiPlaygroundProps) {
   const [selectedEndpoint, setSelectedEndpoint] = useState<EndpointInfo | null>(
@@ -80,7 +82,18 @@ export default function ApiPlayground({
     });
     
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://callio.dev';
-    const proxyUrl = `${origin}/api/proxy/${apiSlug}${path}`;
+    let proxyUrl = `${origin}/api/proxy/${apiSlug}${path}`;
+    // For GET requests, append parameters as query string
+    if (['GET', 'DELETE', 'HEAD'].includes(selectedEndpoint.method)) {
+      const qp = new URLSearchParams();
+      for (const [key, value] of Object.entries(parameters)) {
+        if (value && !selectedEndpoint.path.includes(`{${key}}`)) {
+          qp.set(key, value);
+        }
+      }
+      const qs = qp.toString();
+      if (qs) proxyUrl += `?${qs}`;
+    }
     let curl = `curl -X ${selectedEndpoint.method} "${proxyUrl}" \\`;
     curl += `\n  -H "Authorization: Bearer ${callioApiKey || 'YOUR_CALLIO_API_KEY'}" \\`;
     curl += `\n  -H "Content-Type: application/json"`;
@@ -155,8 +168,21 @@ export default function ApiPlayground({
         requestBody = JSON.stringify(parsed);
       }
 
+      // For GET/DELETE, append non-path parameters as query string
+      let proxyPath = `/api/proxy/${apiSlug}${path}`;
+      if (['GET', 'DELETE', 'HEAD'].includes(selectedEndpoint.method)) {
+        const queryParams = new URLSearchParams();
+        for (const [key, value] of Object.entries(parameters)) {
+          if (value && !selectedEndpoint.path.includes(`{${key}}`)) {
+            queryParams.set(key, value);
+          }
+        }
+        const qs = queryParams.toString();
+        if (qs) proxyPath += `?${qs}`;
+      }
+
       // Call through Callio's proxy
-      const response = await fetch(`/api/proxy/${apiSlug}${path}`, {
+      const response = await fetch(proxyPath, {
         method: selectedEndpoint.method,
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +191,15 @@ export default function ApiPlayground({
         body: requestBody,
       });
 
-      const data = await response.json();
+      // Handle non-JSON responses gracefully
+      const responseText = await response.text();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let data: any;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        data = { raw: responseText || '(empty response)' };
+      }
 
       if (!response.ok) {
         // Convert error to string, handle various formats
@@ -288,16 +322,22 @@ export default function ApiPlayground({
                     placeholder="callio_..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                  <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mt-3">
-                    <p className="text-xs text-amber-900 font-bold mb-2">⚠️ IMPORTANT: Two-step process</p>
-                    <ol className="text-xs text-amber-900 leading-relaxed space-y-2 ml-4 list-decimal">
-                      <li><strong>First:</strong> Scroll down and use "Save Provider Key" to connect your provider account (e.g., OpenAI, Stripe)</li>
-                      <li><strong>Then:</strong> Come back here and enter your Callio API key (from "Add to Agent" button) to test</li>
-                    </ol>
-                    <p className="text-xs text-amber-800 mt-3 italic">
-                      Your Callio key tells our proxy which account to use. The proxy forwards requests using your saved provider key.
+                  {!allowUnauthenticated ? (
+                    <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mt-3">
+                      <p className="text-xs text-amber-900 font-bold mb-2">⚠️ IMPORTANT: Two-step process</p>
+                      <ol className="text-xs text-amber-900 leading-relaxed space-y-2 ml-4 list-decimal">
+                        <li><strong>First:</strong> Scroll down and use &quot;Save Provider Key&quot; to connect your provider account (e.g., OpenAI, Stripe)</li>
+                        <li><strong>Then:</strong> Come back here and enter your Callio API key (from &quot;Add to Agent&quot; button) to test</li>
+                      </ol>
+                      <p className="text-xs text-amber-800 mt-3 italic">
+                        Your Callio key tells our proxy which account to use. The proxy forwards requests using your saved provider key.
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-gray-500 mt-2">
+                      This is a free public API — just enter your Callio key and hit Send.
                     </p>
-                  </div>
+                  )}
                 </div>
               </div>
 
@@ -405,12 +445,14 @@ export default function ApiPlayground({
                       <p className="text-sm font-bold text-red-300 mb-2">❌ Request Failed</p>
                       <p className="text-sm text-red-200 leading-relaxed">{error}</p>
                     </div>
-                    <div className="bg-yellow-900/20 border border-yellow-700 rounded-lg p-4">
-                      <p className="text-sm font-bold text-yellow-300 mb-2">💡 Need your API key?</p>
-                      <p className="text-sm text-yellow-200 leading-relaxed">
-                        Click "Get API Credentials" button above to get instructions on how to obtain your actual provider API key.
-                      </p>
-                    </div>
+                    {!allowUnauthenticated && (
+                      <div className="bg-yellow-900/20 border border-yellow-700 rounded-lg p-4">
+                        <p className="text-sm font-bold text-yellow-300 mb-2">💡 Need your API key?</p>
+                        <p className="text-sm text-yellow-200 leading-relaxed">
+                          Click &quot;Get API Credentials&quot; button above to get instructions on how to obtain your actual provider API key.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <p className="text-sm text-gray-500">

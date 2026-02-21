@@ -314,6 +314,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           apiSlug={api.slug}
           endpoints={endpoints}
           baseUrl={api.baseUrl || ''}
+          allowUnauthenticated={api.allowUnauthenticated}
           onClose={() => setShowPlayground(false)}
         />
       )}
