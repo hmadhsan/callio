@@ -267,7 +267,7 @@ export default function Home() {
                   Setup guide <ArrowRight className="w-4 h-4" />
                 </Link>
                 <a
-                  href="https://github.com/hmadhsan/callio/tree/main/mcp-server"
+                  href="https://github.com/hmadhsan/callio-mcp"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3 rounded-full border border-[#333] text-[#a1a1aa] hover:text-white hover:border-[#555] transition font-semibold inline-flex items-center gap-2"
@@ -287,7 +287,7 @@ export default function Home() {
               <div className="ml-4"><span className="text-[#a78bfa]">&quot;mcpServers&quot;</span>: {`{`}</div>
               <div className="ml-8"><span className="text-[#a78bfa]">&quot;callio&quot;</span>: {`{`}</div>
               <div className="ml-12"><span className="text-[#a78bfa]">&quot;command&quot;</span>: <span className="text-[#34d399]">&quot;npx&quot;</span>,</div>
-              <div className="ml-12"><span className="text-[#a78bfa]">&quot;args&quot;</span>: [<span className="text-[#34d399]">&quot;-y&quot;</span>, <span className="text-[#34d399]">&quot;github:hmadhsan/callio/mcp-server&quot;</span>],</div>
+              <div className="ml-12"><span className="text-[#a78bfa]">&quot;args&quot;</span>: [<span className="text-[#34d399]">&quot;-y&quot;</span>, <span className="text-[#34d399]">&quot;github:hmadhsan/callio-mcp&quot;</span>],</div>
               <div className="ml-12"><span className="text-[#a78bfa]">&quot;env&quot;</span>: {`{`}</div>
               <div className="ml-16"><span className="text-[#a78bfa]">&quot;CALLIO_API_KEY&quot;</span>: <span className="text-[#fbbf24]">&quot;callio_your_key&quot;</span></div>
               <div className="ml-12">{`}`}</div>

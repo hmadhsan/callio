@@ -9,7 +9,7 @@ export default function McpPage() {
   "mcpServers": {
     "callio": {
       "command": "npx",
-      "args": ["-y", "github:hmadhsan/callio/mcp-server"],
+      "args": ["-y", "github:hmadhsan/callio-mcp"],
       "env": {
         "CALLIO_API_KEY": "callio_your_key_here"
       }
@@ -52,7 +52,7 @@ export default function McpPage() {
               Get API Key <ArrowRight className="w-4 h-4" />
             </Link>
             <a
-              href="https://github.com/hmadhsan/callio/tree/main/mcp-server"
+              href="https://github.com/hmadhsan/callio-mcp"
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"

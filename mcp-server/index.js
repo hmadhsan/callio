@@ -7,7 +7,7 @@
  * through the Callio gateway using the Model Context Protocol.
  * 
  * Usage:
- *   CALLIO_API_KEY=callio_xxx npx github:hmadhsan/callio/mcp-server
+ *   CALLIO_API_KEY=callio_xxx npx github:hmadhsan/callio-mcp
  * 
  * Or configure in your AI tool's MCP settings.
  */
