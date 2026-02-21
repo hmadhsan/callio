@@ -109,16 +109,6 @@ async function handler(
     const plan = (subscription?.plan || 'free') as keyof typeof PLANS;
     const limit = PLANS[plan]?.requestsPerMonth || PLANS.free.requestsPerMonth;
 
-    // ── Plan-based API access check (free = public APIs only) ──
-    const canAccessPremium = PLANS[plan]?.premiumApis ?? false;
-    if (!canAccessPremium && !api.allowUnauthenticated) {
-      return NextResponse.json({
-        error: 'This API requires a Pro or Team plan. Free accounts can only use public APIs.',
-        plan,
-        upgrade: 'https://callio.dev/pricing',
-      }, { status: 403 });
-    }
-
     const periodStart = subscription?.currentPeriodStart
       || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 

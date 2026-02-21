@@ -79,8 +79,7 @@ server.tool(
       }
 
       const lines = apis.map((a) => {
-        const premium = a.allowUnauthenticated ? "Free" : "Pro";
-        return `• ${a.name} (slug: ${a.slug}) [${a.category}] [${premium}] — ${a.shortDescription} (${a.endpointsCount} endpoints)`;
+        return `• ${a.name} (slug: ${a.slug}) [${a.category}] — ${a.shortDescription} (${a.endpointsCount} endpoints)`;
       });
 
       return {
