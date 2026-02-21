@@ -120,7 +120,9 @@ export async function getApiBySlug(slug: string): Promise<ApiDetail | null> {
       description: endpoint.description,
       parameters: Array.isArray(endpoint.parameters)
         ? (endpoint.parameters as ApiEndpoint['parameters'])
-        : [],
+        : typeof endpoint.parameters === 'string'
+          ? JSON.parse(endpoint.parameters)
+          : [],
       responseExample: endpoint.responseExample,
     })),
     authentication: api.authentication,
