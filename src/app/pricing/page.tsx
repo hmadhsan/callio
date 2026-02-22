@@ -15,7 +15,7 @@ const plans = [
     description: 'Perfect for trying out Callio',
     features: [
       '50 API requests/month',
-      '2 API keys',
+      '5 API keys',
       'Access to all APIs',
       'MCP integration',
       'Community support',
@@ -113,8 +113,8 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
   return (
     <div
       className={`rounded-2xl border p-8 flex flex-col ${plan.highlighted
-          ? 'border-[var(--accent)] shadow-lg ring-1 ring-[var(--accent)] relative'
-          : 'border-[var(--line)]'
+        ? 'border-[var(--accent)] shadow-lg ring-1 ring-[var(--accent)] relative'
+        : 'border-[var(--line)]'
         }`}
     >
       {plan.highlighted && (
@@ -140,8 +140,8 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
         <Link
           href={effectiveHref}
           className={`w-full text-center py-3 rounded-lg font-semibold transition ${plan.highlighted
-              ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]'
-              : 'border border-[var(--line)] hover:bg-[var(--soft)]'
+            ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]'
+            : 'border border-[var(--line)] hover:bg-[var(--soft)]'
             }`}
         >
           {effectiveCta}
@@ -151,8 +151,8 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
           onClick={handleCheckout}
           disabled={loading}
           className={`w-full py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2 ${plan.highlighted
-              ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)] disabled:opacity-50'
-              : 'border border-[var(--line)] hover:bg-[var(--soft)] disabled:opacity-50'
+            ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)] disabled:opacity-50'
+            : 'border border-[var(--line)] hover:bg-[var(--soft)] disabled:opacity-50'
             }`}
         >
           {loading ? (

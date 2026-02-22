@@ -28,10 +28,10 @@ export const PLANS = {
     name: 'Free',
     monthlyPrice: 0,
     requestsPerMonth: 50,
-    maxKeys: 2,
+    maxKeys: 5,
     features: [
       '50 API requests/month',
-      '2 API keys',
+      '5 API keys',
       'Access to all APIs',
       'MCP integration',
       'Community support',

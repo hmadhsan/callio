@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Copy, Check } from 'lucide-react';
 
 export default function GenerateKeyForm() {
   const [keyName, setKeyName] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [upgradePrompt, setUpgradePrompt] = useState(false);
+  const [generatedKey, setGeneratedKey] = useState('');
+  const [copied, setCopied] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,13 +27,14 @@ export default function GenerateKeyForm() {
         body: JSON.stringify({ name: keyName || 'Default API Key' }),
       });
 
+      const data = await response.json().catch(() => null);
+
       if (response.ok) {
-        setKeyName('');
+        setGeneratedKey(data?.key || '');
         setShowForm(false);
         setUpgradePrompt(false);
         router.refresh();
       } else {
-        const data = await response.json().catch(() => null);
         if (response.status === 403 && data?.upgrade) {
           setShowForm(false);
           setUpgradePrompt(true);
@@ -44,6 +48,64 @@ export default function GenerateKeyForm() {
       setIsGenerating(false);
     }
   };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(generatedKey);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // fallback
+    }
+  };
+
+  const handleDismissKey = () => {
+    setGeneratedKey('');
+    setKeyName('');
+  };
+
+  // Show the generated key
+  if (generatedKey) {
+    return (
+      <div className="mb-6 rounded-xl border border-green-200 bg-green-50 p-6">
+        <div className="flex items-center gap-2 mb-1">
+          <Check className="w-5 h-5 text-green-600" />
+          <h3 className="text-base font-semibold text-green-800">API Key Generated!</h3>
+        </div>
+        <p className="text-sm text-green-700 mb-4">
+          Copy this key now — you won&apos;t be able to see it again.
+        </p>
+        <div className="flex items-center gap-2 mb-4">
+          <code className="flex-1 text-xs sm:text-sm bg-white border border-green-200 rounded-lg px-3.5 py-2.5 break-all font-mono select-all">
+            {generatedKey}
+          </code>
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="shrink-0 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg flex items-center gap-2 transition"
+          >
+            {copied ? (
+              <>
+                <Check className="w-4 h-4" />
+                Copied
+              </>
+            ) : (
+              <>
+                <Copy className="w-4 h-4" />
+                Copy
+              </>
+            )}
+          </button>
+        </div>
+        <button
+          onClick={handleDismissKey}
+          className="text-sm text-green-700 hover:text-green-900 font-medium transition"
+        >
+          Done — I&apos;ve saved it
+        </button>
+      </div>
+    );
+  }
 
   if (upgradePrompt) {
     return (
@@ -63,7 +125,7 @@ export default function GenerateKeyForm() {
                 API key limit reached
               </h3>
               <p className="mt-1 text-sm text-gray-600">
-                Your Free plan includes 2 API keys. Upgrade to <span className="font-medium text-gray-900">Pro</span> for 10 keys, 5,000 requests/month, and priority support.
+                Your Free plan includes 5 API keys. Upgrade to <span className="font-medium text-gray-900">Pro</span> for 10 keys, 5,000 requests/month, and priority support.
               </p>
               <div className="mt-4 flex items-center gap-3">
                 <Link
@@ -139,3 +201,4 @@ export default function GenerateKeyForm() {
     </div>
   );
 }
+

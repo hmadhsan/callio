@@ -85,7 +85,7 @@ export default function Home() {
             <Sparkles className="w-4 h-4 text-[var(--accent)]" />
             <span className="text-xs font-semibold uppercase tracking-wide text-[var(--accent)]">API marketplace for agents</span>
           </div>
-          <h1 className="mt-6 text-4xl sm:text-6xl font-display tracking-tight leading-tight max-w-3xl">
+          <h1 className="mt-6 text-4xl sm:text-6xl font-display font-bold tracking-tight leading-tight max-w-3xl">
             One gateway for every API<br className="hidden sm:block" /> your agents need.
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
