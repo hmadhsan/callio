@@ -410,11 +410,11 @@ export default function Home() {
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:founders@callio.dev"
+              href="mailto:hello@callio.dev"
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--accent)] font-semibold rounded-full hover:bg-white/90 transition text-sm"
             >
               <Mail className="w-4 h-4" />
-              founders@callio.dev
+              hello@callio.dev
             </a>
             <AuthAwareCTA
               className="px-8 py-3.5 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition text-sm"
@@ -463,7 +463,7 @@ export default function Home() {
                 <div className="text-white font-semibold mb-3">Company</div>
                 <div className="space-y-2">
                   <a href="#contact" className="block hover:text-white transition">Contact</a>
-                  <a href="mailto:founders@callio.dev" className="block hover:text-white transition">Contact</a>
+                  <a href="mailto:hello@callio.dev" className="block hover:text-white transition">Contact</a>
                 </div>
               </div>
             </div>
@@ -473,7 +473,7 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">X / Twitter</a>
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">LinkedIn</a>
-              <a href="mailto:founders@callio.dev" className="hover:text-white transition">founders@callio.dev</a>
+              <a href="mailto:hello@callio.dev" className="hover:text-white transition">hello@callio.dev</a>
             </div>
           </div>
         </div>

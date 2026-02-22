@@ -165,6 +165,9 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
           )}
         </button>
       )}
+      {plan.price > 0 && (
+        <p className="text-xs text-center text-[var(--muted)] mt-3">Cancel anytime, no questions asked</p>
+      )}
     </div>
   );
 }

@@ -47,7 +47,7 @@ export default function DocsPage() {
               <p className="text-[var(--muted)] text-sm mb-3">Use your key to call any API through the Callio proxy:</p>
               <div className="bg-[#1a1a1a] rounded-lg p-4 overflow-x-auto">
                 <pre className="text-green-400 text-xs font-mono">
-{`curl -X GET "https://callio.dev/api/proxy/jsonplaceholder/posts/1" \\
+                  {`curl -X GET "https://callio.dev/api/proxy/jsonplaceholder/posts/1" \\
   -H "Authorization: Bearer callio_your_key_here"`}
                 </pre>
               </div>
@@ -90,7 +90,7 @@ export default function DocsPage() {
             <p className="text-[var(--muted)] text-sm">For APIs with custom base URLs, you can also use the forwarding mode:</p>
             <div className="bg-[#1a1a1a] rounded-lg p-4">
               <pre className="text-green-400 text-xs font-mono">
-{`https://callio.dev/api/proxy/<api-slug>/forward?target=<encoded-url>`}
+                {`https://callio.dev/api/proxy/<api-slug>/forward?target=<encoded-url>`}
               </pre>
             </div>
 
@@ -123,7 +123,7 @@ export default function DocsPage() {
             </p>
             <div className="bg-[#1a1a1a] rounded-lg p-4 overflow-x-auto">
               <pre className="text-green-400 text-xs font-mono">
-{`{
+                {`{
   "callio": {
     "api_key": "callio_your_key_here",
     "proxy_url": "https://callio.dev/api/proxy"
@@ -146,7 +146,7 @@ export default function DocsPage() {
               <h3 className="font-semibold mb-2">Python</h3>
               <div className="bg-[#1a1a1a] rounded-lg p-4">
                 <pre className="text-green-400 text-xs font-mono">
-{`import requests
+                  {`import requests
 
 headers = {"Authorization": "Bearer callio_your_key"}
 response = requests.get(
@@ -161,7 +161,7 @@ print(response.json())`}
               <h3 className="font-semibold mb-2">JavaScript</h3>
               <div className="bg-[#1a1a1a] rounded-lg p-4">
                 <pre className="text-green-400 text-xs font-mono">
-{`const response = await fetch(
+                  {`const response = await fetch(
   "https://callio.dev/api/proxy/jsonplaceholder/posts/1",
   { headers: { Authorization: "Bearer callio_your_key" } }
 );
@@ -174,7 +174,7 @@ console.log(data);`}
         </section>
 
         <div className="text-center py-8 border-t border-[var(--line)]">
-          <p className="text-[var(--muted)] text-sm">Need help? Contact us at <a href="mailto:founders@callio.dev" className="text-[var(--accent)] hover:underline">founders@callio.dev</a></p>
+          <p className="text-[var(--muted)] text-sm">Need help? Contact us at <a href="mailto:hello@callio.dev" className="text-[var(--accent)] hover:underline">hello@callio.dev</a></p>
         </div>
       </div>
     </div>
