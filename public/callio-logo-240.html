@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<body
+    style="margin:0;padding:40px;display:flex;flex-direction:column;align-items:center;gap:20px;background:white;font-family:sans-serif;">
+    <svg id="logo" width="240" height="240" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="10" fill="#0a0a0a" />
+        <path d="M20 8C13.373 8 8 13.373 8 20s5.373 12 12 12c2.1 0 4.08-.54 5.8-1.49" stroke="white" stroke-width="3"
+            stroke-linecap="round" />
+        <circle cx="28" cy="14" r="3" fill="white" />
+    </svg>
+    <button onclick="downloadPNG()"
+        style="padding:12px 32px;background:#0a0a0a;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">
+        Download as PNG (240x240)
+    </button>
+    <script>
+        function downloadPNG() {
+            const svg = document.getElementById('logo');
+            const canvas = document.createElement('canvas');
+            canvas.width = 240;
+            canvas.height = 240;
+            const ctx = canvas.getContext('2d');
+            const data = new XMLSerializer().serializeToString(svg);
+            const img = new Image();
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0, 240, 240);
+                const a = document.createElement('a');
+                a.download = 'callio-logo-240.png';
+                a.href = canvas.toDataURL('image/png');
+                a.click();
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(data);
+        }
+    </script>
+</body>
+
+</html>

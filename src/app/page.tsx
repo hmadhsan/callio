@@ -471,8 +471,7 @@ export default function Home() {
           <div className="mt-10 pt-6 border-t border-[#27272a] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
             <div>&copy; 2026 Callio. All rights reserved.</div>
             <div className="flex items-center gap-4">
-              <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">X / Twitter</a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">LinkedIn</a>
+              <a href="https://x.com/ai_callio" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">X / Twitter</a>
               <a href="mailto:hello@callio.dev" className="hover:text-white transition">hello@callio.dev</a>
             </div>
           </div>
