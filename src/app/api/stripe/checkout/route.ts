@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { plan } = await request.json() as { plan: PlanId };
-    
+
     if (!plan || !(plan in PLANS) || plan === 'free') {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
@@ -32,7 +32,23 @@ export async function POST(request: NextRequest) {
     let customerId: string;
 
     if (subscription?.stripeCustomerId) {
-      customerId = subscription.stripeCustomerId;
+      // Validate the stored customer still exists (handles test→live key switch)
+      try {
+        await stripe.customers.retrieve(subscription.stripeCustomerId);
+        customerId = subscription.stripeCustomerId;
+      } catch {
+        // Customer doesn't exist (likely test→live switch), create a new one
+        const customer = await stripe.customers.create({
+          email: user.email,
+          name: user.name || undefined,
+          metadata: { userId: user.id },
+        });
+        customerId = customer.id;
+        await prisma.subscription.update({
+          where: { userId: user.id },
+          data: { stripeCustomerId: customerId },
+        });
+      }
     } else {
       const customer = await stripe.customers.create({
         email: user.email,
