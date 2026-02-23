@@ -502,7 +502,6 @@ export default function Home() {
                 <div className="text-white font-semibold mb-3">Company</div>
                 <div className="space-y-2">
                   <a href="#contact" className="block hover:text-white transition">Contact</a>
-                  <a href="mailto:hello@callio.dev" className="block hover:text-white transition">Contact</a>
                 </div>
               </div>
             </div>
