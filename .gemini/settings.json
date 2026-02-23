@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+        "callio": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "github:hmadhsan/callio-mcp"
+            ],
+            "env": {
+                "CALLIO_API_KEY": "callio_006065bcfd6a0776495806fc76f28b47f7055cac885c8335"
+            }
+        }
+    }
+}

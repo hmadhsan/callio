@@ -8,6 +8,7 @@ import UserNav from '@/components/UserNav';
 import CallioLogoComponent from '@/components/CallioLogo';
 import AuthAwareCTA from '@/components/AuthAwareCTA';
 import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
+import AnalyticsTracker from '@/components/AnalyticsTracker';
 
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
@@ -77,9 +78,10 @@ export default function Home() {
           <UserNav variant="landing" />
         </div>
       </header>
+      <AnalyticsTracker />
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden">
+      <section id="hero" className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_55%),radial-gradient(circle_at_80%_10%,rgba(0,0,0,0.03),transparent_45%)]" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--line)] bg-white/80">
@@ -106,7 +108,7 @@ export default function Home() {
 
 
           {/* Stats row */}
-          <div className="mt-12 flex flex-wrap gap-8 text-sm">
+          <div id="stats" className="mt-12 flex flex-wrap gap-8 text-sm">
             <div>
               <div className="text-2xl font-semibold text-[var(--ink)]">50+</div>
               <div className="text-[var(--muted)]">APIs available</div>
@@ -150,7 +152,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section id="how" className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
+      <section id="how-it-works" className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-14">
             <h2 className="text-3xl sm:text-4xl font-display">How it works</h2>
@@ -202,7 +204,7 @@ export default function Home() {
 
 
       {/* ── Code snippet ── */}
-      <section className="py-20 sm:py-24 border-t border-[var(--line)]">
+      <section id="code-snippet" className="py-20 sm:py-24 border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-10 items-center">
           <div>
             <h2 className="text-3xl sm:text-4xl font-display">Simple to integrate</h2>
@@ -242,7 +244,7 @@ export default function Home() {
       </section>
 
       {/* ── Security ── */}
-      <section className="py-20 sm:py-24 border-t border-[var(--line)]">
+      <section id="security" className="py-20 sm:py-24 border-t border-[var(--line)]">
         <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold uppercase tracking-wide mb-5">
             <Shield className="w-3.5 h-3.5" />
@@ -273,7 +275,7 @@ export default function Home() {
       </section>
 
       {/* ── MCP Setup ── */}
-      <section className="py-20 sm:py-24 bg-[#0a0a0a] text-white border-t border-[var(--line)]">
+      <section id="mcp-setup" className="py-20 sm:py-24 bg-[#0a0a0a] text-white border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -406,7 +408,7 @@ export default function Home() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
+      <section id="faq" className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
         <div className="max-w-3xl mx-auto px-5 sm:px-8">
           <h2 className="text-3xl sm:text-4xl font-display text-center mb-10">Frequently asked questions</h2>
           <div className="divide-y divide-[var(--line)] border-t border-[var(--line)]">
@@ -463,7 +465,7 @@ export default function Home() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-12 bg-[#0a0a0a] text-[#a1a1aa]">
+      <footer id="footer" className="py-12 bg-[#0a0a0a] text-[#a1a1aa]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="flex flex-col sm:flex-row items-start justify-between gap-8">
             <div>
