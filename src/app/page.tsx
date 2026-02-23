@@ -7,6 +7,7 @@ import {
 import UserNav from '@/components/UserNav';
 import CallioLogoComponent from '@/components/CallioLogo';
 import AuthAwareCTA from '@/components/AuthAwareCTA';
+import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
 
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
@@ -141,6 +142,11 @@ export default function Home() {
             <span className="font-semibold text-[var(--ink)]">CrewAI</span>
             <span className="text-[var(--line)]">·</span>
             <Link href="/mcp" className="hover:text-[var(--accent)] transition underline underline-offset-2">& more</Link>
+          </div>
+
+          {/* Animated Hero Diagram */}
+          <div className="mt-16 w-full hidden md:block">
+            <AnimatedHeroSVG />
           </div>
         </div>
       </section>
