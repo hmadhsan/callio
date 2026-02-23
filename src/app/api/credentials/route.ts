@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
+import { encryptProviderKey } from '@/lib/crypto';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -25,6 +26,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'API not found' }, { status: 404 });
     }
 
+    // Encrypt the provider key before storing
+    const encryptedKey = encryptProviderKey(providerKey);
+
     await prisma.apiCredential.upsert({
       where: {
         userId_apiId: {
@@ -33,12 +37,12 @@ export async function POST(request: NextRequest) {
         },
       },
       update: {
-        providerKey,
+        providerKey: encryptedKey,
       },
       create: {
         userId: user.id,
         apiId: api.id,
-        providerKey,
+        providerKey: encryptedKey,
       },
     });
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { hashApiKey } from '@/lib/keys';
 import { PLANS } from '@/lib/stripe';
+import { decryptProviderKey } from '@/lib/crypto';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -88,7 +89,8 @@ async function handler(
       if (credential) {
         const scheme = api.providerAuthScheme || 'Bearer';
         const header = api.providerAuthHeader || 'Authorization';
-        upstreamHeaders[header] = `${scheme} ${credential.providerKey}`;
+        const decryptedKey = decryptProviderKey(credential.providerKey);
+        upstreamHeaders[header] = `${scheme} ${decryptedKey}`;
       } else if (api.providerApiKey) {
         // Use the API's built-in key (for demo/free APIs)
         const scheme = api.providerAuthScheme || 'Bearer';
@@ -168,7 +170,7 @@ async function handler(
 
     // Return the upstream response — intercept provider auth errors for better messaging
     const responseBody = await upstream.text();
-    
+
     // If upstream returned 401/403 with auth error, it likely means the stored provider key is wrong
     if (upstream.status === 401 || upstream.status === 403) {
       try {
@@ -185,7 +187,7 @@ async function handler(
         // Not JSON, just pass through
       }
     }
-    
+
     const responseHeaders = new Headers();
     responseHeaders.set('content-type', upstream.headers.get('content-type') || 'application/json');
     responseHeaders.set('x-callio-proxy', 'true');

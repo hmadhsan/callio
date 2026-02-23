@@ -241,6 +241,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Security ── */}
+      <section className="py-20 sm:py-24 border-t border-[var(--line)]">
+        <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold uppercase tracking-wide mb-5">
+            <Shield className="w-3.5 h-3.5" />
+            Built with Security
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-display">Your credentials, your control</h2>
+          <p className="mt-4 text-[var(--muted)] text-lg max-w-2xl mx-auto">
+            Provider keys are AES-256 encrypted at rest. Callio keys are hashed. We never store request or response data.
+          </p>
+          <div className="mt-10 grid sm:grid-cols-3 gap-6 text-left">
+            <div className="rounded-2xl border border-[var(--line)] p-6">
+              <Lock className="w-5 h-5 text-emerald-600 mb-3" />
+              <h3 className="font-semibold text-[var(--ink)] mb-1">Encrypted at rest</h3>
+              <p className="text-sm text-[var(--muted)]">All provider credentials are AES-256-GCM encrypted before storage.</p>
+            </div>
+            <div className="rounded-2xl border border-[var(--line)] p-6">
+              <Shield className="w-5 h-5 text-emerald-600 mb-3" />
+              <h3 className="font-semibold text-[var(--ink)] mb-1">Zero data logging</h3>
+              <p className="text-sm text-[var(--muted)]">Request and response bodies pass through — we only log metadata.</p>
+            </div>
+            <div className="rounded-2xl border border-[var(--line)] p-6">
+              <Gauge className="w-5 h-5 text-emerald-600 mb-3" />
+              <h3 className="font-semibold text-[var(--ink)] mb-1">Built-in rate limits</h3>
+              <p className="text-sm text-[var(--muted)]">Per-plan quotas and real-time usage monitoring from your dashboard.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── MCP Setup ── */}
       <section className="py-20 sm:py-24 bg-[#0a0a0a] text-white border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
