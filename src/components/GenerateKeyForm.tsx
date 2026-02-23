@@ -125,7 +125,7 @@ export default function GenerateKeyForm() {
                 API key limit reached
               </h3>
               <p className="mt-1 text-sm text-gray-600">
-                Your Free plan includes 5 API keys. Upgrade to <span className="font-medium text-gray-900">Pro</span> for 10 keys, 5,000 requests/month, and priority support.
+                Your Free plan includes 3 API keys. Upgrade to <span className="font-medium text-gray-900">Pro</span> for 10 keys, 5,000 requests/month, and priority support.
               </p>
               <div className="mt-4 flex items-center gap-3">
                 <Link
