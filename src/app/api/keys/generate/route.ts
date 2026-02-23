@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       });
       if (existingKeyCount >= maxKeys) {
         return NextResponse.json({
-          error: `Your ${PLANS[plan]?.name || 'Free'} plan allows ${maxKeys} API key${maxKeys === 1 ? '' : 's'}. Upgrade to create more.`,
+          error: `Your ${PLANS[plan]?.name || 'Free'} plan allows ${maxKeys} agent connection${maxKeys === 1 ? '' : 's'}. Upgrade to connect more.`,
           upgrade: 'https://callio.dev/pricing',
         }, { status: 403 });
       }

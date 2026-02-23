@@ -15,7 +15,7 @@ const plans = [
     description: 'Perfect for trying out Callio',
     features: [
       '50 API requests/month',
-      '5 API keys',
+      '1 API key — connect up to 3 agents',
       'Access to all APIs',
       'MCP integration',
       'Community support',
@@ -32,7 +32,7 @@ const plans = [
     description: 'For developers building real products',
     features: [
       '5,000 API requests/month',
-      '10 API keys',
+      '5 API keys — unlimited agents',
       'Access to all APIs',
       'Full usage analytics',
       'Priority support',
@@ -50,7 +50,7 @@ const plans = [
     description: 'For teams scaling AI agents',
     features: [
       '50,000 API requests/month',
-      'Unlimited API keys',
+      'Unlimited keys & agents',
       'Access to all APIs',
       'Advanced analytics',
       'Dedicated support',

@@ -77,11 +77,11 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6 mb-10">
-          {/* API Keys Card */}
+          {/* Agent Connections Card */}
           <div className="bg-white rounded-xl border border-[var(--line)] p-5">
             <div className="flex items-center gap-3 mb-2">
               <Key className="w-5 h-5 text-[var(--accent)]" />
-              <span className="text-sm text-[var(--muted)]">API Keys</span>
+              <span className="text-sm text-[var(--muted)]">Agent Connections</span>
             </div>
             <p className="text-3xl font-bold">
               {apiKeys.length}

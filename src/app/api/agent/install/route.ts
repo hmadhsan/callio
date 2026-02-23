@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       });
       if (existingKeyCount >= maxKeys) {
         return NextResponse.json({
-          error: `Your ${PLANS[plan]?.name || 'Free'} plan allows a maximum of ${maxKeys} API key${maxKeys === 1 ? '' : 's'}. Please upgrade to add more APIs.`,
+          error: `Your ${PLANS[plan]?.name || 'Free'} plan allows a maximum of ${maxKeys} agent connection${maxKeys === 1 ? '' : 's'}. Please upgrade to connect more.`,
           upgrade: true,
         }, { status: 403 });
       }
