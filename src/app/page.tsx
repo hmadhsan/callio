@@ -102,11 +102,7 @@ export default function Home() {
               Browse APIs <Search className="w-4 h-4" />
             </Link>
           </div>
-          <div className="mt-6">
-            <a href="https://www.producthunt.com/products/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer">
-              <img alt="Callio - Connect any API with AI Agent in under 5 mins | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1083879&theme=light&t=1771844726712" />
-            </a>
-          </div>
+
 
           {/* Stats row */}
           <div className="mt-12 flex flex-wrap gap-8 text-sm">
@@ -197,6 +193,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Product Hunt Badge ── */}
+      <div className="py-10 flex justify-center border-t border-[var(--line)]">
+        <a href="https://www.producthunt.com/products/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer">
+          <img alt="Callio - Connect any API with AI Agent in under 5 mins | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1083879&theme=light&t=1771844726712" />
+        </a>
+      </div>
 
       {/* ── Code snippet ── */}
       <section className="py-20 sm:py-24 border-t border-[var(--line)]">
