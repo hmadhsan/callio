@@ -118,7 +118,7 @@ export default function Home() {
             </div>
             <div className="w-px bg-[var(--line)]" />
             <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">&lt;5 min</div>
+              <div className="text-2xl font-semibold text-[var(--ink)]">&lt;2 min</div>
               <div className="text-[var(--muted)]">Setup time</div>
             </div>
             <div className="w-px bg-[var(--line)] hidden sm:block" />
