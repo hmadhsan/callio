@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,7 +31,8 @@ export default function RootLayout({
       <head>
         {/* Google Analytics (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-F9B384E3Q2"></script>
-        <script dangerouslySetInnerHTML={{ __html: `
+        <script dangerouslySetInnerHTML={{
+          __html: `
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
@@ -41,6 +43,7 @@ export default function RootLayout({
         className="antialiased bg-[var(--page-bg)] text-[var(--ink)]"
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
