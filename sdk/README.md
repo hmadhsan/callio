@@ -1,4 +1,4 @@
-# @callio/sdk
+# callio-sdk
 
 The official Node.js SDK for Callio — the API Gateway for AI Agents.
 
@@ -7,17 +7,17 @@ Callio gives you a single API key to access 50+ APIs (Search, Payments, Data, Me
 ## Installation
 
 ```bash
-npm install @callio/sdk
+npm install callio-sdk
 # or
-yarn add @callio/sdk
+yarn add callio-sdk
 # or
-pnpm add @callio/sdk
+pnpm add callio-sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { CallioClient } from '@callio/sdk';
+import { CallioClient } from 'callio-sdk';
 
 // Initialize with your Callio API key (from your dashboard)
 const callio = new CallioClient('callio_your_api_key_here');

@@ -227,18 +227,24 @@ export default function Home() {
             </div>
           </div>
           <div className="rounded-2xl bg-[#0a0a0a] text-[#e4e4e7] p-6 font-mono text-sm leading-relaxed overflow-x-auto shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-            <div className="text-[#6b7280] mb-1"># Call any API through Callio&apos;s proxy</div>
-            <div><span className="text-[#a78bfa]">curl</span> https://callio.dev/api/proxy/openai/v1/chat/completions \</div>
-            <div className="ml-4">-H <span className="text-[#34d399]">&quot;Authorization: Bearer callio_...&quot;</span> \</div>
-            <div className="ml-4">-d <span className="text-[#34d399]">&apos;{`{"model":"gpt-4","messages":[{"role":"user","content":"Hi"}]}`}&apos;</span></div>
-            <div className="mt-4 text-[#6b7280]"># Same key, different API — just change the slug</div>
-            <div><span className="text-[#a78bfa]">curl</span> https://callio.dev/api/proxy/sendgrid/v3/mail/send \</div>
-            <div className="ml-4">-H <span className="text-[#34d399]">&quot;Authorization: Bearer callio_...&quot;</span> \</div>
-            <div className="ml-4">-d <span className="text-[#34d399]">&apos;{`{"to":"user@co.com","subject":"Hello"}`}&apos;</span></div>
-            <div className="mt-4 text-[#6b7280]"># Or use fetch, axios, any HTTP client</div>
-            <div><span className="text-[#60a5fa]">const</span> res = <span className="text-[#60a5fa]">await</span> <span className="text-[#fbbf24]">fetch</span>(<span className="text-[#34d399]">&quot;https://callio.dev/api/proxy/anthropic/v1/messages&quot;</span>, {`{`}</div>
-            <div className="ml-4">headers: {`{`} <span className="text-[#34d399]">&quot;Authorization&quot;</span>: <span className="text-[#34d399]">`Bearer ${`{`}CALLIO_KEY{`}`}`</span> {`}`}</div>
-            <div>{`}`})</div>
+            <div className="text-[#6b7280] mb-1"># 1. Install the SDK</div>
+            <div><span className="text-[#a78bfa]">npm</span> install callio-sdk</div>
+
+            <div className="mt-4 text-[#6b7280]"># 2. Initialize with your single Callio key</div>
+            <div><span className="text-[#60a5fa]">import</span> {`{`} CallioClient {`}`} <span className="text-[#60a5fa]">from</span> <span className="text-[#34d399]">&apos;callio-sdk&apos;</span>;</div>
+            <div className="mt-2"><span className="text-[#60a5fa]">const</span> callio = <span className="text-[#60a5fa]">new</span> <span className="text-[#fbbf24]">CallioClient</span>(<span className="text-[#34d399]">&apos;callio_your_api_key&apos;</span>);</div>
+
+            <div className="mt-4 text-[#6b7280]"># 3. Call ANY API through the unified proxy</div>
+            <div><span className="text-[#6b7280]">/* OpenAI */</span></div>
+            <div><span className="text-[#60a5fa]">await</span> callio.<span className="text-[#fbbf24]">post</span>(<span className="text-[#34d399]">&apos;openai&apos;</span>, <span className="text-[#34d399]">&apos;v1/chat/completions&apos;</span>, {`{`}</div>
+            <div className="ml-4">model: <span className="text-[#34d399]">&apos;gpt-4&apos;</span>,</div>
+            <div className="ml-4">messages: [{`{`} role: <span className="text-[#34d399]">&apos;user&apos;</span>, content: <span className="text-[#34d399]">&apos;Hi!&apos;</span> {`}`}]</div>
+            <div>{`}`});</div>
+
+            <div className="mt-4 text-[#6b7280]">/* Same key, different API — just change the slug! */</div>
+            <div><span className="text-[#60a5fa]">await</span> callio.<span className="text-[#fbbf24]">post</span>(<span className="text-[#34d399]">&apos;sendgrid&apos;</span>, <span className="text-[#34d399]">&apos;v3/mail/send&apos;</span>, {`{`}</div>
+            <div className="ml-4">to: <span className="text-[#34d399]">&apos;user@co.com&apos;</span>, subject: <span className="text-[#34d399]">&apos;Hello&apos;</span></div>
+            <div>{`}`});</div>
           </div>
         </div>
       </section>

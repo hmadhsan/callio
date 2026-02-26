@@ -11,6 +11,14 @@ export const metadata: Metadata = {
     description: "50+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy.",
     url: "https://callio.dev",
     siteName: "Callio",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Callio API Gateway",
+      },
+    ],
     type: "website",
     locale: "en_US",
   },
@@ -18,6 +26,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Callio — The API Gateway for AI Agents",
     description: "50+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy.",
+    images: ["/twitter-image.png"],
   },
 };
 

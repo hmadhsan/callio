@@ -1,5 +1,5 @@
 {
-  "name": "@callio/sdk",
+  "name": "callio-sdk",
   "version": "1.0.0",
   "description": "The official Node.js SDK for Callio — the API Gateway for AI Agents.",
   "main": "dist/index.js",
