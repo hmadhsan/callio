@@ -109,6 +109,7 @@ export default function ApiPlayground({
   const [selectedEndpoint, setSelectedEndpoint] = useState<EndpointInfo | null>(
     endpoints[0] || null
   );
+  // Optional key if they really want to test with one, but we default to session auth
   const [callioApiKey, setCallioApiKey] = useState('');
   const [parameters, setParameters] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -154,7 +155,7 @@ export default function ApiPlayground({
       if (qs) proxyUrl += `?${qs}`;
     }
     let curl = `curl -X ${selectedEndpoint.method} "${proxyUrl}" \\`;
-    curl += `\n  -H "Authorization: Bearer ${callioApiKey || 'YOUR_CALLIO_API_KEY'}" \\`;
+    curl += `\n  -H "Authorization: Bearer YOUR_CALLIO_API_KEY" \\`;
     curl += `\n  -H "Content-Type: application/json"`;
 
     if (['POST', 'PUT', 'PATCH'].includes(selectedEndpoint.method)) {
@@ -176,11 +177,6 @@ export default function ApiPlayground({
   };
 
   const handleTestRequest = async () => {
-    if (!callioApiKey) {
-      setError('Please enter your Callio API key (from "Add to Agent" button)');
-      return;
-    }
-
     setLoading(true);
     setError('');
     setResponse(null);
@@ -220,12 +216,19 @@ export default function ApiPlayground({
       }
 
       // Call through Callio's proxy
+      // The browser will automatically send the session cookie, which our proxy now accepts!
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+
+      // If they provided one manually, use it
+      if (callioApiKey) {
+        headers['Authorization'] = `Bearer ${callioApiKey}`;
+      }
+
       const response = await fetch(proxyPath, {
         method: selectedEndpoint.method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${callioApiKey}`,
-        },
+        headers,
         body: requestBody,
       });
 
@@ -292,7 +295,7 @@ export default function ApiPlayground({
           <div className="flex items-center gap-3">
             <button
               onClick={handleTestRequest}
-              disabled={loading || !callioApiKey}
+              disabled={loading}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium rounded-lg transition flex items-center gap-2 text-sm"
             >
               {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
@@ -348,34 +351,16 @@ export default function ApiPlayground({
           {/* Center - Parameters & Input */}
           <div className="flex-1 border-r border-gray-200 overflow-y-auto p-6 bg-white">
             <div className="max-w-xl">
-              {/* API Credentials */}
+              {/* Note about Auth */}
               <div className="mb-8">
-                <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wider">API Credentials</h3>
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-2">
-                    Your Callio API Key <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="password"
-                    value={callioApiKey}
-                    onChange={(e) => setCallioApiKey(e.target.value)}
-                    placeholder="callio_..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  {!allowUnauthenticated ? (
-                    <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mt-3">
-                      <p className="text-xs text-amber-900 font-bold mb-2">⚠️ IMPORTANT: Two-step process</p>
-                      <ol className="text-xs text-amber-900 leading-relaxed space-y-2 ml-4 list-decimal">
-                        <li><strong>First:</strong> Scroll down and use &quot;Save Provider Key&quot; to connect your provider account (e.g., OpenAI, Stripe)</li>
-                        <li><strong>Then:</strong> Come back here and enter your Callio API key (from &quot;Add to Agent&quot; button) to test</li>
-                      </ol>
-                      <p className="text-xs text-amber-800 mt-3 italic">
-                        Your Callio key tells our proxy which account to use. The proxy forwards requests using your saved provider key.
-                      </p>
-                    </div>
-                  ) : (
-                    <p className="text-xs text-gray-500 mt-2">
-                      This is a free public API — just enter your Callio key and hit Send.
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-xs text-blue-900 font-bold mb-2">✨ Magic Authentication</p>
+                  <p className="text-xs text-blue-800 leading-relaxed mb-2">
+                    Because you are logged in, we are automatically authenticating this request using your session! You don't need to copy-paste your Callio API key here.
+                  </p>
+                  {!allowUnauthenticated && (
+                    <p className="text-xs text-blue-800 leading-relaxed font-semibold">
+                      Note: You still need to save your Provider API Key below before testing.
                     </p>
                   )}
                 </div>

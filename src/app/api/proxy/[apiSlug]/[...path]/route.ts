@@ -3,25 +3,35 @@ import prisma from '@/lib/prisma';
 import { hashApiKey } from '@/lib/keys';
 import { PLANS } from '@/lib/stripe';
 import { decryptProviderKey } from '@/lib/crypto';
+import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 async function authenticateRequest(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
+
+  // Try Bearer token first
+  if (authHeader?.startsWith('Bearer ')) {
+    const rawKey = authHeader.slice(7);
+    const keyHash = hashApiKey(rawKey);
+
+    const apiKey = await prisma.apiKey.findUnique({
+      where: { keyHash },
+      include: { user: true },
+    });
+
+    if (apiKey) return { userId: apiKey.user.id };
   }
 
-  const rawKey = authHeader.slice(7);
-  const keyHash = hashApiKey(rawKey);
+  // Fallback to session cookie for playground testing 
+  const token = request.cookies.get(SESSION_COOKIE)?.value;
+  if (token) {
+    const user = await getUserFromSessionToken(token);
+    if (user) return { userId: user.id };
+  }
 
-  const apiKey = await prisma.apiKey.findUnique({
-    where: { keyHash },
-    include: { user: true },
-  });
-
-  return apiKey;
+  return null;
 }
 
 async function handler(
