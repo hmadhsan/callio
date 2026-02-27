@@ -135,11 +135,12 @@ model ApiKey {
   api       Api?     @relation(fields: [apiId], references: [id], onDelete: Cascade)
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name      String
-  keyHash   String   @unique
-  keyLast4  String
-  scopes    String[] @default([])
-  createdAt DateTime @default(now())
+  name         String
+  keyHash      String   @unique
+  keyLast4     String
+  scopes       String[] @default([])
+  monthlyLimit Int?     // Optional limit for requests per month
+  createdAt    DateTime @default(now())
 
   @@index([apiId])
   @@index([userId])
@@ -185,6 +186,7 @@ model UsageRecord {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   apiSlug   String
+  apiKeyId  String?  // References the ApiKey that made the request (if applicable)
   method    String
   path      String
   status    Int

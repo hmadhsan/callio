@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { User, LogOut, Key, LayoutDashboard, ChevronDown } from 'lucide-react';
+import { User, LogOut, Key, LayoutDashboard, ChevronDown, Settings } from 'lucide-react';
 
 interface UserInfo {
   id: string;

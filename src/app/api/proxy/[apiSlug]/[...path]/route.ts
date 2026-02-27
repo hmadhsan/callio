@@ -21,14 +21,14 @@ async function authenticateRequest(request: NextRequest) {
       include: { user: true },
     });
 
-    if (apiKey) return { userId: apiKey.user.id, type: 'api_key', scopes: apiKey.scopes };
+    if (apiKey) return { userId: apiKey.user.id, type: 'api_key', scopes: apiKey.scopes, keyId: apiKey.id, monthlyLimit: apiKey.monthlyLimit };
   }
 
   // Fallback to session cookie for playground testing 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   if (token) {
     const user = await getUserFromSessionToken(token);
-    if (user) return { userId: user.id, type: 'session', scopes: [] };
+    if (user) return { userId: user.id, type: 'session', scopes: [], keyId: null, monthlyLimit: null };
   }
 
   return null;
@@ -138,9 +138,27 @@ async function handler(
       },
     });
 
+    // Check specific API Key limit
+    if (auth.type === 'api_key' && auth.monthlyLimit) {
+      const keyUsageCount = await prisma.usageRecord.count({
+        where: {
+          apiKeyId: auth.keyId,
+          createdAt: { gte: periodStart },
+        },
+      });
+
+      if (keyUsageCount >= auth.monthlyLimit) {
+        return NextResponse.json({
+          error: `API Key monthly limit of ${auth.monthlyLimit} requests reached`,
+          used: keyUsageCount,
+          limit: auth.monthlyLimit,
+        }, { status: 429 });
+      }
+    }
+
     if (usageCount >= limit) {
       return NextResponse.json({
-        error: 'Monthly request limit reached',
+        error: 'Monthly request limit reached for this account',
         plan,
         used: usageCount,
         limit,
@@ -153,6 +171,7 @@ async function handler(
       data: {
         userId: auth.userId,
         apiSlug,
+        apiKeyId: auth.keyId,
         method: request.method,
         path: pathStr,
         status: 0,

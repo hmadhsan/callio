@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const { name, scopes } = await request.json();
+    const { name, scopes, monthlyLimit } = await request.json();
     const keyName = name || 'Default API Key';
     const keyScopes = Array.isArray(scopes) ? scopes : [];
 
@@ -43,11 +43,12 @@ export async function POST(request: NextRequest) {
 
     await prisma.apiKey.create({
       data: {
+        userId: user.id,
         name: keyName,
         keyHash,
         keyLast4,
         scopes: keyScopes,
-        userId: user.id,
+        monthlyLimit: typeof monthlyLimit === 'number' ? monthlyLimit : null,
       },
     });
 

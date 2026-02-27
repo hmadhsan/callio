@@ -15,6 +15,7 @@ type ApiMinimal = {
 export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) {
   const [keyName, setKeyName] = useState('');
   const [scopes, setScopes] = useState<string[]>([]);
+  const [monthlyLimit, setMonthlyLimit] = useState<number | ''>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [upgradePrompt, setUpgradePrompt] = useState(false);
@@ -32,7 +33,11 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: keyName || 'Default API Key', scopes }),
+        body: JSON.stringify({
+          name: keyName || 'Default API Key',
+          scopes,
+          monthlyLimit: monthlyLimit === '' ? null : Number(monthlyLimit)
+        }),
       });
 
       const data = await response.json().catch(() => null);
@@ -71,6 +76,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
     setGeneratedKey('');
     setKeyName('');
     setScopes([]);
+    setMonthlyLimit('');
   };
 
   // Show the generated key
@@ -219,7 +225,35 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
               </label>
             ))}
           </div>
+          <button
+            type="button"
+            className="text-xs text-[var(--accent)] hover:underline mt-2"
+            onClick={() => {
+              const checked = scopes.length !== 0; // Check if "Full Access" is currently unchecked
+              if (checked) {
+                // Select all APIs
+                setScopes(apis.map(api => api.slug));
+              } else {
+                setScopes([]); // Deselect all
+              }
+            }}
+          >
+            Toggle all
+          </button>
           <p className="text-xs text-gray-500 mt-1.5">If "Full Access" is selected, the key can access any API.</p>
+        </div>
+
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Request Limit (Optional)</label>
+          <input
+            type="number"
+            min="1"
+            value={monthlyLimit}
+            onChange={(e) => setMonthlyLimit(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
+            placeholder="No limit"
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+          />
+          <p className="text-xs text-gray-500 mt-1.5">Leave blank for unlimited requests (up to your plan's maximum capacity).</p>
         </div>
 
         <div className="flex gap-3">
@@ -235,6 +269,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
             onClick={() => {
               setKeyName('');
               setScopes([]);
+              setMonthlyLimit('');
               setShowForm(false);
             }}
             className="px-5 py-2.5 bg-white text-gray-700 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition"
