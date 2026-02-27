@@ -12,10 +12,10 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
     try {
         const token = request.cookies.get(SESSION_COOKIE)?.value;
-        if (!token) return NextResponse.redirect(new URL('/login', request.url));
+        if (!token) return NextResponse.redirect(new URL('/login', request.url), 303);
 
         const user = await getUserFromSessionToken(token);
-        if (!user) return NextResponse.redirect(new URL('/login', request.url));
+        if (!user) return NextResponse.redirect(new URL('/login', request.url), 303);
 
         const subscription = await prisma.subscription.findUnique({
             where: { userId: user.id },
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
         if (!subscription || !subscription.stripeCustomerId) {
             // If the user has no stripe customer id yet, send them to pricing to start a sub
-            return NextResponse.redirect(new URL('/pricing', request.url));
+            return NextResponse.redirect(new URL('/pricing', request.url), 303);
         }
 
         const returnUrl = new URL('/dashboard/settings', request.url).toString();
