@@ -162,7 +162,7 @@ model ApiCredential {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@unique([userId, apiId])
+  @@unique([workspaceId, apiId])
   @@index([apiId])
   @@index([userId])
   @@index([workspaceId])
