@@ -21,14 +21,14 @@ async function authenticateRequest(request: NextRequest) {
       include: { user: true },
     });
 
-    if (apiKey) return { userId: apiKey.user.id };
+    if (apiKey) return { userId: apiKey.user.id, type: 'api_key', scopes: apiKey.scopes };
   }
 
   // Fallback to session cookie for playground testing 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   if (token) {
     const user = await getUserFromSessionToken(token);
-    if (user) return { userId: user.id };
+    if (user) return { userId: user.id, type: 'session', scopes: [] };
   }
 
   return null;
@@ -42,9 +42,16 @@ async function handler(
     const { apiSlug, path } = await params;
 
     // Authenticate
-    const apiKey = await authenticateRequest(request);
-    if (!apiKey) {
+    const auth = await authenticateRequest(request);
+    if (!auth) {
       return NextResponse.json({ error: 'Invalid or missing API key. Pass your Callio key as: Authorization: Bearer callio_...' }, { status: 401 });
+    }
+
+    // Check API Scoping
+    if (auth.type === 'api_key' && auth.scopes && auth.scopes.length > 0) {
+      if (!auth.scopes.includes(apiSlug)) {
+        return NextResponse.json({ error: `Forbidden: API key does not have access to "${apiSlug}"` }, { status: 403 });
+      }
     }
 
     // Find the API
@@ -90,7 +97,7 @@ async function handler(
       const credential = await prisma.apiCredential.findUnique({
         where: {
           userId_apiId: {
-            userId: apiKey.userId,
+            userId: auth.userId,
             apiId: api.id,
           },
         },
@@ -116,7 +123,7 @@ async function handler(
 
     // ── Usage limit check ──────────────────────────────────
     const subscription = await prisma.subscription.findUnique({
-      where: { userId: apiKey.userId },
+      where: { userId: auth.userId },
     });
     const plan = (subscription?.plan || 'free') as keyof typeof PLANS;
     const limit = PLANS[plan]?.requestsPerMonth || PLANS.free.requestsPerMonth;
@@ -126,7 +133,7 @@ async function handler(
 
     const usageCount = await prisma.usageRecord.count({
       where: {
-        userId: apiKey.userId,
+        userId: auth.userId,
         createdAt: { gte: periodStart },
       },
     });
@@ -144,7 +151,7 @@ async function handler(
     // Reserve a usage slot before making the upstream call (prevents race condition)
     const usageRecord = await prisma.usageRecord.create({
       data: {
-        userId: apiKey.userId,
+        userId: auth.userId,
         apiSlug,
         method: request.method,
         path: pathStr,

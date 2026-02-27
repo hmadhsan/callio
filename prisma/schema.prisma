@@ -138,6 +138,7 @@ model ApiKey {
   name      String
   keyHash   String   @unique
   keyLast4  String
+  scopes    String[] @default([])
   createdAt DateTime @default(now())
 
   @@index([apiId])

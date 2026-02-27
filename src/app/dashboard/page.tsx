@@ -54,6 +54,7 @@ export default async function DashboardPage() {
           <div className="flex items-center gap-4">
             <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Browse</Link>
             <Link href="/keys" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Keys</Link>
+            <Link href="/dashboard/logs" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Logs</Link>
             <UserNav />
           </div>
         </div>
@@ -99,9 +100,12 @@ export default async function DashboardPage() {
               {usageCount}
               <span className="text-sm font-normal text-[var(--muted)]"> / {planConfig.requestsPerMonth.toLocaleString()}</span>
             </p>
-            <div className="w-full bg-gray-100 rounded-full h-2 mt-3">
+            <div className="w-full bg-gray-100 rounded-full h-2 mt-3 mb-2">
               <div className={`${barColor} h-2 rounded-full transition-all`} style={{ width: `${usagePercent}%` }} />
             </div>
+            <Link href="/dashboard/logs" className="text-xs text-[var(--accent)] hover:underline inline-flex items-center gap-1 mt-1">
+              View full logs <ArrowRight className="w-3 h-3" />
+            </Link>
           </div>
 
           {/* Plan Card */}
@@ -131,7 +135,7 @@ export default async function DashboardPage() {
             </Link>
           </div>
 
-          <GenerateKeyForm />
+          <GenerateKeyForm apis={apis} />
 
           {apiKeys.length > 0 ? (
             <div className="mt-5 border border-[var(--line)] rounded-lg overflow-x-auto">

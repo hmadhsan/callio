@@ -5,8 +5,16 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Copy, Check } from 'lucide-react';
 
-export default function GenerateKeyForm() {
+type ApiMinimal = {
+  id: string;
+  slug: string;
+  name: string;
+  icon: string;
+};
+
+export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) {
   const [keyName, setKeyName] = useState('');
+  const [scopes, setScopes] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [upgradePrompt, setUpgradePrompt] = useState(false);
@@ -24,7 +32,7 @@ export default function GenerateKeyForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: keyName || 'Default API Key' }),
+        body: JSON.stringify({ name: keyName || 'Default API Key', scopes }),
       });
 
       const data = await response.json().catch(() => null);
@@ -62,6 +70,7 @@ export default function GenerateKeyForm() {
   const handleDismissKey = () => {
     setGeneratedKey('');
     setKeyName('');
+    setScopes([]);
   };
 
   // Show the generated key
@@ -174,10 +183,45 @@ export default function GenerateKeyForm() {
             value={keyName}
             onChange={(e) => setKeyName(e.target.value)}
             placeholder="Name your key (e.g., Production, Development)"
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
             autoFocus
           />
         </div>
+
+        <div className="mb-5">
+          <label className="block text-sm font-medium text-gray-700 mb-2">API Access Scope</label>
+          <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={scopes.length === 0}
+                onChange={() => setScopes([])}
+                className="rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+              />
+              <span className="text-sm font-medium text-gray-900">Full Access (All APIs)</span>
+            </label>
+            <div className="h-px bg-gray-200 my-2" />
+            {apis.map((api) => (
+              <label key={api.id} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={scopes.includes(api.slug)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setScopes([...scopes, api.slug]);
+                    } else {
+                      setScopes(scopes.filter(s => s !== api.slug));
+                    }
+                  }}
+                  className="rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                />
+                <span className="text-sm text-gray-700 mt-0.5">{api.icon} {api.name}</span>
+              </label>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500 mt-1.5">If "Full Access" is selected, the key can access any API.</p>
+        </div>
+
         <div className="flex gap-3">
           <button
             type="submit"
@@ -190,6 +234,7 @@ export default function GenerateKeyForm() {
             type="button"
             onClick={() => {
               setKeyName('');
+              setScopes([]);
               setShowForm(false);
             }}
             className="px-5 py-2.5 bg-white text-gray-700 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition"

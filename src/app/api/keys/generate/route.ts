@@ -35,8 +35,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const { name } = await request.json();
+    const { name, scopes } = await request.json();
     const keyName = name || 'Default API Key';
+    const keyScopes = Array.isArray(scopes) ? scopes : [];
 
     const { raw, keyHash, keyLast4 } = generateApiKey();
 
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest) {
         name: keyName,
         keyHash,
         keyLast4,
+        scopes: keyScopes,
         userId: user.id,
       },
     });
