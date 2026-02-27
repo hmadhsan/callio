@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, name } = await request.json();
+    const { email, password, name, inviteToken } = await request.json();
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
@@ -29,26 +29,64 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'An account with this email already exists' }, { status: 409 });
     }
 
+    let workspaceInvite = null;
+    if (inviteToken) {
+      workspaceInvite = await prisma.workspaceInvite.findUnique({
+        where: { token: inviteToken }
+      });
+
+      if (workspaceInvite && workspaceInvite.expiresAt < new Date()) {
+        return NextResponse.json({ error: 'Invite link has expired' }, { status: 400 });
+      }
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name: name || null,
-        memberships: {
-          create: {
-            role: 'OWNER',
-            workspace: {
-              create: {
-                name: 'Personal Workspace',
-                slug: `personal-${randomBytes(4).toString('hex')}`,
+    let user;
+
+    if (workspaceInvite) {
+      // User is joining an existing workspace via invite
+      user = await prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          name: name || null,
+          memberships: {
+            create: {
+              role: workspaceInvite.role,
+              workspace: {
+                connect: { id: workspaceInvite.workspaceId }
               }
             }
           }
-        }
-      },
-    });
+        },
+      });
+
+      // Delete the used invite
+      await prisma.workspaceInvite.delete({
+        where: { id: workspaceInvite.id }
+      });
+    } else {
+      // Normal signup, create a personal workspace
+      user = await prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          name: name || null,
+          memberships: {
+            create: {
+              role: 'OWNER',
+              workspace: {
+                create: {
+                  name: 'Personal Workspace',
+                  slug: `personal-${randomBytes(4).toString('hex')}`,
+                }
+              }
+            }
+          }
+        },
+      });
+    }
 
     const session = await createSession(user.id);
 

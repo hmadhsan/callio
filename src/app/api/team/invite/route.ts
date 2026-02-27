@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
             }
         });
 
-        const inviteLink = `${appUrl}/register?invite=${token}`;
+        const inviteLink = `${appUrl}/signup?invite=${token}`;
 
         if (resend) {
             console.log(`Sending new user invite email from ${fromEmail} to ${email}`);
