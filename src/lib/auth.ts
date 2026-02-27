@@ -138,11 +138,28 @@ export function getSessionCookieOptions() {
 }
 
 export async function getActiveWorkspace(userId: string) {
-  const membership = await prisma.workspaceMember.findFirst({
+  let membership = await prisma.workspaceMember.findFirst({
     where: { userId },
     include: { workspace: true },
     orderBy: { createdAt: 'asc' }, // Defaults to the earliest created (usually Personal Workspace)
   });
+
+  // Fallback: If an old user logs in and has no workspace, auto-provision one.
+  if (!membership) {
+    membership = await prisma.workspaceMember.create({
+      data: {
+        userId,
+        role: 'OWNER',
+        workspace: {
+          create: {
+            name: 'Personal Workspace',
+          }
+        }
+      },
+      include: { workspace: true }
+    });
+  }
+
   return membership?.workspace || null;
 }
 

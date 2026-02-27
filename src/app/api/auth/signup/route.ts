@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import { createSession, getSessionCookieOptions, SESSION_COOKIE } from '@/lib/auth';
+import { randomBytes } from 'crypto';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -35,6 +36,17 @@ export async function POST(request: NextRequest) {
         email,
         password: hashedPassword,
         name: name || null,
+        memberships: {
+          create: {
+            role: 'OWNER',
+            workspace: {
+              create: {
+                name: 'Personal Workspace',
+                slug: `personal-${randomBytes(4).toString('hex')}`,
+              }
+            }
+          }
+        }
       },
     });
 

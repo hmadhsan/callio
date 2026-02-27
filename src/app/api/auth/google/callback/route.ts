@@ -111,6 +111,17 @@ export async function GET(request: NextRequest) {
           firstName: googleUser.given_name || null,
           lastName: googleUser.family_name || null,
           googleId: googleUser.sub,
+          memberships: {
+            create: {
+              role: 'OWNER',
+              workspace: {
+                create: {
+                  name: 'Personal Workspace',
+                  slug: `personal-${googleUser.sub.substring(0, 8)}`,
+                }
+              }
+            }
+          }
         },
       });
     }
