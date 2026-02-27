@@ -56,6 +56,17 @@ model MagicLinkToken {
   @@index([expiresAt])
 }
 
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([expiresAt])
+}
+
 model Session {
   id        String   @id @default(cuid())
   token     String   @unique

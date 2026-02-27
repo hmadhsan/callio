@@ -43,6 +43,39 @@ export async function consumeMagicLink(token: string) {
   return record.email;
 }
 
+export async function createPasswordResetToken(email: string) {
+  const token = createToken();
+  const expiresAt = new Date(Date.now() + MAGIC_LINK_MINUTES * 60 * 1000); // reuse 15 min expiry
+
+  await prisma.passwordResetToken.create({
+    data: {
+      email,
+      token,
+      expiresAt,
+    },
+  });
+
+  return { token, expiresAt };
+}
+
+export async function consumePasswordResetToken(token: string) {
+  const record = await prisma.passwordResetToken.findUnique({
+    where: { token },
+  });
+
+  if (!record) {
+    return null;
+  }
+
+  if (record.expiresAt.getTime() < Date.now()) {
+    await prisma.passwordResetToken.delete({ where: { token } }).catch(() => null);
+    return null;
+  }
+
+  await prisma.passwordResetToken.delete({ where: { token } }).catch(() => null);
+  return record.email;
+}
+
 export async function createSession(userId: string) {
   const token = createToken();
   const expiresAt = new Date(Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000);
