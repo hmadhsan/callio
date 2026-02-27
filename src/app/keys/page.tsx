@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getCurrentUser } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { getAllApis } from '@/lib/apiService';
 import GenerateKeyForm from '@/components/GenerateKeyForm';
 import KeyTableRow from '@/components/KeyTableRow';
 import { ArrowLeft, Key, Shield } from 'lucide-react';
@@ -22,6 +23,8 @@ export default async function KeysPage() {
     include: { api: true },
     orderBy: { createdAt: 'desc' },
   });
+
+  const apis = await getAllApis();
 
   return (
     <div className="min-h-screen bg-[var(--page-bg)]">
@@ -55,7 +58,7 @@ export default async function KeysPage() {
         </div>
 
         <div className="bg-white rounded-xl border border-[var(--line)] p-6">
-          <GenerateKeyForm />
+          <GenerateKeyForm apis={apis} />
 
           {apiKeys.length > 0 ? (
             <div className="mt-6 border border-[var(--line)] rounded-lg overflow-x-auto">
@@ -89,7 +92,7 @@ export default async function KeysPage() {
         <div className="mt-8 bg-[#1a1a1a] rounded-xl p-6 text-sm">
           <p className="text-gray-400 mb-3 font-medium">Quick start — make an API call through Callio:</p>
           <pre className="text-green-400 font-mono text-xs overflow-x-auto">
-{`curl -X GET "https://callio.dev/api/proxy/jsonplaceholder/posts/1" \\
+            {`curl -X GET "https://callio.dev/api/proxy/jsonplaceholder/posts/1" \\
   -H "Authorization: Bearer callio_your_key_here"`}
           </pre>
         </div>
