@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentUserWithWorkspace } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { PLANS, getPlan } from '@/lib/stripe';
 
@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
-    if (!user) {
+    const { user, workspace } = await getCurrentUserWithWorkspace();
+    if (!user || !workspace) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
@@ -22,10 +22,10 @@ export async function GET(request: NextRequest) {
 
     // Get usage count for current period
     const periodStart = subscription?.currentPeriodStart || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-    
+
     const usageCount = await prisma.usageRecord.count({
       where: {
-        userId: user.id,
+        workspaceId: workspace.id,
         createdAt: { gte: periodStart },
       },
     });

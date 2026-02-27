@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentUserWithWorkspace } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { getAllApis } from '@/lib/apiService';
 import GenerateKeyForm from '@/components/GenerateKeyForm';
@@ -12,14 +12,14 @@ import UserNav from '@/components/UserNav';
 export const dynamic = 'force-dynamic';
 
 export default async function KeysPage() {
-  const user = await getCurrentUser();
+  const { user, workspace } = await getCurrentUserWithWorkspace();
 
-  if (!user) {
+  if (!user || !workspace) {
     redirect('/login');
   }
 
   const apiKeys = await prisma.apiKey.findMany({
-    where: { userId: user.id },
+    where: { workspaceId: workspace.id },
     include: { api: true },
     orderBy: { createdAt: 'desc' },
   });

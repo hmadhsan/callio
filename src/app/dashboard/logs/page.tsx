@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentUserWithWorkspace } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { ArrowLeft, Activity, Search, Filter } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
@@ -9,15 +9,15 @@ import UserNav from '@/components/UserNav';
 export const dynamic = 'force-dynamic';
 
 export default async function LogsPage() {
-    const user = await getCurrentUser();
+    const { user, workspace } = await getCurrentUserWithWorkspace();
 
-    if (!user) {
+    if (!user || !workspace) {
         redirect('/login');
     }
 
-    // Fetch the last 100 usage records for this user
+    // Fetch the last 100 usage records for this workspace
     const records = await prisma.usageRecord.findMany({
-        where: { userId: user.id },
+        where: { workspaceId: workspace.id },
         orderBy: { createdAt: 'desc' },
         take: 100,
     });
@@ -92,9 +92,9 @@ export default async function LogsPage() {
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-2">
                                                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${record.method === 'GET' ? 'bg-blue-100 text-blue-700' :
-                                                                record.method === 'POST' ? 'bg-green-100 text-green-700' :
-                                                                    record.method === 'DELETE' ? 'bg-red-100 text-red-700' :
-                                                                        'bg-gray-100 text-gray-700'
+                                                            record.method === 'POST' ? 'bg-green-100 text-green-700' :
+                                                                record.method === 'DELETE' ? 'bg-red-100 text-red-700' :
+                                                                    'bg-gray-100 text-gray-700'
                                                             }`}>
                                                             {record.method}
                                                         </span>

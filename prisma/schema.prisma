@@ -40,6 +40,7 @@ model User {
   apiCredentials ApiCredential[]
   subscription   Subscription?
   usageRecords   UsageRecord[]
+  memberships    WorkspaceMember[]
 
   @@index([email])
   @@index([googleId])
@@ -135,6 +136,8 @@ model ApiKey {
   api       Api?     @relation(fields: [apiId], references: [id], onDelete: Cascade)
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   name         String
   keyHash      String   @unique
   keyLast4     String
@@ -144,6 +147,7 @@ model ApiKey {
 
   @@index([apiId])
   @@index([userId])
+  @@index([workspaceId])
 }
 
 model ApiCredential {
@@ -152,6 +156,8 @@ model ApiCredential {
   api         Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   providerKey String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -159,6 +165,7 @@ model ApiCredential {
   @@unique([userId, apiId])
   @@index([apiId])
   @@index([userId])
+  @@index([workspaceId])
 }
 
 // ── Stripe Billing ──────────────────────────────────────
@@ -185,6 +192,8 @@ model UsageRecord {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   apiSlug   String
   apiKeyId  String?  // References the ApiKey that made the request (if applicable)
   method    String
@@ -196,4 +205,49 @@ model UsageRecord {
   @@index([userId, createdAt])
   @@index([apiSlug])
   @@index([createdAt])
+  @@index([workspaceId])
+}
+
+// ── Workspaces ──────────────────────────────────────────
+
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members   WorkspaceMember[]
+  invites   WorkspaceInvite[]
+  apiKeys   ApiKey[]
+  usageRecords UsageRecord[]
+  apiCredentials ApiCredential[]
+}
+
+model WorkspaceMember {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        String    @default("MEMBER") // OWNER, ADMIN, MEMBER
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([workspaceId, userId])
+  @@index([userId])
+}
+
+model WorkspaceInvite {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  email       String
+  role        String    @default("MEMBER")
+  token       String    @unique
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+
+  @@unique([workspaceId, email])
+  @@index([email])
 }

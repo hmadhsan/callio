@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import { hashApiKey } from '@/lib/keys';
 import { PLANS } from '@/lib/stripe';
 import { decryptProviderKey } from '@/lib/crypto';
-import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
+import { getUserFromSessionToken, getActiveWorkspace, SESSION_COOKIE } from '@/lib/auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -21,14 +21,17 @@ async function authenticateRequest(request: NextRequest) {
       include: { user: true },
     });
 
-    if (apiKey) return { userId: apiKey.user.id, type: 'api_key', scopes: apiKey.scopes, keyId: apiKey.id, monthlyLimit: apiKey.monthlyLimit };
+    if (apiKey) return { userId: apiKey.userId, workspaceId: apiKey.workspaceId, type: 'api_key', scopes: apiKey.scopes, keyId: apiKey.id, monthlyLimit: apiKey.monthlyLimit };
   }
 
   // Fallback to session cookie for playground testing 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   if (token) {
     const user = await getUserFromSessionToken(token);
-    if (user) return { userId: user.id, type: 'session', scopes: [] as string[], keyId: null, monthlyLimit: null };
+    if (user) {
+      const workspace = await getActiveWorkspace(user.id);
+      return { userId: user.id, workspaceId: workspace?.id, type: 'session', scopes: [] as string[], keyId: null, monthlyLimit: null };
+    }
   }
 
   return null;
@@ -43,8 +46,8 @@ async function handler(
 
     // Authenticate
     const auth = await authenticateRequest(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Invalid or missing API key. Pass your Callio key as: Authorization: Bearer callio_...' }, { status: 401 });
+    if (!auth || !auth.workspaceId) {
+      return NextResponse.json({ error: 'Invalid or missing API key, or no active workspace found.' }, { status: 401 });
     }
 
     // Check API Scoping
@@ -93,13 +96,11 @@ async function handler(
 
     // If API requires provider auth, get the user's stored credential
     if (!api.allowUnauthenticated) {
-      // Check if user has stored a provider key
-      const credential = await prisma.apiCredential.findUnique({
+      // Check if workspace has stored a provider key
+      const credential = await prisma.apiCredential.findFirst({
         where: {
-          userId_apiId: {
-            userId: auth.userId,
-            apiId: api.id,
-          },
+          workspaceId: auth.workspaceId,
+          apiId: api.id,
         },
       });
 
@@ -133,7 +134,7 @@ async function handler(
 
     const usageCount = await prisma.usageRecord.count({
       where: {
-        userId: auth.userId,
+        workspaceId: auth.workspaceId,
         createdAt: { gte: periodStart },
       },
     });
@@ -170,6 +171,7 @@ async function handler(
     const usageRecord = await prisma.usageRecord.create({
       data: {
         userId: auth.userId,
+        workspaceId: auth.workspaceId,
         apiSlug,
         apiKeyId: auth.keyId,
         method: request.method,

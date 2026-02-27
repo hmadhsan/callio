@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { getUserFromSessionToken, SESSION_COOKIE } from '@/lib/auth';
+import { getUserFromSessionToken, getActiveWorkspace, SESSION_COOKIE } from '@/lib/auth';
 import { generateApiKey } from '@/lib/keys';
 import { PLANS } from '@/lib/stripe';
 
@@ -14,6 +14,11 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const workspace = await getActiveWorkspace(user.id);
+    if (!workspace) {
+      return NextResponse.json({ error: 'No active workspace found' }, { status: 400 });
     }
 
     const { slug } = await request.json();
@@ -36,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     if (maxKeys !== Infinity) {
       const existingKeyCount = await prisma.apiKey.count({
-        where: { userId: user.id },
+        where: { workspaceId: workspace.id },
       });
       if (existingKeyCount >= maxKeys) {
         return NextResponse.json({
@@ -55,6 +60,7 @@ export async function POST(request: NextRequest) {
         keyHash,
         keyLast4,
         userId: user.id,
+        workspaceId: workspace.id,
         apiId: api.id,
       },
     });

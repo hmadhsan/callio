@@ -137,4 +137,23 @@ export function getSessionCookieOptions() {
   };
 }
 
+export async function getActiveWorkspace(userId: string) {
+  const membership = await prisma.workspaceMember.findFirst({
+    where: { userId },
+    include: { workspace: true },
+    orderBy: { createdAt: 'asc' }, // Defaults to the earliest created (usually Personal Workspace)
+  });
+  return membership?.workspace || null;
+}
+
+export async function getCurrentUserWithWorkspace() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  const user = await getUserFromSessionToken(token);
+  if (!user) return { user: null, workspace: null };
+
+  const workspace = await getActiveWorkspace(user.id);
+  return { user, workspace };
+}
+
 export { SESSION_COOKIE };
