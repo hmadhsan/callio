@@ -27,6 +27,7 @@ export default function DocsPage() {
               <li><a href="#authentication" className="hover:text-[var(--accent)] transition">Authentication</a></li>
               <li><a href="#api-proxy" className="hover:text-[var(--accent)] transition">API Proxy</a></li>
               <li><a href="#agent-integration" className="hover:text-[var(--accent)] transition">Agent Integration</a></li>
+              <li><a href="#official-sdk" className="hover:text-[var(--accent)] transition">Official SDK</a></li>
               <li><a href="#code-examples" className="hover:text-[var(--accent)] transition">Code Examples</a></li>
             </ul>
           </div>
@@ -152,6 +153,42 @@ export default function DocsPage() {
           </section>
 
           {/* SDKs */}
+          <section id="official-sdk" className="mb-12 scroll-mt-24">
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <Code2 className="w-5 h-5" />
+              Official SDK
+            </h2>
+            <div className="bg-white rounded-xl border border-[var(--line)] p-6 space-y-4">
+              <p className="text-[var(--muted)] text-sm">
+                For Node.js and TypeScript environments, we provide an official SDK to make interacting with the Callio proxy even easier.
+              </p>
+
+              <h3 className="font-semibold mt-4">Installation</h3>
+              <div className="bg-[#1a1a1a] rounded-lg p-4">
+                <pre className="text-green-400 text-xs font-mono">npm install callio-sdk</pre>
+              </div>
+
+              <h3 className="font-semibold mt-4">Usage</h3>
+              <div className="bg-[#1a1a1a] rounded-lg p-4 overflow-x-auto">
+                <pre className="text-green-400 text-xs font-mono">
+                  {`import { CallioClient } from 'callio-sdk';
+
+// Initialize with your single Callio API Key
+const callio = new CallioClient('callio_your_api_key');
+
+// Make a request to any supported API
+const response = await callio.post('openai', 'v1/chat/completions', {
+  model: 'gpt-4',
+  messages: [{ role: 'user', content: 'Hello!' }]
+});
+
+console.log(response);`}
+                </pre>
+              </div>
+            </div>
+          </section>
+
+          {/* Raw Code Examples */}
           <section id="code-examples" className="mb-12 scroll-mt-24">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
               <Code2 className="w-5 h-5" />
