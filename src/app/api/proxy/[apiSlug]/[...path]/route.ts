@@ -28,7 +28,7 @@ async function authenticateRequest(request: NextRequest) {
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   if (token) {
     const user = await getUserFromSessionToken(token);
-    if (user) return { userId: user.id, type: 'session', scopes: [], keyId: null, monthlyLimit: null };
+    if (user) return { userId: user.id, type: 'session', scopes: [] as string[], keyId: null, monthlyLimit: null };
   }
 
   return null;
