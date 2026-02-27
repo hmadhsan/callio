@@ -4,14 +4,14 @@ import prisma from '@/lib/prisma';
 import { randomBytes } from 'crypto';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const fromEmail = process.env.RESEND_FROM_INVITES || 'invites@callio.dev';
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://callio.dev';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
     try {
+        const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+        const fromEmail = process.env.RESEND_FROM_INVITES || 'invites@callio.dev';
         const { user, workspace } = await getCurrentUserWithWorkspace();
 
         if (!user || !workspace) {
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
                 }
             });
 
-            if (process.env.RESEND_API_KEY) {
+            if (resend) {
                 await resend.emails.send({
                     from: `Callio <${fromEmail}>`,
                     to: email,
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
 
         const inviteLink = `${appUrl}/register?invite=${token}`;
 
-        if (process.env.RESEND_API_KEY) {
+        if (resend) {
             await resend.emails.send({
                 from: `Callio <${fromEmail}>`,
                 to: email,
