@@ -143,6 +143,14 @@ export default function UserNav({ variant = 'default' }: UserNavProps) {
             <User className="w-4 h-4 text-[var(--muted)]" />
             Browse APIs
           </Link>
+          <Link
+            href="/dashboard/settings"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--ink)] hover:bg-[var(--soft)] transition"
+          >
+            <Settings className="w-4 h-4 text-[var(--muted)]" />
+            Settings
+          </Link>
 
           {/* Logout */}
           <div className="border-t border-[var(--line)] mt-1">
