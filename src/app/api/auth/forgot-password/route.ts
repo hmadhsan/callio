@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
                 const resend = new Resend(process.env.RESEND_API_KEY);
 
                 await resend.emails.send({
-                    from: 'Callio <noreply@callio.dev>',
+                    from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
                     to: email,
                     subject: 'Reset your Callio password',
                     html: `
