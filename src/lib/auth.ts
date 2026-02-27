@@ -149,21 +149,22 @@ export async function getActiveWorkspace(userId: string) {
   }
 
   // Fallback: If an old user logs in and has no workspace, auto-provision one.
-  const newMembership = await prisma.workspaceMember.create({
+  const newWorkspace = await prisma.workspace.create({
     data: {
-      userId,
-      role: 'OWNER',
-      workspace: {
-        create: {
-          name: 'Personal Workspace',
-          slug: `personal-${randomBytes(4).toString('hex')}`,
-        }
-      }
-    },
-    include: { workspace: true }
+      name: 'Personal Workspace',
+      slug: `personal-${randomBytes(4).toString('hex')}`,
+    }
   });
 
-  return newMembership.workspace;
+  await prisma.workspaceMember.create({
+    data: {
+      userId,
+      workspaceId: newWorkspace.id,
+      role: 'OWNER',
+    }
+  });
+
+  return newWorkspace;
 }
 
 export async function getCurrentUserWithWorkspace() {
