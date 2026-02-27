@@ -11,7 +11,9 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
     try {
         const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-        const fromEmail = process.env.RESEND_FROM_INVITES || 'invites@callio.dev';
+        let fromEmail = process.env.RESEND_FROM_INVITES || 'invites@callio.dev';
+        // Strip out accidental quotes if set in Vercel like RESEND_FROM_INVITES="invites@callio.dev"
+        fromEmail = fromEmail.replace(/["']/g, '').trim();
         const { user, workspace } = await getCurrentUserWithWorkspace();
 
         if (!user || !workspace) {
@@ -64,7 +66,8 @@ export async function POST(request: NextRequest) {
             });
 
             if (resend) {
-                await resend.emails.send({
+                console.log(`Sending immediate invite email from ${fromEmail} to ${email}`);
+                const { error: resendError } = await resend.emails.send({
                     from: `Callio <${fromEmail}>`,
                     to: email,
                     subject: `You've been added to ${workspace.name} on Callio`,
@@ -79,6 +82,14 @@ export async function POST(request: NextRequest) {
                         </div>
                     `
                 });
+
+                if (resendError) {
+                    console.error("Resend API failed to send to existing user:", resendError);
+                } else {
+                    console.log("Resend API response successful for existing user");
+                }
+            } else {
+                console.warn("RESEND_API_KEY is not defined. Skipping email sending.");
             }
 
             return NextResponse.json({ success: true, message: 'User added to workspace immediately.' });
@@ -114,7 +125,8 @@ export async function POST(request: NextRequest) {
         const inviteLink = `${appUrl}/register?invite=${token}`;
 
         if (resend) {
-            await resend.emails.send({
+            console.log(`Sending new user invite email from ${fromEmail} to ${email}`);
+            const { error: resendError } = await resend.emails.send({
                 from: `Callio <${fromEmail}>`,
                 to: email,
                 subject: `You've been invited to join ${workspace.name} on Callio`,
@@ -130,6 +142,15 @@ export async function POST(request: NextRequest) {
                     </div>
                 `
             });
+
+            if (resendError) {
+                console.error("Resend API failed to send to new user:", resendError);
+                // We don't necessarily want to fail the invite if the email fails, but we want it logged.
+            } else {
+                console.log("Resend API response successful for new user");
+            }
+        } else {
+            console.warn("RESEND_API_KEY is not defined. Skipping email sending.");
         }
         return NextResponse.json({ success: true, message: 'Invite created' });
 
