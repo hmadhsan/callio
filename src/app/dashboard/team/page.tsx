@@ -6,6 +6,7 @@ import { ArrowLeft, Users, ShieldAlert, Mail } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
 import UserNav from '@/components/UserNav';
 import TeamInviteForm from '@/components/TeamInviteForm';
+import CancelInviteButton from '@/components/CancelInviteButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,7 +85,7 @@ export default async function TeamPage() {
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <span className={`text-[10px] font-bold px-2 py-1 rounded border uppercase tracking-wider ${member.role === 'OWNER' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                                                    'bg-gray-50 text-gray-600 border-gray-200'
+                                                'bg-gray-50 text-gray-600 border-gray-200'
                                                 }`}>
                                                 {member.role === 'OWNER' && <ShieldAlert className="w-3 h-3 inline mr-1 -mt-0.5" />}
                                                 {member.role}
@@ -110,9 +111,14 @@ export default async function TeamPage() {
                                                 <p className="text-sm font-medium text-[var(--ink)]">{invite.email}</p>
                                                 <p className="text-xs text-[var(--muted)]">Invited on {new Date(invite.createdAt).toLocaleDateString()}</p>
                                             </div>
-                                            <span className="text-[10px] font-bold px-2 py-1 rounded bg-yellow-50 text-yellow-700 border border-yellow-200 uppercase tracking-wider">
-                                                Pending
-                                            </span>
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-[10px] font-bold px-2 py-1 rounded bg-yellow-50 text-yellow-700 border border-yellow-200 uppercase tracking-wider">
+                                                    Pending
+                                                </span>
+                                                {isOwner && (
+                                                    <CancelInviteButton inviteId={invite.id} workspaceId={workspace.id} />
+                                                )}
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>
