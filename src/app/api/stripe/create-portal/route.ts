@@ -26,9 +26,11 @@ export async function POST(request: NextRequest) {
             return NextResponse.redirect(new URL('/pricing', request.url));
         }
 
+        const returnUrl = new URL('/dashboard/settings', request.url).toString();
+
         const portalSession = await stripe.billingPortal.sessions.create({
             customer: subscription.stripeCustomerId,
-            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings`,
+            return_url: returnUrl,
         });
 
         return NextResponse.redirect(portalSession.url, 303);
