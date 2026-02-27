@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUserWithWorkspace } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { randomBytes } from 'crypto';
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://callio.dev';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,6 +63,24 @@ export async function POST(request: NextRequest) {
                 }
             });
 
+            if (process.env.RESEND_API_KEY) {
+                await resend.emails.send({
+                    from: `Callio <${fromEmail}>`,
+                    to: email,
+                    subject: `You've been added to ${workspace.name} on Callio`,
+                    html: `
+                        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                            <h2>You're in!</h2>
+                            <p><strong>${user.name || user.email}</strong> has added you to the <strong>${workspace.name}</strong> workspace on Callio.</p>
+                            <p>You can now access this workspace from your dashboard.</p>
+                            <div style="margin: 30px 0;">
+                                <a href="${appUrl}/dashboard" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Go to Dashboard</a>
+                            </div>
+                        </div>
+                    `
+                });
+            }
+
             return NextResponse.json({ success: true, message: 'User added to workspace immediately.' });
         }
 
@@ -88,7 +111,26 @@ export async function POST(request: NextRequest) {
             }
         });
 
-        // In a real app, send an email with the link here.
+        const inviteLink = `${appUrl}/register?invite=${token}`;
+
+        if (process.env.RESEND_API_KEY) {
+            await resend.emails.send({
+                from: `Callio <${fromEmail}>`,
+                to: email,
+                subject: `You've been invited to join ${workspace.name} on Callio`,
+                html: `
+                    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                        <h2>You've been invited!</h2>
+                        <p><strong>${user.name || user.email}</strong> has invited you to join the <strong>${workspace.name}</strong> workspace on Callio.</p>
+                        <p>Click the button below to accept the invitation and set up your account.</p>
+                        <div style="margin: 30px 0;">
+                            <a href="${inviteLink}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Accept Invitation</a>
+                        </div>
+                        <p style="color: #666; font-size: 14px;">Or copy and paste this link: ${inviteLink}</p>
+                    </div>
+                `
+            });
+        }
         return NextResponse.json({ success: true, message: 'Invite created' });
 
     } catch (err: any) {
