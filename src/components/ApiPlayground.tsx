@@ -357,6 +357,8 @@ export default function ApiPlayground({
                   <p className="text-xs text-blue-900 font-bold mb-2">✨ Magic Authentication</p>
                   <p className="text-xs text-blue-800 leading-relaxed mb-2">
                     Because you are logged in, we are automatically authenticating this request using your session! You don't need to copy-paste your Callio API key here.
+                    <br /><br />
+                    <strong>Note:</strong> API Keys and Scopes generated on your Dashboard apply <em>only</em> to external agents. The Playground gives you full access via your browser session.
                   </p>
                   {!allowUnauthenticated && (
                     <p className="text-xs text-blue-800 leading-relaxed font-semibold">
