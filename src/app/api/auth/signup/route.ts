@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import { createSession, getSessionCookieOptions, SESSION_COOKIE } from '@/lib/auth';
 import { randomBytes } from 'crypto';
+import { Resend } from 'resend';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -86,6 +87,35 @@ export async function POST(request: NextRequest) {
           }
         },
       });
+    }
+
+    // Send Onboarding Email
+    const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+    let fromEmail = process.env.RESEND_FROM_ONBOARDING || 'onboarding@callio.dev';
+    fromEmail = fromEmail.replace(/["']/g, '').trim();
+
+    if (resend) {
+      console.log(`Sending onboarding email from ${fromEmail} to ${email}`);
+      const { error: resendError } = await resend.emails.send({
+        from: `Callio <${fromEmail}>`,
+        to: email,
+        subject: `Welcome to Callio! 🚀`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+            <h2 style="color: #000;">Welcome to Callio!</h2>
+            <p>Hi ${user.name || 'there'},</p>
+            <p>Thanks for creating an account on Callio. We're excited to have you on board!</p>
+            <div style="margin: 30px 0;">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://callio.dev'}/dashboard" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Go to your Dashboard</a>
+            </div>
+            <p>If you have any questions, just reply to this email!</p>
+          </div>
+        `
+      });
+
+      if (resendError) {
+        console.error("Resend API failed to send onboarding email:", resendError);
+      }
     }
 
     const session = await createSession(user.id);
