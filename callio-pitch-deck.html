@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Callio — Investor Pitch Deck</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --orange: #f97316;
+            --orange-dark: #ea6e0c;
+            --orange-light: #fff7ed;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --white: #ffffff;
+            --bg: #f8fafc;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+        }
+
+        .deck {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ── Slides ─────────────────────────────────────────────────── */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.45s ease, transform 0.45s ease;
+            transform: translateX(40px);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(0);
+        }
+
+        .slide.exit {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        /* ── Navigation ─────────────────────────────────────────────── */
+        .nav {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            padding: 10px 20px;
+        }
+
+        .nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 18px;
+            transition: color 0.2s;
+            padding: 2px 6px;
+        }
+
+        .nav button:hover {
+            color: #fff;
+        }
+
+        .dot-wrap {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .dot.active {
+            background: var(--orange);
+            transform: scale(1.3);
+        }
+
+        .slide-count {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* ── Keyboard hint ──────────────────────────────────────────── */
+        .hint {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 5px 10px;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+       SLIDE STYLES
+    ════════════════════════════════════════════════════════════ */
+
+        /* ── 1. Cover ────────────────────────────────────────────────── */
+        .s-cover {
+            background: linear-gradient(145deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .s-cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 700px 500px at 50% 60%, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
+        }
+
+        .cover-logo {
+            font-size: 52px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #fb923c, #f97316, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+            position: relative;
+        }
+
+        .cover-tag {
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 48px;
+            position: relative;
+        }
+
+        .cover-headline {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            color: #fff;
+            max-width: 760px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .cover-headline span {
+            color: var(--orange);
+        }
+
+        .cover-sub {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 560px;
+            margin: 0 auto 60px;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .cover-badge {
+            display: inline-flex;
+            gap: 32px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 20px 40px;
+            position: relative;
+        }
+
+        .cover-badge-item {
+            text-align: center;
+        }
+
+        .cover-badge-item .num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--orange);
+        }
+
+        .cover-badge-item .lbl {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+        }
+
+        /* ── Shared layout ───────────────────────────────────────────── */
+        .s-light {
+            background: var(--white);
+            padding: 64px 80px;
+            justify-content: center;
+        }
+
+        .s-dark {
+            background: linear-gradient(145deg, #0f172a, #1e1b4b);
+            padding: 64px 80px;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .s-orange {
+            background: linear-gradient(145deg, #f97316, #ea580c);
+            padding: 64px 80px;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .s-gray {
+            background: var(--bg);
+            padding: 64px 80px;
+            justify-content: center;
+        }
+
+        .slide-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+
+        .slide-label.light {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .slide-title {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .slide-title.white {
+            color: #fff;
+        }
+
+        .slide-sub {
+            font-size: 18px;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 680px;
+            margin-bottom: 48px;
+        }
+
+        .slide-sub.white {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ── 2-col grid ─────────────────────────────────────────────── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* ── Cards ──────────────────────────────────────────────────── */
+        .card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .card.dark {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+
+        .card.orange-card {
+            background: linear-gradient(135deg, #fff7ed, #fff);
+            border: 2px solid #fed7aa;
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .card-title.white {
+            color: #fff;
+        }
+
+        .card-body {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .card-body.white {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ── Stats row ──────────────────────────────────────────────── */
+        .stat-row {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat {
+            flex: 1;
+            background: var(--orange-light);
+            border: 2px solid #fed7aa;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat.dark-stat {
+            background: rgba(249, 115, 22, 0.12);
+            border: 2px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .stat-num {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--orange);
+        }
+
+        .stat-lbl {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .stat-lbl.white {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ── Problem pain points ────────────────────────────────────── */
+        .pain-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 20px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid var(--line);
+            margin-bottom: 16px;
+        }
+
+        .pain-emoji {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .pain-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .pain-desc {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* ── Pricing table ──────────────────────────────────────────── */
+        .price-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            flex: 1;
+        }
+
+        .price-card.featured {
+            background: rgba(249, 115, 22, 0.15);
+            border: 2px solid var(--orange);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--orange);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .price-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+        }
+
+        .price-amount {
+            font-size: 42px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .price-amount span {
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .price-feature {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.65);
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .price-feature::before {
+            content: '✓';
+            color: var(--orange);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .price-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* ── Timeline / roadmap ─────────────────────────────────────── */
+        .roadmap-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .roadmap-dot-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .roadmap-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .roadmap-dot.done {
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .roadmap-dot.next {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            border: 2px dashed rgba(255, 255, 255, 0.25);
+        }
+
+        .roadmap-line {
+            width: 2px;
+            flex: 1;
+            min-height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 4px;
+        }
+
+        .roadmap-body {
+            flex: 1;
+            padding-top: 6px;
+        }
+
+        .roadmap-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .roadmap-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+
+        /* ── Ask / CTA ──────────────────────────────────────────────── */
+        .ask-amount {
+            font-size: 72px;
+            font-weight: 900;
+            color: #fff;
+            background: linear-gradient(135deg, #fb923c, #f97316, #c2410c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .use-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .use-pct {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--orange);
+            min-width: 48px;
+        }
+
+        .use-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        /* ── Progress bar ───────────────────────────────────────────── */
+        .bar-wrap {
+            margin-bottom: 20px;
+        }
+
+        .bar-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bar-outer {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #f97316, #fb923c);
+            border-radius: 99px;
+        }
+
+        /* ── Team ───────────────────────────────────────────────────── */
+        .team-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-align: center;
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #f97316, #c2410c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .team-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            font-size: 13px;
+            color: var(--orange);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .team-bio {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* ── Competitive matrix ─────────────────────────────────────── */
+        table.matrix {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        table.matrix th {
+            padding: 12px 16px;
+            text-align: center;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        table.matrix th:first-child {
+            text-align: left;
+        }
+
+        table.matrix td {
+            padding: 12px 16px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        table.matrix td:first-child {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table.matrix tr.callio-row td {
+            background: rgba(249, 115, 22, 0.12);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        table.matrix tr.callio-row td:first-child {
+            border-radius: 8px 0 0 8px;
+            color: var(--orange);
+        }
+
+        table.matrix tr.callio-row td:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .check {
+            color: #4ade80;
+        }
+
+        .cross {
+            color: rgba(255, 255, 255, 0.25);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="deck" id="deck">
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 1 — Cover
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-cover active" data-slide="0">
+            <div class="cover-logo">callio</div>
+            <div class="cover-tag">callio.dev</div>
+            <h1 class="cover-headline">One Key to Rule<br /><span>Every API</span></h1>
+            <p class="cover-sub">The unified API gateway that lets developers and AI agents call any third-party API
+                through a single, authenticated, usage-tracked endpoint.</p>
+            <div class="cover-badge">
+                <div class="cover-badge-item">
+                    <div class="num">50+</div>
+                    <div class="lbl">APIs Available</div>
+                </div>
+                <div class="cover-badge-item">
+                    <div class="num">$20/mo</div>
+                    <div class="lbl">Starting Price</div>
+                </div>
+                <div class="cover-badge-item">
+                    <div class="num">MCP</div>
+                    <div class="lbl">AI Agent Ready</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 2 — Problem
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-gray" data-slide="1">
+            <div class="slide-label">The Problem</div>
+            <h2 class="slide-title">API Integration is<br />a Developer Nightmare</h2>
+            <p class="slide-sub">Every API has a different auth scheme, rate limit, and billing model. Teams waste weeks
+                on boilerplate instead of building products.</p>
+            <div>
+                <div class="pain-item">
+                    <div class="pain-emoji">🔑</div>
+                    <div>
+                        <div class="pain-title">Key management chaos</div>
+                        <div class="pain-desc">Developers juggle 10+ provider keys per project — OpenAI, Stripe, Twilio,
+                            Sendgrid — scattered across .env files and team Slack threads.</div>
+                    </div>
+                </div>
+                <div class="pain-item">
+                    <div class="pain-emoji">📊</div>
+                    <div>
+                        <div class="pain-title">Zero unified visibility</div>
+                        <div class="pain-desc">Usage, costs, and errors are siloed per provider. Teams have no single
+                            dashboard to understand their API spend or failure mode.</div>
+                    </div>
+                </div>
+                <div class="pain-item">
+                    <div class="pain-emoji">🤖</div>
+                    <div>
+                        <div class="pain-title">AI agents need APIs — but can't handle auth</div>
+                        <div class="pain-desc">LLM-powered agents need to call real APIs, but managing credentials and
+                            rate limits inside an agent is fragile and insecure.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 3 — Solution
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-dark" data-slide="2">
+            <div class="slide-label light">The Solution</div>
+            <h2 class="slide-title white">Callio — One Unified<br />API Gateway</h2>
+            <p class="slide-sub white">Developers and AI agents get a single Callio key. Behind it, every integrated API
+                is authenticated, rate-limited, and usage-tracked automatically.</p>
+            <div class="three-col">
+                <div class="card dark">
+                    <div class="card-icon">🔐</div>
+                    <div class="card-title white">BYOK Credentials</div>
+                    <div class="card-body white">Save your provider keys once. Callio encrypts them (AES-256-GCM) and
+                        injects them on every proxied request. No more key sprawl.</div>
+                </div>
+                <div class="card dark">
+                    <div class="card-icon">🤖</div>
+                    <div class="card-title white">MCP + AI Agent Ready</div>
+                    <div class="card-body white">Built-in Model Context Protocol support. AI agents call any API with
+                        one key — no per-provider auth, rate limits handled automatically.</div>
+                </div>
+                <div class="card dark">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title white">Unified Analytics</div>
+                    <div class="card-body white">Every request logged. Latency, error rates, and usage per API — all in
+                        one dashboard. No third-party tool needed.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 4 — Product
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-light" data-slide="3">
+            <div class="slide-label">Product</div>
+            <h2 class="slide-title">What's Built Today</h2>
+            <p class="slide-sub">A production-ready platform — not a pitch-ware prototype.</p>
+            <div class="two-col">
+                <div>
+                    <div class="card orange-card" style="margin-bottom:20px">
+                        <div class="card-title" style="color:var(--orange)">🌐 API Marketplace</div>
+                        <div class="card-body">50+ integrated APIs (OpenAI, Stripe, GitHub, Slack, SendGrid…) with
+                            interactive playgrounds, OpenAPI spec viewers, and Postman export.</div>
+                    </div>
+                    <div class="card orange-card" style="margin-bottom:20px">
+                        <div class="card-title" style="color:var(--orange)">⚡ Zapier &amp; Make Integration</div>
+                        <div class="card-body">Polling trigger endpoint at /api/zapier/trigger/:slug. Non-developers can
+                            automate workflows using any Callio API — no code required.</div>
+                    </div>
+                    <div class="card orange-card">
+                        <div class="card-title" style="color:var(--orange)">👥 Team Workspaces</div>
+                        <div class="card-body">Multi-member workspaces, invite flows, role-based access, and per-seat
+                            billing — ready to sell to engineering teams.</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card orange-card" style="margin-bottom:20px">
+                        <div class="card-title" style="color:var(--orange)">🔑 API Key Management</div>
+                        <div class="card-body">Scoped keys with per-key monthly limits, last-4 display, and instant
+                            revoke. Full audit trail via UsageRecord.</div>
+                    </div>
+                    <div class="card orange-card" style="margin-bottom:20px">
+                        <div class="card-title" style="color:var(--orange)">💳 Stripe Billing Live</div>
+                        <div class="card-body">Free → Pro ($20/mo) → Team ($99/mo) subscription tiers, metered by
+                            requests per month, fully integrated with Stripe.</div>
+                    </div>
+                    <div class="card orange-card">
+                        <div class="card-title" style="color:var(--orange)">🧩 Skills / Agents</div>
+                        <div class="card-body">Pre-packaged "skills" bundle multiple APIs into agent-ready modules.
+                            One-click add to any AI agent via MCP protocol.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 5 — Market
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-dark" data-slide="4">
+            <div class="slide-label light">Market Opportunity</div>
+            <h2 class="slide-title white">Riding Two Mega-Trends</h2>
+            <p class="slide-sub white">API economy growth + AI agent explosion = a massive, underserved market for
+                unified API infrastructure.</p>
+            <div class="stat-row">
+                <div class="stat dark-stat">
+                    <div class="stat-num">$1.2T</div>
+                    <div class="stat-lbl white">Global API Economy by 2030<br />(Emergen Research)</div>
+                </div>
+                <div class="stat dark-stat">
+                    <div class="stat-num">$4.8B</div>
+                    <div class="stat-lbl white">API Management Market 2024<br />(MarketsandMarkets)</div>
+                </div>
+                <div class="stat dark-stat">
+                    <div class="stat-num">$47B</div>
+                    <div class="stat-lbl white">AI Agents Market by 2030<br />(Grand View Research)</div>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="card dark">
+                    <div class="card-title white">🎯 ICP: Developer Teams</div>
+                    <div class="card-body white">Startups and scale-ups with 2–50 engineers who integrate 3+ third-party
+                        APIs. They have the pain and the budget.</div>
+                </div>
+                <div class="card dark">
+                    <div class="card-title white">🤖 ICP: AI Agent Builders</div>
+                    <div class="card-body white">The fastest-growing developer segment. Every agent builder needs
+                        real-world API access — Callio is their infrastructure layer.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 6 — Business Model
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-dark" data-slide="5">
+            <div class="slide-label light">Business Model</div>
+            <h2 class="slide-title white">SaaS + Usage-Based Pricing</h2>
+            <p class="slide-sub white">Predictable subscription revenue with built-in usage lever — as customers grow,
+                revenue grows automatically.</p>
+            <div class="price-row" style="margin-bottom:40px">
+                <div class="price-card">
+                    <div class="price-name">Free</div>
+                    <div class="price-amount">$0<span>/mo</span></div>
+                    <div class="price-feature">50 requests/month</div>
+                    <div class="price-feature">3 API keys</div>
+                    <div class="price-feature">MCP integration</div>
+                </div>
+                <div class="price-card featured">
+                    <div class="price-badge">Most Popular</div>
+                    <div class="price-name">Pro</div>
+                    <div class="price-amount">$20<span>/mo</span></div>
+                    <div class="price-feature">5,000 requests/month</div>
+                    <div class="price-feature">10 API keys</div>
+                    <div class="price-feature">Full analytics</div>
+                    <div class="price-feature">Webhook forwarding</div>
+                </div>
+                <div class="price-card">
+                    <div class="price-name">Team</div>
+                    <div class="price-amount">$99<span>/mo</span></div>
+                    <div class="price-feature">50,000 requests/month</div>
+                    <div class="price-feature">Unlimited keys &amp; agents</div>
+                    <div class="price-feature">Advanced analytics</div>
+                    <div class="price-feature">Dedicated support</div>
+                </div>
+            </div>
+            <div class="card dark">
+                <div style="display:flex;gap:40px;align-items:center">
+                    <div>
+                        <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:4px">Revenue Drivers</div>
+                        <div style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.8">✦ Subscription MRR
+                            &nbsp;✦ Usage overage fees &nbsp;✦ API provider revenue share &nbsp;✦ Enterprise custom
+                            plans</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 7 — Competitive Landscape
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-dark" data-slide="6">
+            <div class="slide-label light">Competitive Advantage</div>
+            <h2 class="slide-title white">Why Callio Wins</h2>
+            <p class="slide-sub white" style="margin-bottom:32px">Existing tools solve one part of the problem. Callio
+                is the only platform that unifies all of it — including AI agent support.</p>
+            <table class="matrix">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>API Marketplace</th>
+                        <th>AI Agent / MCP</th>
+                        <th>BYOK Credentials</th>
+                        <th>Unified Analytics</th>
+                        <th>Zapier/Make</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="callio-row">
+                        <td>🔶 Callio</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>RapidAPI</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td style="color:rgba(255,255,255,0.4)">Partial</td>
+                        <td class="cross">✗</td>
+                    </tr>
+                    <tr>
+                        <td>Kong / Apigee</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                    </tr>
+                    <tr>
+                        <td>Zapier</td>
+                        <td style="color:rgba(255,255,255,0.4)">Partial</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Postman</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td style="color:rgba(255,255,255,0.4)">Partial</td>
+                        <td class="cross">✗</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 8 — Traction
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-light" data-slide="7">
+            <div class="slide-label">Traction</div>
+            <h2 class="slide-title">Built. Shipped. Live.</h2>
+            <p class="slide-sub">Callio is in production at callio.dev with a working product, billing, and users.</p>
+            <div class="three-col">
+                <div class="stat">
+                    <div class="stat-num">50+</div>
+                    <div class="stat-lbl">APIs Integrated</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">$0→$99</div>
+                    <div class="stat-lbl">Paid Plans Live</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">100%</div>
+                    <div class="stat-lbl">Stripe Billing Active</div>
+                </div>
+            </div>
+            <div style="margin-top:8px">
+                <div class="bar-wrap">
+                    <div class="bar-label" style="color:var(--muted)"><span>Core Proxy Infrastructure</span><span
+                            style="color:var(--orange);font-weight:700">100%</span></div>
+                    <div class="bar-outer">
+                        <div class="bar-inner" style="width:100%;background:linear-gradient(90deg,#f97316,#fb923c)">
+                        </div>
+                    </div>
+                </div>
+                <div class="bar-wrap">
+                    <div class="bar-label" style="color:var(--muted)"><span>Auth, Teams &amp; Billing</span><span
+                            style="color:var(--orange);font-weight:700">100%</span></div>
+                    <div class="bar-outer">
+                        <div class="bar-inner" style="width:100%"></div>
+                    </div>
+                </div>
+                <div class="bar-wrap">
+                    <div class="bar-label" style="color:var(--muted)"><span>Analytics &amp; Usage Tracking</span><span
+                            style="color:var(--orange);font-weight:700">100%</span></div>
+                    <div class="bar-outer">
+                        <div class="bar-inner" style="width:100%"></div>
+                    </div>
+                </div>
+                <div class="bar-wrap">
+                    <div class="bar-label" style="color:var(--muted)"><span>Zapier / Make Integration</span><span
+                            style="color:var(--orange);font-weight:700">100%</span></div>
+                    <div class="bar-outer">
+                        <div class="bar-inner" style="width:100%"></div>
+                    </div>
+                </div>
+                <div class="bar-wrap">
+                    <div class="bar-label" style="color:var(--muted)"><span>Enterprise / Custom Plans</span><span
+                            style="color:var(--orange);font-weight:700">Q2 2026</span></div>
+                    <div class="bar-outer">
+                        <div class="bar-inner" style="width:20%;opacity:0.5"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 9 — Roadmap
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-dark" data-slide="8">
+            <div class="slide-label light">Roadmap</div>
+            <h2 class="slide-title white">What's Next</h2>
+            <div class="two-col">
+                <div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot-col">
+                            <div class="roadmap-dot done">✓</div>
+                            <div class="roadmap-line"></div>
+                        </div>
+                        <div class="roadmap-body">
+                            <div class="roadmap-title">API Proxy + Marketplace</div>
+                            <div class="roadmap-desc">50+ APIs, playground, credential storage, MCP. Live now.</div>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot-col">
+                            <div class="roadmap-dot done">✓</div>
+                            <div class="roadmap-line"></div>
+                        </div>
+                        <div class="roadmap-body">
+                            <div class="roadmap-title">Teams + Billing</div>
+                            <div class="roadmap-desc">Workspace invites, Stripe subscriptions, usage limits. Live now.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot-col">
+                            <div class="roadmap-dot done">✓</div>
+                            <div class="roadmap-line"></div>
+                        </div>
+                        <div class="roadmap-body">
+                            <div class="roadmap-title">Zapier / Make + Postman</div>
+                            <div class="roadmap-desc">Automation trigger endpoint and developer tooling. Live now.</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot-col">
+                            <div class="roadmap-dot next">Q2</div>
+                            <div class="roadmap-line"></div>
+                        </div>
+                        <div class="roadmap-body">
+                            <div class="roadmap-title">Usage-Based Billing</div>
+                            <div class="roadmap-desc">Overage charges via Stripe Metered. Unlocks revenue growth beyond
+                                flat subscription.</div>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot-col">
+                            <div class="roadmap-dot next">Q2</div>
+                            <div class="roadmap-line"></div>
+                        </div>
+                        <div class="roadmap-body">
+                            <div class="roadmap-title">Provider Marketplace</div>
+                            <div class="roadmap-desc">API providers self-list with revenue share. Callio becomes
+                                two-sided marketplace.</div>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="roadmap-dot-col">
+                            <div class="roadmap-dot next">Q3</div>
+                        </div>
+                        <div class="roadmap-body">
+                            <div class="roadmap-title">Enterprise Plan + SAML SSO</div>
+                            <div class="roadmap-desc">Custom contracts, dedicated infrastructure, audit logs. ACV $20K+.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+       SLIDE 10 — The Ask
+  ══════════════════════════════════════════════════════ -->
+        <div class="slide s-dark" data-slide="9">
+            <div class="slide-label light">The Ask</div>
+            <div class="two-col" style="align-items:center;gap:60px">
+                <div>
+                    <h2 class="slide-title white" style="font-size:36px;margin-bottom:16px">We're raising
+                        a<br />Pre-Seed Round</h2>
+                    <div class="ask-amount">$500K</div>
+                    <p style="font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:36px">18-month runway to hit $50K
+                        MRR and raise a Seed</p>
+                    <div>
+                        <div class="use-item">
+                            <div class="use-pct">40%</div>
+                            <div class="use-desc">Engineering — API integrations, enterprise features, mobile</div>
+                        </div>
+                        <div class="use-item">
+                            <div class="use-pct">30%</div>
+                            <div class="use-desc">Growth &amp; GTM — developer marketing, content, events</div>
+                        </div>
+                        <div class="use-item">
+                            <div class="use-pct">20%</div>
+                            <div class="use-desc">Sales — first enterprise AEs, outbound to dev teams</div>
+                        </div>
+                        <div class="use-item">
+                            <div class="use-pct">10%</div>
+                            <div class="use-desc">Infrastructure &amp; ops — Supabase scale, reliability, security</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card dark" style="margin-bottom:20px">
+                        <div class="card-title white" style="font-size:20px;margin-bottom:16px">🎯 12-Month Targets
+                        </div>
+                        <div class="card-body white" style="line-height:2.2;font-size:15px">
+                            📈 &nbsp;<strong style="color:#fff">$50K MRR</strong> from 500 paying teams<br />
+                            🤝 &nbsp;<strong style="color:#fff">3 enterprise contracts</strong> @ $20K+ ACV<br />
+                            🌐 &nbsp;<strong style="color:#fff">200+ APIs</strong> in marketplace<br />
+                            🤖 &nbsp;<strong style="color:#fff">#1 API gateway</strong> for AI agent builders
+                        </div>
+                    </div>
+                    <div class="card dark" style="text-align:center;padding:28px">
+                        <div style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:8px">Contact</div>
+                        <div style="font-size:20px;font-weight:700;color:#fff">callio.dev</div>
+                        <div style="font-size:14px;color:var(--orange);margin-top:4px">hello@callio.dev</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /deck -->
+
+    <!-- Navigation -->
+    <div class="nav" id="nav">
+        <button id="prev" title="Previous">←</button>
+        <div class="dot-wrap" id="dots"></div>
+        <button id="next" title="Next">→</button>
+        <div class="slide-count" id="count">1 / 10</div>
+    </div>
+    <div class="hint">← → or click dots</div>
+
+    <script>
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const dotsWrap = document.getElementById('dots');
+        const countEl = document.getElementById('count');
+        let current = 0;
+
+        // Build dots
+        slides.forEach((_, i) => {
+            const d = document.createElement('div');
+            d.className = 'dot' + (i === 0 ? ' active' : '');
+            d.addEventListener('click', () => goTo(i));
+            dotsWrap.appendChild(d);
+        });
+
+        function goTo(idx) {
+            if (idx < 0 || idx >= slides.length) return;
+            slides[current].classList.remove('active');
+            slides[current].classList.add('exit');
+            setTimeout(() => slides[current].classList.remove('exit'), 450);
+            current = idx;
+            slides[current].classList.add('active');
+            document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+            countEl.textContent = `${current + 1} / ${slides.length}`;
+        }
+
+        document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+        document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(current - 1);
+        });
+    </script>
+</body>
+
+</html>
