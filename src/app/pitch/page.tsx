@@ -246,7 +246,58 @@ const slides = [
         </div>
     </div>,
 
-    // ── 10. The Ask ───────────────────────────────────────────────────────────
+    // ── 10. Founder ──────────────────────────────────────────────────────────
+    <div key="founder" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>The Founder</div>
+        <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 40 }}>Built by a builder,<br />for builders</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 56, alignItems: 'center' }}>
+            {/* Photo */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+                <div style={{ width: 220, height: 220, borderRadius: '50%', overflow: 'hidden', border: '4px solid #f97316', flexShrink: 0 }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/founder.jpg" alt="Founder" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>H. Hassan</div>
+                    <div style={{ fontSize: 14, color: '#f97316', fontWeight: 600, marginTop: 4 }}>Founder & CEO, Callio</div>
+                </div>
+                <a
+                    href="https://www.linkedin.com/in/h-hassan-sde/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#0a66c2', color: '#fff', fontSize: 13, fontWeight: 600, padding: '10px 20px', borderRadius: 10, textDecoration: 'none', transition: 'opacity 0.2s' }}
+                >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+                    linkedin.com/in/h-hassan-sde
+                </a>
+            </div>
+
+            {/* Bio */}
+            <div>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 32 }}>
+                    {['Software Engineer', 'Builder', 'Intl. Conference Speaker'].map(tag => (
+                        <span key={tag} style={{ background: 'rgba(249,115,22,0.15)', border: '1px solid rgba(249,115,22,0.4)', color: '#fb923c', fontSize: 13, fontWeight: 600, padding: '6px 14px', borderRadius: 99 }}>{tag}</span>
+                    ))}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    {[
+                        { icon: '🛠️', title: 'Full-Stack Engineer', desc: 'Built Callio end-to-end — from the API proxy and encryption layer to the billing system, team management, and AI agent integrations.' },
+                        { icon: '🌍', title: 'International Conference Speaker', desc: 'Spoken at developer and tech conferences internationally, evangelising AI, APIs and modern software engineering.' },
+                        { icon: '🚀', title: 'Shipped. Fast.', desc: 'Took Callio from idea to a production-ready platform with 50+ API integrations, Stripe billing, and an AI agent marketplace — solo.' },
+                    ].map(({ icon, title, desc }) => (
+                        <div key={title} style={{ display: 'flex', gap: 16 }}>
+                            <div style={{ fontSize: 26, flexShrink: 0 }}>{icon}</div>
+                            <div>
+                                <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{title}</div>
+                                <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>{desc}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>,
+
     <div key="ask" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>The Ask</div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
@@ -290,7 +341,7 @@ const slides = [
 
 const SLIDE_LABELS = [
     'Cover', 'Problem', 'Solution', 'Product', 'Market',
-    'Business Model', 'Competitive', 'Traction', 'Roadmap', 'The Ask',
+    'Business Model', 'Competitive', 'Traction', 'Roadmap', 'Founder', 'The Ask',
 ];
 
 export default function PitchPage() {
