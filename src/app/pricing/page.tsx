@@ -240,7 +240,7 @@ export default function PricingPage() {
             <div>
               <h3 className="font-semibold mb-1">Is there an enterprise plan?</h3>
               <p className="text-sm text-[var(--muted)]">
-                Yes — contact us at hello@callio.dev for custom limits, SLAs, and on-premise options.
+                Yes — <Link href="/contact" className="text-[var(--accent)] hover:underline">contact us</Link> for custom limits, SLAs, and on-premise options.
               </p>
             </div>
           </div>

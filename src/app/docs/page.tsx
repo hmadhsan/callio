@@ -227,7 +227,7 @@ console.log(data);`}
           </section>
 
           <div className="text-center py-8 border-t border-[var(--line)]">
-            <p className="text-[var(--muted)] text-sm">Need help? Contact us at <a href="mailto:hello@callio.dev" className="text-[var(--accent)] hover:underline">hello@callio.dev</a></p>
+            <p className="text-[var(--muted)] text-sm">Need help? <Link href="/contact" className="text-[var(--accent)] hover:underline">Contact us</Link></p>
           </div>
         </div>
       </div>

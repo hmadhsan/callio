@@ -456,13 +456,13 @@ export default function Home() {
             Have questions, feedback, or want to list your API? We&apos;d love to hear from you.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="mailto:hello@callio.dev"
+            <Link
+              href="/contact"
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--accent)] font-semibold rounded-full hover:bg-white/90 transition text-sm"
             >
-              <Mail className="w-4 h-4" />
-              hello@callio.dev
-            </a>
+              <MessageSquare className="w-4 h-4" />
+              Contact Us
+            </Link>
             <AuthAwareCTA
               className="px-8 py-3.5 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition text-sm"
             />
@@ -518,7 +518,7 @@ export default function Home() {
             <div>&copy; 2026 Callio. All rights reserved.</div>
             <div className="flex items-center gap-4">
               <a href="https://x.com/ai_callio" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">X / Twitter</a>
-              <a href="mailto:hello@callio.dev" className="hover:text-white transition">hello@callio.dev</a>
+              <Link href="/contact" className="hover:text-white transition">Contact Us</Link>
             </div>
           </div>
         </div>

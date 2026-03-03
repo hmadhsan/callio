@@ -266,3 +266,19 @@ model WorkspaceInvite {
   @@unique([workspaceId, email])
   @@index([email])
 }
+
+// ── Contact Messages ─────────────────────────────────────
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  status    String   @default("UNREAD") // UNREAD, READ, REPLIED
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+}
