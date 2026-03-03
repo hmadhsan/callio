@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { User, LogOut, Key, LayoutDashboard, ChevronDown, Settings, Users } from 'lucide-react';
+import { User, LogOut, Key, LayoutDashboard, ChevronDown, Settings, Users, Star } from 'lucide-react';
 
 interface UserInfo {
   id: string;
@@ -150,6 +150,14 @@ export default function UserNav({ variant = 'default' }: UserNavProps) {
           >
             <Users className="w-4 h-4 text-[var(--muted)]" />
             Team Workspace
+          </Link>
+          <Link
+            href="/dashboard/favorites"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--ink)] hover:bg-[var(--soft)] transition"
+          >
+            <Star className="w-4 h-4 text-[var(--muted)]" />
+            Favorite APIs
           </Link>
           <Link
             href="/dashboard/settings"
