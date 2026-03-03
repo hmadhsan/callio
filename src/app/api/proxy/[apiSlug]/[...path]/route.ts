@@ -74,7 +74,24 @@ async function handler(
     if (targetParam) {
       targetUrl = targetParam;
     } else if (api.baseUrl) {
-      targetUrl = `${api.baseUrl.replace(/\/$/, '')}/${pathStr}`;
+      let base = api.baseUrl.replace(/\/$/, '');
+      let pathToAppend = pathStr.startsWith('/') ? pathStr : `/${pathStr}`;
+
+      try {
+        const url = new URL(base);
+        if (url.pathname !== '/' && url.pathname.length > 1) {
+          // Check if pathToAppend starts with the pathname from baseUrl (e.g. Hunter /v2)
+          if (pathToAppend.startsWith(url.pathname)) {
+            // Trim the overlapping path from the base URL so we don't duplicate it
+            base = base.substring(0, base.length - url.pathname.length);
+          }
+        }
+      } catch (e) {
+        // Ignore parsing errors and fallback to simple concat
+      }
+
+      targetUrl = `${base}${pathToAppend}`;
+
       // Forward query params
       const queryParams = new URLSearchParams();
       url.searchParams.forEach((value, key) => {

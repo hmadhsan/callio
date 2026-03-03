@@ -247,9 +247,19 @@ export default function ApiPlayground({
         setError('Monthly request limit reached');
       } else if (!response.ok) {
         // Convert error to string, handle various formats
-        let errorMsg = typeof data.error === 'string'
-          ? data.error
-          : (data.message || JSON.stringify(data) || 'Request failed');
+        let errorMsg;
+        if (typeof data.error === 'string') {
+          errorMsg = data.error;
+        } else if (data.message) {
+          errorMsg = data.message;
+        } else if (data.raw) {
+          const rawStr = String(data.raw);
+          errorMsg = rawStr.toLowerCase().includes('<!doctype html>')
+            ? `Received HTML response instead of JSON (Status ${response.status}). The endpoint might differ from documentation or the URL might be malformed.`
+            : (rawStr.length > 500 ? rawStr.substring(0, 500) + '...' : rawStr);
+        } else {
+          errorMsg = JSON.stringify(data) || 'Request failed';
+        }
 
         // Check if it's a provider key issue
         if (errorMsg.includes('PROVIDER_KEY_MISSING') || data.code === 'PROVIDER_KEY_MISSING' || errorMsg.includes('Provider API key')) {
