@@ -7,7 +7,7 @@ const slides = [
     <div key="cover" style={{
         background: 'linear-gradient(145deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        textAlign: 'center', padding: '60px 60px 88px', position: 'relative', overflow: 'hidden', height: '100%',
+        textAlign: 'center', padding: '60px', position: 'relative', overflow: 'hidden', height: '100%',
     }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 700px 500px at 50% 60%, rgba(249,115,22,0.15) 0%, transparent 70%)' }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -31,7 +31,7 @@ const slides = [
     </div>,
 
     // ── 2. Problem ────────────────────────────────────────────────────────────
-    <div key="problem" style={{ background: '#f8fafc', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div key="problem" style={{ background: '#f8fafc', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: '#f97316', marginBottom: 10 }}>The Problem</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#0f172a', marginBottom: 12 }}>API Integration is<br />a Developer Nightmare</h2>
         <p style={{ fontSize: 18, color: '#64748b', marginBottom: 40, maxWidth: 640 }}>Every API has a different auth scheme, rate limit, and billing model. Teams waste weeks on boilerplate instead of building products.</p>
@@ -53,7 +53,7 @@ const slides = [
     </div>,
 
     // ── 3. Solution ───────────────────────────────────────────────────────────
-    <div key="solution" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="solution" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>The Solution</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 12 }}>Callio — One Unified<br />API Gateway</h2>
         <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.65)', marginBottom: 48, maxWidth: 640 }}>Developers and AI agents get a single Callio key. Behind it, every integrated API is authenticated, rate-limited, and usage-tracked automatically.</p>
@@ -73,7 +73,7 @@ const slides = [
     </div>,
 
     // ── 4. Product ────────────────────────────────────────────────────────────
-    <div key="product" style={{ background: '#fff', padding: '56px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div key="product" style={{ background: '#fff', padding: '56px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: '#f97316', marginBottom: 10 }}>Product</div>
         <h2 style={{ fontSize: 40, fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>What&apos;s Built Today</h2>
         <p style={{ fontSize: 17, color: '#64748b', marginBottom: 36 }}>A production-ready platform — not pitch-ware.</p>
@@ -95,7 +95,7 @@ const slides = [
     </div>,
 
     // ── 5. Market ─────────────────────────────────────────────────────────────
-    <div key="market" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="market" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Market Opportunity</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 12 }}>Riding Two Mega-Trends</h2>
         <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.65)', marginBottom: 40 }}>API economy growth + AI agent explosion = a massive, underserved market for unified API infrastructure.</p>
@@ -121,7 +121,7 @@ const slides = [
     </div>,
 
     // ── 6. Business Model ─────────────────────────────────────────────────────
-    <div key="biz" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="biz" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Business Model</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 12 }}>SaaS + Usage-Based Pricing</h2>
         <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.65)', marginBottom: 40 }}>Predictable subscription MRR with a built-in usage lever — as customers grow, revenue grows automatically.</p>
@@ -145,7 +145,7 @@ const slides = [
     </div>,
 
     // ── 7. Competitive ────────────────────────────────────────────────────────
-    <div key="competitive" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="competitive" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Competitive Advantage</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 12 }}>Why Callio Wins</h2>
         <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.65)', marginBottom: 36 }}>Existing tools solve one part of the problem. Callio unifies all of it — including AI agent support.</p>
@@ -177,7 +177,7 @@ const slides = [
     </div>,
 
     // ── 8. Traction ───────────────────────────────────────────────────────────
-    <div key="traction" style={{ background: '#fff', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div key="traction" style={{ background: '#fff', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: '#f97316', marginBottom: 10 }}>Traction</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>Built. Shipped. Live.</h2>
         <p style={{ fontSize: 18, color: '#64748b', marginBottom: 36 }}>Callio is in production at callio.dev — not a prototype.</p>
@@ -318,41 +318,43 @@ export default function PitchPage() {
     }, [current, goTo]);
 
     return (
-        <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', background: '#0f172a', fontFamily: "'Inter', -apple-system, sans-serif", position: 'relative' }}>
+        <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', background: '#0f172a', fontFamily: "'Inter', -apple-system, sans-serif" }}>
             {/* Google Fonts */}
             <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap'); * { box-sizing: border-box; }`}</style>
 
-            {/* Slide */}
-            <div style={{
-                width: '100%', height: '100%',
-                opacity: animating ? 0 : 1,
-                transform: animating ? `translateX(${direction === 'forward' ? '20px' : '-20px'})` : 'none',
-                transition: 'opacity 0.2s ease, transform 0.2s ease',
-            }}>
-                {slides[current]}
+            {/* Slide area — flex:1 so it fills all space above the nav */}
+            <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+                {/* Slide label top-right */}
+                <div style={{ position: 'absolute', top: 16, right: 18, fontSize: 11, color: 'rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.05)', borderRadius: 6, padding: '4px 10px', letterSpacing: 1, textTransform: 'uppercase', zIndex: 10 }}>
+                    {SLIDE_LABELS[current]} &nbsp;·&nbsp; ← → keys
+                </div>
+
+                {/* Animated slide */}
+                <div style={{
+                    width: '100%', height: '100%',
+                    opacity: animating ? 0 : 1,
+                    transform: animating ? `translateX(${direction === 'forward' ? '20px' : '-20px'})` : 'none',
+                    transition: 'opacity 0.2s ease, transform 0.2s ease',
+                }}>
+                    {slides[current]}
+                </div>
             </div>
 
-            {/* Bottom Nav */}
+            {/* Nav bar — in normal flow, always below slides, never overlaps */}
             <div style={{
-                position: 'fixed', bottom: 28, left: '50%', transform: 'translateX(-50%)',
-                display: 'flex', alignItems: 'center', gap: 14, zIndex: 100,
-                background: 'rgba(15,23,42,0.9)', backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(255,255,255,0.1)', borderRadius: 999,
-                padding: '10px 18px',
+                flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14,
+                background: 'rgba(15,23,42,0.97)', borderTop: '1px solid rgba(255,255,255,0.08)',
+                padding: '12px 24px',
             }}>
-                <button onClick={() => goTo(current - 1)} disabled={current === 0} style={{ background: 'none', border: 'none', cursor: current === 0 ? 'default' : 'pointer', color: current === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', fontSize: 18, transition: 'color 0.2s', padding: '2px 6px' }}>←</button>
-                <div style={{ display: 'flex', gap: 6 }}>
+                <button onClick={() => goTo(current - 1)} disabled={current === 0} style={{ background: 'none', border: 'none', cursor: current === 0 ? 'default' : 'pointer', color: current === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', fontSize: 18, padding: '2px 8px' }}>←</button>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                     {slides.map((_, i) => (
                         <div key={i} onClick={() => goTo(i)} title={SLIDE_LABELS[i]} style={{ width: i === current ? 20 : 7, height: 7, borderRadius: 99, background: i === current ? '#f97316' : 'rgba(255,255,255,0.22)', cursor: 'pointer', transition: 'all 0.25s ease' }} />
                     ))}
                 </div>
-                <button onClick={() => goTo(current + 1)} disabled={current === slides.length - 1} style={{ background: 'none', border: 'none', cursor: current === slides.length - 1 ? 'default' : 'pointer', color: current === slides.length - 1 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', fontSize: 18, transition: 'color 0.2s', padding: '2px 6px' }}>→</button>
+                <button onClick={() => goTo(current + 1)} disabled={current === slides.length - 1} style={{ background: 'none', border: 'none', cursor: current === slides.length - 1 ? 'default' : 'pointer', color: current === slides.length - 1 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', fontSize: 18, padding: '2px 8px' }}>→</button>
                 <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12, minWidth: 44, textAlign: 'center' }}>{current + 1} / {slides.length}</span>
-            </div>
-
-            {/* Slide label top-right */}
-            <div style={{ position: 'fixed', top: 18, right: 20, fontSize: 11, color: 'rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.05)', borderRadius: 6, padding: '4px 10px', letterSpacing: 1, textTransform: 'uppercase' }}>
-                {SLIDE_LABELS[current]} &nbsp;·&nbsp; ← → to navigate
             </div>
         </div>
     );
