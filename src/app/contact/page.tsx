@@ -66,19 +66,7 @@ export default function ContactPage() {
                                 </div>
                             </div>
 
-                            {/* Discord / Community Block */}
-                            <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 bg-white border border-[var(--line)] rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <MessageSquare className="w-6 h-6 text-[var(--ink)]" />
-                                </div>
-                                <div>
-                                    <h3 className="text-[var(--ink)] font-bold mb-1">Join the Community</h3>
-                                    <p className="text-[var(--muted)] text-sm mb-2">Connect with other developers building AI agents.</p>
-                                    <a href="#" className="text-[var(--accent)] hover:underline font-medium">
-                                        Callio Discord Server →
-                                    </a>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 

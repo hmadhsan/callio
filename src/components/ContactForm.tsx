@@ -75,7 +75,7 @@ export default function ContactForm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Name */}
                 <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-gray-300">
+                    <label htmlFor="name" className="text-sm font-medium text-[var(--muted)]">
                         Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -86,13 +86,13 @@ export default function ContactForm() {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Jane Doe"
-                        className="w-full bg-[var(--surface-color)] border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all"
+                        className="w-full bg-[var(--surface-color)] border border-[var(--line)] rounded-xl px-4 py-3 text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all"
                     />
                 </div>
 
                 {/* Email */}
                 <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-gray-300">
+                    <label htmlFor="email" className="text-sm font-medium text-[var(--muted)]">
                         Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -103,15 +103,15 @@ export default function ContactForm() {
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="jane@company.com"
-                        className="w-full bg-[var(--surface-color)] border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all"
+                        className="w-full bg-[var(--surface-color)] border border-[var(--line)] rounded-xl px-4 py-3 text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all"
                     />
                 </div>
             </div>
 
             {/* Subject */}
             <div className="space-y-2">
-                <label htmlFor="subject" className="text-sm font-medium text-gray-300">
-                    Subject <span className="text-gray-500 text-xs ml-1">(Optional)</span>
+                <label htmlFor="subject" className="text-sm font-medium text-[var(--muted)]">
+                    Subject <span className="text-[var(--muted)] text-xs ml-1 opacity-70">(Optional)</span>
                 </label>
                 <input
                     id="subject"
@@ -120,13 +120,13 @@ export default function ContactForm() {
                     value={formData.subject}
                     onChange={handleChange}
                     placeholder="How can we help?"
-                    className="w-full bg-[var(--surface-color)] border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all"
+                    className="w-full bg-[var(--surface-color)] border border-[var(--line)] rounded-xl px-4 py-3 text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all"
                 />
             </div>
 
             {/* Message */}
             <div className="space-y-2">
-                <label htmlFor="message" className="text-sm font-medium text-gray-300">
+                <label htmlFor="message" className="text-sm font-medium text-[var(--muted)]">
                     Your Message <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -137,7 +137,7 @@ export default function ContactForm() {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Tell us more about your inquiry..."
-                    className="w-full bg-[var(--surface-color)] border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all resize-y"
+                    className="w-full bg-[var(--surface-color)] border border-[var(--line)] rounded-xl px-4 py-3 text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all resize-y"
                 />
             </div>
 
@@ -153,7 +153,7 @@ export default function ContactForm() {
             <button
                 type="submit"
                 disabled={status === 'LOADING'}
-                className="w-full sm:w-auto px-8 py-4 bg-[var(--accent)] hover:bg-[#ff9d2b] disabled:opacity-70 text-gray-900 font-bold rounded-xl transition-all flex items-center justify-center gap-2 transform active:scale-95"
+                className="w-full sm:w-auto px-8 py-4 bg-[var(--accent)] hover:opacity-90 disabled:opacity-70 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 transform active:scale-95"
             >
                 {status === 'LOADING' ? (
                     <>
