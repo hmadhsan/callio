@@ -3,12 +3,25 @@ import { getAllApis } from '@/lib/apiService';
 import UserNav from '@/components/UserNav';
 import CallioLogo from '@/components/CallioLogo';
 import BrowseGrid from '@/components/BrowseGrid';
+import { getCurrentUser } from '@/lib/auth';
+import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
 export default async function BrowsePage() {
   const apis = await getAllApis();
   const categoryCount = new Set(apis.map((a) => a.category)).size;
+
+  // Fetch current user's favorites
+  const user = await getCurrentUser();
+  let favoritedApiIds: string[] = [];
+  if (user) {
+    const favorites = await prisma.favoriteApi.findMany({
+      where: { userId: user.id },
+      select: { apiId: true }
+    });
+    favoritedApiIds = favorites.map(f => f.apiId);
+  }
 
   return (
     <div className="min-h-screen bg-[var(--page-bg)]">
@@ -34,7 +47,7 @@ export default async function BrowsePage() {
         </div>
 
         {/* Client-side interactive grid */}
-        <BrowseGrid apis={apis} />
+        <BrowseGrid apis={apis} initialFavoritedIds={favoritedApiIds} />
       </div>
     </div>
   );

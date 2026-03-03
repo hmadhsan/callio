@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, X } from 'lucide-react';
+import FavoriteButton from './FavoriteButton';
 
 interface Api {
   id: string;
@@ -19,7 +20,13 @@ interface Api {
   endpointsCount: number;
 }
 
-export default function BrowseGrid({ apis }: { apis: Api[] }) {
+export default function BrowseGrid({
+  apis,
+  initialFavoritedIds = []
+}: {
+  apis: Api[];
+  initialFavoritedIds?: string[];
+}) {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
@@ -87,11 +94,10 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
       <div className="flex flex-wrap gap-2 mb-8">
         <button
           onClick={() => setActiveCategory(null)}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition border ${
-            !activeCategory
-              ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
-              : 'bg-white text-[var(--muted)] border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--ink)]'
-          }`}
+          className={`px-3 py-1.5 rounded-full text-sm font-medium transition border ${!activeCategory
+            ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+            : 'bg-white text-[var(--muted)] border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--ink)]'
+            }`}
         >
           All ({apis.length})
         </button>
@@ -99,11 +105,10 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
           <button
             key={cat}
             onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition border ${
-              activeCategory === cat
-                ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
-                : 'bg-white text-[var(--muted)] border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--ink)]'
-            }`}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition border ${activeCategory === cat
+              ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+              : 'bg-white text-[var(--muted)] border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--ink)]'
+              }`}
           >
             {cat} ({categoryCounts[cat] || 0})
           </button>
@@ -119,46 +124,56 @@ export default function BrowseGrid({ apis }: { apis: Api[] }) {
         </p>
       )}
 
+      import FavoriteButton from './FavoriteButton';
+
+      // ...rest of imports...
+
+      // ...inside BrowseGrid...
+
       {/* API Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map((api) => (
-          <Link
-            key={api.id}
-            href={`/skills/callio/${api.slug}`}
-            className="group bg-white rounded-xl border border-[var(--line)] p-5 hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col relative"
-          >
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 relative">
+        {filtered.map((api) => {
+          const isFavorited = initialFavoritedIds.includes(api.id);
 
-            <div className="flex items-start gap-3 mb-3">
-              <span className="text-2xl flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[var(--soft)] rounded-lg">
-                {api.icon}
-              </span>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm group-hover:text-[var(--accent)] transition truncate">
-                  {api.name}
-                </h3>
-                <span className="text-[10px] text-[var(--muted)] font-mono">callio/{api.slug}</span>
-              </div>
+          return (
+            <div key={api.id} className="relative group">
+              <Link
+                href={`/skills/callio/${api.slug}`}
+                className="bg-white rounded-xl border border-[var(--line)] p-5 hover:border-[var(--accent)] hover:shadow-md transition-all flex flex-col h-full"
+              >
+                <div className="flex items-start gap-3 mb-3 pr-8">
+                  <span className="text-2xl flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[var(--soft)] rounded-lg">
+                    {api.icon}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-sm group-hover:text-[var(--accent)] transition truncate">
+                      {api.name}
+                    </h3>
+                    <span className="text-[10px] text-[var(--muted)] font-mono">callio/{api.slug}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-[var(--muted)] line-clamp-2 mb-4 flex-1 leading-relaxed">
+                  {api.shortDescription}
+                </p>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="bg-[var(--soft)] text-[var(--ink)] px-2 py-0.5 rounded text-[10px] font-medium">
+                    {api.category}
+                  </span>
+                  <span className="bg-[var(--soft)] px-2 py-0.5 rounded text-[10px] text-[var(--muted)]">
+                    {api.endpointsCount} {api.endpointsCount === 1 ? 'endpoint' : 'endpoints'}
+                  </span>
+                  {api.pricing && (
+                    <span className="bg-[var(--soft)] px-2 py-0.5 rounded text-[10px] text-[var(--muted)]">
+                      {api.pricing}
+                    </span>
+                  )}
+                </div>
+              </Link>
+              <FavoriteButton apiId={api.id} initialIsFavorite={isFavorited} />
             </div>
-            <p className="text-xs text-[var(--muted)] line-clamp-2 mb-4 flex-1 leading-relaxed">
-              {api.shortDescription}
-            </p>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="bg-[var(--soft)] text-[var(--ink)] px-2 py-0.5 rounded text-[10px] font-medium">
-                {api.category}
-              </span>
-              <span className="bg-[var(--soft)] px-2 py-0.5 rounded text-[10px] text-[var(--muted)]">
-                {api.endpointsCount} {api.endpointsCount === 1 ? 'endpoint' : 'endpoints'}
-              </span>
-              {api.pricing && (
-                <span className="bg-[var(--soft)] px-2 py-0.5 rounded text-[10px] text-[var(--muted)]">
-                  {api.pricing}
-                </span>
-              )}
-            </div>
-          </Link>
-        ))}
+          );
+        })}
       </div>
-
       {filtered.length === 0 && (
         <div className="text-center py-16">
           <p className="text-[var(--muted)] text-lg mb-2">No APIs match your search.</p>

@@ -41,6 +41,7 @@ model User {
   subscription   Subscription?
   usageRecords   UsageRecord[]
   memberships    WorkspaceMember[]
+  favoriteApis   FavoriteApi[]
 
   @@index([email])
   @@index([googleId])
@@ -108,12 +109,26 @@ model Api {
   endpoints        Endpoint[]
   apiKeys          ApiKey[]
   credentials      ApiCredential[]
+  favoritedBy      FavoriteApi[]
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
   @@index([category])
   @@index([featured])
   @@index([slug])
+}
+
+model FavoriteApi {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  apiId     String
+  api       Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, apiId])
+  @@index([userId])
+  @@index([apiId])
 }
 
 model Endpoint {
