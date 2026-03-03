@@ -7,7 +7,7 @@ const slides = [
     <div key="cover" style={{
         background: 'linear-gradient(145deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        textAlign: 'center', padding: '60px', position: 'relative', overflow: 'hidden', height: '100%',
+        textAlign: 'center', padding: '60px 60px 88px', position: 'relative', overflow: 'hidden', height: '100%',
     }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 700px 500px at 50% 60%, rgba(249,115,22,0.15) 0%, transparent 70%)' }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -31,7 +31,7 @@ const slides = [
     </div>,
 
     // ── 2. Problem ────────────────────────────────────────────────────────────
-    <div key="problem" style={{ background: '#f8fafc', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div key="problem" style={{ background: '#f8fafc', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: '#f97316', marginBottom: 10 }}>The Problem</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#0f172a', marginBottom: 12 }}>API Integration is<br />a Developer Nightmare</h2>
         <p style={{ fontSize: 18, color: '#64748b', marginBottom: 40, maxWidth: 640 }}>Every API has a different auth scheme, rate limit, and billing model. Teams waste weeks on boilerplate instead of building products.</p>
@@ -53,7 +53,7 @@ const slides = [
     </div>,
 
     // ── 3. Solution ───────────────────────────────────────────────────────────
-    <div key="solution" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="solution" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>The Solution</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 12 }}>Callio — One Unified<br />API Gateway</h2>
         <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.65)', marginBottom: 48, maxWidth: 640 }}>Developers and AI agents get a single Callio key. Behind it, every integrated API is authenticated, rate-limited, and usage-tracked automatically.</p>
@@ -73,7 +73,7 @@ const slides = [
     </div>,
 
     // ── 4. Product ────────────────────────────────────────────────────────────
-    <div key="product" style={{ background: '#fff', padding: '56px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div key="product" style={{ background: '#fff', padding: '56px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: '#f97316', marginBottom: 10 }}>Product</div>
         <h2 style={{ fontSize: 40, fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>What&apos;s Built Today</h2>
         <p style={{ fontSize: 17, color: '#64748b', marginBottom: 36 }}>A production-ready platform — not pitch-ware.</p>
@@ -95,7 +95,7 @@ const slides = [
     </div>,
 
     // ── 5. Market ─────────────────────────────────────────────────────────────
-    <div key="market" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="market" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Market Opportunity</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 12 }}>Riding Two Mega-Trends</h2>
         <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.65)', marginBottom: 40 }}>API economy growth + AI agent explosion = a massive, underserved market for unified API infrastructure.</p>
@@ -121,7 +121,7 @@ const slides = [
     </div>,
 
     // ── 6. Business Model ─────────────────────────────────────────────────────
-    <div key="biz" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="biz" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Business Model</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 12 }}>SaaS + Usage-Based Pricing</h2>
         <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.65)', marginBottom: 40 }}>Predictable subscription MRR with a built-in usage lever — as customers grow, revenue grows automatically.</p>
@@ -145,7 +145,7 @@ const slides = [
     </div>,
 
     // ── 7. Competitive ────────────────────────────────────────────────────────
-    <div key="competitive" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="competitive" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Competitive Advantage</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 12 }}>Why Callio Wins</h2>
         <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.65)', marginBottom: 36 }}>Existing tools solve one part of the problem. Callio unifies all of it — including AI agent support.</p>
@@ -177,7 +177,7 @@ const slides = [
     </div>,
 
     // ── 8. Traction ───────────────────────────────────────────────────────────
-    <div key="traction" style={{ background: '#fff', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div key="traction" style={{ background: '#fff', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: '#f97316', marginBottom: 10 }}>Traction</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>Built. Shipped. Live.</h2>
         <p style={{ fontSize: 18, color: '#64748b', marginBottom: 36 }}>Callio is in production at callio.dev — not a prototype.</p>
@@ -209,7 +209,7 @@ const slides = [
     </div>,
 
     // ── 9. Roadmap ────────────────────────────────────────────────────────────
-    <div key="roadmap" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="roadmap" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Roadmap</div>
         <h2 style={{ fontSize: 42, fontWeight: 800, color: '#fff', marginBottom: 40 }}>What&apos;s Next</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
@@ -247,7 +247,7 @@ const slides = [
     </div>,
 
     // ── 10. The Ask ───────────────────────────────────────────────────────────
-    <div key="ask" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
+    <div key="ask" style={{ background: 'linear-gradient(145deg, #0f172a, #1e1b4b)', padding: '64px 80px 88px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', color: '#fff' }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>The Ask</div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
             <div>
@@ -357,3 +357,4 @@ export default function PitchPage() {
         </div>
     );
 }
+
