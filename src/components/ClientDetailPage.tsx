@@ -2,13 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, Check, ExternalLink, Zap, Lock, Globe, Play } from 'lucide-react';
+import { ChevronLeft, Check, ExternalLink, Zap, Lock, Globe, Play, BookOpen } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
 import AddToAgentButton from '@/components/AddToAgentButton';
 import ProviderKeyForm from '@/components/ProviderKeyForm';
 import CodeExamples from '@/components/CodeExamples';
 import ApiPlayground from '@/components/ApiPlayground';
 import UserNav from '@/components/UserNav';
+import PostmanExportButton from '@/components/PostmanExportButton';
+import dynamic from 'next/dynamic';
+
+const OpenApiViewer = dynamic(() => import('@/components/OpenApiViewer'), { ssr: false });
 
 interface Parameter {
   name: string;
@@ -42,6 +46,7 @@ interface ApiInfo {
   allowUnauthenticated?: boolean;
   setupGuide?: string;
   setupUrl?: string;
+  openapiJson?: Record<string, unknown> | null;
 }
 
 interface ClientDetailPageProps {
@@ -62,20 +67,20 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           <div className="flex items-center gap-8">
             <CallioLogo size={30} />
             <div className="hidden md:flex items-center gap-6">
-              <Link 
-                href="/skills" 
+              <Link
+                href="/skills"
                 className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
               >
                 Skills
               </Link>
-              <Link 
-                href="/browse" 
+              <Link
+                href="/browse"
                 className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
               >
                 APIs
               </Link>
-              <Link 
-                href="/docs" 
+              <Link
+                href="/docs"
                 className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
               >
                 Docs
@@ -155,6 +160,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
                   </button>
                 )}
                 <AddToAgentButton apiSlug={api.slug} />
+                <PostmanExportButton api={api} endpoints={endpoints} />
                 {api.documentation && (
                   <a
                     href={api.documentation}
@@ -223,7 +229,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
       <section className="border-b border-gray-200 py-12 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold mb-8">Getting Started</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl">
             {/* Step 1 */}
             <div className="flex gap-4">
@@ -277,6 +283,20 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           <CodeExamples apiSlug={api.slug} baseUrl={api.baseUrl} />
         </div>
       </section>
+
+      {/* OpenAPI Spec Viewer */}
+      {api.openapiJson && (
+        <section className="border-b border-gray-200 py-12">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3 mb-2">
+              <BookOpen className="w-6 h-6 text-gray-400" />
+              <h2 className="text-2xl font-bold text-gray-900">API Reference</h2>
+            </div>
+            <p className="text-gray-600 mb-6">Interactive API specification — explore all endpoints, parameters, and response schemas.</p>
+            <OpenApiViewer spec={api.openapiJson} />
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-b from-white to-gray-50">

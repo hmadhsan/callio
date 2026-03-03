@@ -37,6 +37,7 @@ export default async function ApiDetailPage({
     allowUnauthenticated: rawApi?.allowUnauthenticated || false,
     setupGuide: rawApi?.setupGuide || undefined,
     setupUrl: rawApi?.setupUrl || undefined,
+    openapiJson: rawApi?.openapiJson as Record<string, unknown> | null | undefined,
   };
 
   const endpoints = api.endpoints.map((ep) => ({
