@@ -56,13 +56,13 @@ export default function ContactForm() {
                 <div className="w-16 h-16 bg-[var(--accent)]/20 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle className="w-8 h-8 text-[var(--accent)]" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Message Sent!</h3>
+                <h3 className="text-2xl font-bold text-[var(--ink)] mb-3">Message Sent!</h3>
                 <p className="text-[var(--muted)] text-lg max-w-md mx-auto mb-8">
                     Thank you for reaching out. We&apos;ve received your message and will get back to you as soon as possible.
                 </p>
                 <button
                     onClick={() => setStatus('IDLE')}
-                    className="px-6 py-3 bg-[var(--surface-color)] hover:bg-gray-800 text-white rounded-xl font-medium transition-colors border border-gray-800"
+                    className="px-6 py-3 bg-[var(--surface-color)] hover:bg-[var(--line)] text-[var(--ink)] rounded-xl font-medium transition-colors border border-[var(--line)]"
                 >
                     Send another message
                 </button>
