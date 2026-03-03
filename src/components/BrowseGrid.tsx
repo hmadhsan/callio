@@ -124,12 +124,6 @@ export default function BrowseGrid({
         </p>
       )}
 
-      import FavoriteButton from './FavoriteButton';
-
-      // ...rest of imports...
-
-      // ...inside BrowseGrid...
-
       {/* API Grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 relative">
         {filtered.map((api) => {
