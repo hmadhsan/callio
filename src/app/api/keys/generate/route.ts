@@ -29,10 +29,12 @@ export async function POST(request: NextRequest) {
     const maxKeys = PLANS[plan]?.maxKeys ?? PLANS.free.maxKeys;
 
     if (maxKeys !== Infinity) {
-      const existingKeyCount = await prisma.apiKey.count({
+      // Count ALL keys ever created for this workspace (including soft-deleted)
+      // This prevents the bypass of generating a key, deleting it, and generating again
+      const totalKeyCount = await prisma.apiKey.count({
         where: { workspaceId: workspace.id },
       });
-      if (existingKeyCount >= maxKeys) {
+      if (totalKeyCount >= maxKeys) {
         return NextResponse.json({
           error: `Your ${PLANS[plan]?.name || 'Free'} plan allows ${maxKeys} agent connection${maxKeys === 1 ? '' : 's'}. Upgrade to connect more.`,
           upgrade: 'https://callio.dev/pricing',

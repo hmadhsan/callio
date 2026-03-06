@@ -21,7 +21,7 @@ async function authenticateRequest(request: NextRequest) {
       include: { user: true },
     });
 
-    if (apiKey) return { userId: apiKey.userId, workspaceId: apiKey.workspaceId, type: 'api_key', scopes: apiKey.scopes, keyId: apiKey.id, monthlyLimit: apiKey.monthlyLimit };
+    if (apiKey && !apiKey.deletedAt) return { userId: apiKey.userId, workspaceId: apiKey.workspaceId, type: 'api_key', scopes: apiKey.scopes, keyId: apiKey.id, monthlyLimit: apiKey.monthlyLimit };
   }
 
   // Fallback to session cookie for playground testing 

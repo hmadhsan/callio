@@ -30,7 +30,7 @@ export async function POST(
       return NextResponse.json({ error: 'Key not found' }, { status: 404 });
     }
 
-    await prisma.apiKey.delete({ where: { id } });
+    await prisma.apiKey.update({ where: { id }, data: { deletedAt: new Date() } });
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {

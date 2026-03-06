@@ -158,6 +158,7 @@ model ApiKey {
   keyLast4     String
   scopes       String[] @default([])
   monthlyLimit Int?     // Optional limit for requests per month
+  deletedAt    DateTime? // Soft-delete: key stays in DB so plan limit is always enforced
   createdAt    DateTime @default(now())
 
   @@index([apiId])

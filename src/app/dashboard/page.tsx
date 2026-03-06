@@ -21,7 +21,7 @@ export default async function DashboardPage() {
   }
 
   const apiKeys = await prisma.apiKey.findMany({
-    where: { workspaceId: workspace.id },
+    where: { workspaceId: workspace.id, deletedAt: null },
     include: { api: true },
     orderBy: { createdAt: 'desc' },
   });
