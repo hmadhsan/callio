@@ -17,6 +17,7 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [magicSent, setMagicSent] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState('');
 
   useEffect(() => {
     const err = searchParams.get('error');
@@ -38,6 +39,9 @@ function LoginForm() {
       const data = await res.json();
       if (data.success) {
         router.push('/dashboard');
+      } else if (data.requiresVerification) {
+        setUnverifiedEmail(data.email || email);
+        setError('');
       } else {
         setError(data.error || 'Login failed');
       }
@@ -179,7 +183,25 @@ function LoginForm() {
                     </div>
                   )}
 
-                  {error && <p className="text-red-600 text-sm">{error}</p>}
+                  {unverifiedEmail ? (
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm">
+                      <p className="text-amber-800 font-medium mb-1">Please verify your email to continue.</p>
+                      <p className="text-amber-700 mb-2">We sent a link to <strong>{unverifiedEmail}</strong>.</p>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          await fetch('/api/auth/request-link', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: unverifiedEmail }) });
+                          setUnverifiedEmail('');
+                          setError('Verification email resent! Check your inbox.');
+                        }}
+                        className="text-amber-800 underline hover:no-underline text-xs"
+                      >
+                        Resend verification email
+                      </button>
+                    </div>
+                  ) : error ? (
+                    <p className="text-red-600 text-sm">{error}</p>
+                  ) : null}
 
                   <button
                     type="submit"

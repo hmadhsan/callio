@@ -24,6 +24,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
     }
 
+    // Block unverified users
+    if (!user.emailVerified) {
+      return NextResponse.json({
+        error: 'Please verify your email before logging in. Check your inbox for a verification link.',
+        requiresVerification: true,
+        email: user.email,
+      }, { status: 403 });
+    }
+
     console.log("Creating session for user", user.id);
     const session = await createSession(user.id);
     console.log("Session created", session.token.substring(0, 10));

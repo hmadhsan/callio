@@ -30,7 +30,9 @@ function SignupForm() {
         body: JSON.stringify({ email, password, name, inviteToken }),
       });
       const data = await res.json();
-      if (data.success) {
+      if (data.requiresVerification) {
+        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+      } else if (data.success) {
         router.push('/dashboard');
       } else {
         setError(data.error || 'Signup failed');
