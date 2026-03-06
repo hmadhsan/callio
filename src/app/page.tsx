@@ -73,7 +73,7 @@ export default function Home() {
             <Link href="/pricing" className="hover:text-[var(--accent)] transition">Pricing</Link>
             <Link href="/docs" className="hover:text-[var(--accent)] transition">Docs</Link>
             <Link href="/how-it-works" className="hover:text-[var(--accent)] transition">How it works</Link>
-            <a href="https://cal.com/hammad-hassan-py6mdj/callio-demo?overlayCalendar=true" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition">Book a call</a>
+
           </nav>
           <UserNav variant="landing" />
         </div>
