@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, X } from 'lucide-react';
 import FavoriteButton from './FavoriteButton';
+import CarbonAd from './CarbonAd';
 
 interface Api {
   id: string;
@@ -123,6 +124,9 @@ export default function BrowseGrid({
           {search && <span> matching &ldquo;<strong className="text-[var(--ink)]">{search}</strong>&rdquo;</span>}
         </p>
       )}
+
+      {/* Carbon Ads Placement */}
+      <CarbonAd />
 
       {/* API Grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 relative">
