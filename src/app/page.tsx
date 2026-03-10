@@ -297,15 +297,15 @@ export default function Home() {
                 <Sparkles className="w-3.5 h-3.5" />
                 MCP Server
               </div>
-              <h2 className="text-3xl sm:text-4xl font-display">Connect Claude Code, Cursor &amp; more</h2>
+              <h2 className="text-3xl sm:text-4xl font-display">Connect Antigravity, Cursor &amp; more</h2>
               <p className="mt-4 text-[#a1a1aa] text-lg">
                 Install our MCP server and your AI agent gets instant access to 50+ APIs. Search, browse, and call any API using natural language.
               </p>
               <div className="mt-6 space-y-3">
                 {[
-                  { tool: 'Claude Code', path: '~/.claude/claude_desktop_config.json' },
-                  { tool: 'Cursor', path: '.cursor/mcp.json' },
                   { tool: 'Antigravity', path: 'MCP Settings panel' },
+                  { tool: 'Cursor', path: '.cursor/mcp.json' },
+                  { tool: 'Claude Code', path: '~/.claude/claude_desktop_config.json' },
                 ].map((t) => (
                   <div key={t.tool} className="flex items-center gap-3 text-sm">
                     <Check className="w-4 h-4 text-violet-400 flex-shrink-0" />
