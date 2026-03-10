@@ -87,37 +87,6 @@ export async function POST(request: NextRequest) {
         break;
       }
 
-      case 'invoice.payment_succeeded': {
-        const invoice = event.data.object as Stripe.Invoice;
-        const customerId = invoice.customer as string;
-        
-        // Find subscription and attached user
-        const subscription = await prisma.subscription.findUnique({
-          where: { stripeCustomerId: customerId },
-          include: { user: true }
-        });
-
-        if (subscription?.user?.referredById) {
-          // Calculate 20% commission (amount_paid is in cents)
-          const amountPaid = invoice.amount_paid / 100;
-          if (amountPaid > 0) {
-            const commission = amountPaid * 0.20;
-
-            // Credit the affiliate
-            await prisma.affiliate.update({
-              where: { id: subscription.user.referredById },
-              data: {
-                balance: { increment: commission },
-                totalEarned: { increment: commission },
-                conversions: { increment: 1 } // Optionally just incrementing on first payment might be better, but this acts as an activities counter
-              }
-            });
-            console.log(`Credited affiliate ${subscription.user.referredById} with $${commission} for user ${subscription.user.id}`);
-          }
-        }
-        break;
-      }
-
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
         const customerId = invoice.customer as string;

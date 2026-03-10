@@ -45,14 +45,9 @@ model User {
   memberships    WorkspaceMember[]
   favoriteApis   FavoriteApi[]
 
-  // Affiliate Tracking
-  affiliate    Affiliate?
-  referredById String?
-  referredBy   Affiliate? @relation("ReferredBy", fields: [referredById], references: [id])
 
   @@index([email])
   @@index([googleId])
-  @@index([referredById])
 }
 
 model MagicLinkToken {
@@ -292,32 +287,3 @@ model ContactMessage {
   @@index([createdAt])
 }
 
-// ── Affiliates & Referrals ────────────────────────────────
-
-model Affiliate {
-  id            String   @id @default(cuid())
-  userId        String   @unique
-  user          User     @relation(fields: [userId], references: [id])
-  referralCode  String   @unique // The "?ref=xyz" code
-  clickCount    Int      @default(0) // Total raw clicks
-  balance       Float    @default(0.0) // Unpaid earnings
-  totalEarned   Float    @default(0.0) // Lifetime earnings
-  conversions   Int      @default(0) // Number of successful signups/payments
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  payouts       Payout[]
-  referredUsers User[]   @relation("ReferredBy") // Users who signed up via this affiliate
-}
-
-model Payout {
-  id          String    @id @default(cuid())
-  affiliateId String
-  affiliate   Affiliate @relation(fields: [affiliateId], references: [id])
-  amount      Float
-  status      String    @default("PENDING") // PENDING, PAID, FAILED
-  reference   String? // External transaction ID (e.g., Stripe/Wise transfer ID)
-  createdAt   DateTime  @default(now())
-  paidAt      DateTime?
-
-  @@index([affiliateId])
-}
