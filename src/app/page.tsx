@@ -106,6 +106,16 @@ export default function Home() {
             </Link>
           </div>
 
+          {/* Badges */}
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <a href="https://launchigniter.com/product/callio?ref=badge-callio" target="_blank" rel="noopener noreferrer">
+              <img src="https://launchigniter.com/api/badge/callio?theme=light" alt="Featured on LaunchIgniter" width="212" height="55" />
+            </a>
+            <a href="https://www.producthunt.com/products/callio-3?utm_source=badge-follow&utm_medium=badge&utm_source=badge-callio&#0045;3" target="_blank" rel="noopener noreferrer">
+              <img src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1168527&theme=light" alt="Callio - Connect any API with AI Agent under 1 minute | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
+            </a>
+          </div>
+
 
           {/* Stats row */}
           <div id="stats" className="mt-12 flex flex-wrap gap-8 text-sm">
