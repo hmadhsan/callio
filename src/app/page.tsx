@@ -140,7 +140,7 @@ export default function Home() {
             <span className="text-[var(--line)]">·</span>
             <span className="font-semibold text-[var(--ink)]">Cursor</span>
             <span className="text-[var(--line)]">·</span>
-            <span className="font-semibold text-[var(--ink)]">LangChain</span>
+            <span className="font-semibold text-[var(--ink)]">Antigravity</span>
             <span className="text-[var(--line)]">·</span>
             <span className="font-semibold text-[var(--ink)]">CrewAI</span>
             <span className="text-[var(--line)]">·</span>
