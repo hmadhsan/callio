@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     const planConfig = PLANS[plan];
     if (!planConfig.stripePriceId) {
-      return NextResponse.json({ error: 'Stripe not configured for this plan. Set STRIPE_PRO_PRICE_ID/STRIPE_TEAM_PRICE_ID.' }, { status: 500 });
+      return NextResponse.json({ error: 'Stripe not configured for this plan. Set STRIPE_STARTER_PRICE_ID/STRIPE_PRO_PRICE_ID/STRIPE_TEAM_PRICE_ID.' }, { status: 500 });
     }
 
     // Find or create Stripe customer
