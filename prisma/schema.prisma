@@ -14,7 +14,7 @@ datasource db {
 model BetaSignup {
   id        String   @id @default(cuid())
   email     String   @unique
-  role      String   // Developer, API Provider, AI Startup, Other
+  role      String // Developer, API Provider, AI Startup, Other
   company   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -24,29 +24,35 @@ model BetaSignup {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  firstName String?
-  lastName  String?
-  password  String?  // Hashed password for email/password auth
-  googleId  String?  // For Google OAuth
+  id                     String   @id @default(cuid())
+  email                  String   @unique
+  name                   String?
+  firstName              String?
+  lastName               String?
+  password               String? // Hashed password for email/password auth
+  googleId               String? // For Google OAuth
   emailVerified          Boolean  @default(false)
   emailVerificationToken String?  @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
-  apis     Api[]
-  sessions Session[]
-  apiKeys  ApiKey[]
+  apis           Api[]
+  sessions       Session[]
+  apiKeys        ApiKey[]
   apiCredentials ApiCredential[]
   subscription   Subscription?
   usageRecords   UsageRecord[]
   memberships    WorkspaceMember[]
   favoriteApis   FavoriteApi[]
 
+  // Affiliate Tracking
+  affiliate    Affiliate?
+  referredById String?
+  referredBy   Affiliate? @relation("ReferredBy", fields: [referredById], references: [id])
+
   @@index([email])
   @@index([googleId])
+  @@index([referredById])
 }
 
 model MagicLinkToken {
@@ -84,36 +90,36 @@ model Session {
 }
 
 model Api {
-  id               String   @id @default(cuid())
-  slug             String   @unique
-  name             String
-  category         String
-  icon             String
-  featured         Boolean  @default(false)
-  shortDescription String
-  fullDescription  String
-  useCases         Json
-  documentation    String?
-  baseUrl          String?
-  providerApiKey   String?
-  providerAuthHeader String?
-  providerAuthScheme String?
-  allowUnauthenticated Boolean @default(false)
-  authentication   String
-  rateLimit        String
-  pricing          String
-  webhook          Boolean  @default(false)
-  setupGuide       String?
-  setupUrl         String?
-  openapiJson      Json?
-  providerId       String?
-  provider         User?    @relation(fields: [providerId], references: [id])
-  endpoints        Endpoint[]
-  apiKeys          ApiKey[]
-  credentials      ApiCredential[]
-  favoritedBy      FavoriteApi[]
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id                   String          @id @default(cuid())
+  slug                 String          @unique
+  name                 String
+  category             String
+  icon                 String
+  featured             Boolean         @default(false)
+  shortDescription     String
+  fullDescription      String
+  useCases             Json
+  documentation        String?
+  baseUrl              String?
+  providerApiKey       String?
+  providerAuthHeader   String?
+  providerAuthScheme   String?
+  allowUnauthenticated Boolean         @default(false)
+  authentication       String
+  rateLimit            String
+  pricing              String
+  webhook              Boolean         @default(false)
+  setupGuide           String?
+  setupUrl             String?
+  openapiJson          Json?
+  providerId           String?
+  provider             User?           @relation(fields: [providerId], references: [id])
+  endpoints            Endpoint[]
+  apiKeys              ApiKey[]
+  credentials          ApiCredential[]
+  favoritedBy          FavoriteApi[]
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
 
   @@index([category])
   @@index([featured])
@@ -148,20 +154,20 @@ model Endpoint {
 }
 
 model ApiKey {
-  id        String   @id @default(cuid())
-  apiId     String?
-  api       Api?     @relation(fields: [apiId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String    @id @default(cuid())
+  apiId        String?
+  api          Api?      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspaceId  String
   workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   name         String
-  keyHash      String   @unique
+  keyHash      String    @unique
   keyLast4     String
-  scopes       String[] @default([])
-  monthlyLimit Int?     // Optional limit for requests per month
+  scopes       String[]  @default([])
+  monthlyLimit Int? // Optional limit for requests per month
   deletedAt    DateTime? // Soft-delete: key stays in DB so plan limit is always enforced
-  createdAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
 
   @@index([apiId])
   @@index([userId])
@@ -169,16 +175,16 @@ model ApiKey {
 }
 
 model ApiCredential {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   apiId       String
-  api         Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  api         Api       @relation(fields: [apiId], references: [id], onDelete: Cascade)
   userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   providerKey String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@unique([workspaceId, apiId])
   @@index([apiId])
@@ -189,36 +195,36 @@ model ApiCredential {
 // ── Stripe Billing ──────────────────────────────────────
 
 model Subscription {
-  id                   String   @id @default(cuid())
-  userId               String   @unique
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  stripeCustomerId     String   @unique
-  stripeSubscriptionId String?  @unique
-  plan                 String   @default("free") // free, pro, team
-  status               String   @default("active") // active, past_due, canceled, trialing
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId     String    @unique
+  stripeSubscriptionId String?   @unique
+  plan                 String    @default("free") // free, pro, team
+  status               String    @default("active") // active, past_due, canceled, trialing
   currentPeriodStart   DateTime?
   currentPeriodEnd     DateTime?
-  cancelAtPeriodEnd    Boolean  @default(false)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  cancelAtPeriodEnd    Boolean   @default(false)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   @@index([stripeCustomerId])
   @@index([plan])
 }
 
 model UsageRecord {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  apiSlug   String
-  apiKeyId  String?  // References the ApiKey that made the request (if applicable)
-  method    String
-  path      String
-  status    Int
-  latencyMs Int
-  createdAt DateTime @default(now())
+  apiSlug     String
+  apiKeyId    String? // References the ApiKey that made the request (if applicable)
+  method      String
+  path        String
+  status      Int
+  latencyMs   Int
+  createdAt   DateTime  @default(now())
 
   @@index([userId, createdAt])
   @@index([apiSlug])
@@ -235,15 +241,15 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members   WorkspaceMember[]
-  invites   WorkspaceInvite[]
-  apiKeys   ApiKey[]
-  usageRecords UsageRecord[]
+  members        WorkspaceMember[]
+  invites        WorkspaceInvite[]
+  apiKeys        ApiKey[]
+  usageRecords   UsageRecord[]
   apiCredentials ApiCredential[]
 }
 
 model WorkspaceMember {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   userId      String
@@ -257,7 +263,7 @@ model WorkspaceMember {
 }
 
 model WorkspaceInvite {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   email       String
@@ -284,4 +290,34 @@ model ContactMessage {
   @@index([email])
   @@index([status])
   @@index([createdAt])
+}
+
+// ── Affiliates & Referrals ────────────────────────────────
+
+model Affiliate {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id])
+  referralCode  String   @unique // The "?ref=xyz" code
+  clickCount    Int      @default(0) // Total raw clicks
+  balance       Float    @default(0.0) // Unpaid earnings
+  totalEarned   Float    @default(0.0) // Lifetime earnings
+  conversions   Int      @default(0) // Number of successful signups/payments
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  payouts       Payout[]
+  referredUsers User[]   @relation("ReferredBy") // Users who signed up via this affiliate
+}
+
+model Payout {
+  id          String    @id @default(cuid())
+  affiliateId String
+  affiliate   Affiliate @relation(fields: [affiliateId], references: [id])
+  amount      Float
+  status      String    @default("PENDING") // PENDING, PAID, FAILED
+  reference   String? // External transaction ID (e.g., Stripe/Wise transfer ID)
+  createdAt   DateTime  @default(now())
+  paidAt      DateTime?
+
+  @@index([affiliateId])
 }

@@ -47,6 +47,17 @@ export async function POST(request: NextRequest) {
     const isInviteBased = !!workspaceInvite;
     const emailVerificationToken = isInviteBased ? null : randomBytes(32).toString('hex');
 
+    const { getAffiliateRef } = await import('@/lib/affiliate');
+    const refCode = await getAffiliateRef();
+    
+    let affiliateConnection = undefined;
+    if (refCode) {
+      const affiliate = await prisma.affiliate.findUnique({ where: { referralCode: refCode } });
+      if (affiliate) {
+        affiliateConnection = { connect: { id: affiliate.id } };
+      }
+    }
+
     let user;
 
     if (workspaceInvite) {
@@ -56,6 +67,7 @@ export async function POST(request: NextRequest) {
           password: hashedPassword,
           name: name || null,
           emailVerified: true, // invite-based = email already verified
+          referredBy: affiliateConnection,
           memberships: {
             create: {
               role: workspaceInvite.role,
@@ -74,6 +86,7 @@ export async function POST(request: NextRequest) {
           name: name || null,
           emailVerified: false,
           emailVerificationToken,
+          referredBy: affiliateConnection,
           memberships: {
             create: {
               role: 'OWNER',
