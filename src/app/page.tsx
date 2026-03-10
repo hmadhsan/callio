@@ -9,6 +9,7 @@ import CallioLogoComponent from '@/components/CallioLogo';
 import AuthAwareCTA from '@/components/AuthAwareCTA';
 import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
+import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
 
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
@@ -132,19 +133,24 @@ export default function Home() {
           </div>
 
           {/* Works with bar */}
-          <div className="mt-10 flex items-center gap-3 text-sm text-[var(--muted)]">
-            <span>Works with</span>
-            <span className="font-semibold text-[var(--ink)]">OpenAI Codex</span>
-            <span className="text-[var(--line)]">·</span>
-            <span className="font-semibold text-[var(--ink)]">Claude Code</span>
-            <span className="text-[var(--line)]">·</span>
-            <span className="font-semibold text-[var(--ink)]">Cursor</span>
-            <span className="text-[var(--line)]">·</span>
-            <span className="font-semibold text-[var(--ink)]">Antigravity</span>
-            <span className="text-[var(--line)]">·</span>
-            <span className="font-semibold text-[var(--ink)]">CrewAI</span>
-            <span className="text-[var(--line)]">·</span>
-            <Link href="/mcp" className="hover:text-[var(--accent)] transition underline underline-offset-2">& more</Link>
+          <div className="mt-10 flex flex-wrap items-center gap-4 text-sm text-[var(--muted)]">
+            <span className="font-medium">Works with</span>
+            <div className="flex items-center gap-5">
+              <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
+                <ClaudeLogo className="w-5 h-5" />
+                <span className="font-semibold text-[var(--ink)]">Claude</span>
+              </div>
+              <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
+                <CursorLogo className="w-5 h-5" />
+                <span className="font-semibold text-[var(--ink)]">Cursor</span>
+              </div>
+              <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
+                <AntigravityLogo className="w-5 h-5" />
+                <span className="font-semibold text-[var(--ink)]">Antigravity</span>
+              </div>
+            </div>
+            <span className="text-[var(--line)]">|</span>
+            <Link href="/mcp" className="hover:text-[var(--accent)] transition font-medium">View all integrations →</Link>
           </div>
 
           {/* Animated Hero Diagram */}
