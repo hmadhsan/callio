@@ -100,7 +100,7 @@ const slides = [
         {/* Pricing row */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
             {[
-                { tier: 'Free', price: '$0', sub: '/month', items: ['50 requests/month', '3 API keys', 'MCP access'], highlight: false },
+                { tier: 'Starter', price: '$5', sub: '/month', items: ['50 requests/month', '3 API keys', 'MCP access'], highlight: false },
                 { tier: 'Pro', price: '$20', sub: '/month', items: ['5,000 requests/month', '10 API keys', 'Full analytics', 'Webhooks'], highlight: true },
                 { tier: 'Team', price: '$99', sub: '/month', items: ['50,000 requests/month', 'Unlimited keys', 'Advanced analytics', 'Dedicated support'], highlight: false },
             ].map(p => (

@@ -8,10 +8,10 @@ import CallioLogo from '@/components/CallioLogo';
 
 const plans = [
   {
-    id: 'free',
-    name: 'Free',
-    price: 0,
-    period: 'forever',
+    id: 'starter',
+    name: 'Starter',
+    price: 5,
+    period: '/month',
     description: 'Perfect for trying out Callio',
     features: [
       '50 API requests/month',
@@ -21,7 +21,7 @@ const plans = [
       'Community support',
     ],
     cta: 'Get Started',
-    href: '/signup',
+    href: null,
     highlighted: false,
   },
   {
@@ -83,9 +83,8 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
     return () => window.removeEventListener('callio:auth-change', onAuthChange);
   }, []);
 
-  // Override Free plan CTA when logged in
-  const effectiveHref = (plan.id === 'free' && loggedIn) ? '/dashboard' : plan.href;
-  const effectiveCta = (plan.id === 'free' && loggedIn) ? 'Go to Dashboard' : plan.cta;
+  const effectiveHref = plan.href;
+  const effectiveCta = plan.cta;
 
   const handleCheckout = async () => {
     setLoading(true);
@@ -196,7 +195,7 @@ export default function PricingPage() {
             Simple, transparent pricing
           </h1>
           <p className="text-[var(--muted)] text-lg max-w-xl mx-auto">
-            Start free. Upgrade when you need more. No hidden fees, no surprises.
+            Upgrade when you need more. No hidden fees, no surprises.
           </p>
         </div>
 

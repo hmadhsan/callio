@@ -208,13 +208,13 @@ export default function McpPage() {
             Ready to supercharge your agent?
           </h2>
           <p className="text-[var(--muted)] mb-8">
-            Get started in under 2 minutes. Free tier includes 100 API calls/month.
+            Get started in under 2 minutes. Starter tier includes 50 API calls/month.
           </p>
           <Link
             href="/signup"
             className="px-8 py-3.5 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition inline-flex items-center gap-2 text-lg"
           >
-            Get Started Free <ArrowRight className="w-5 h-5" />
+            Get Started <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>

@@ -39,8 +39,8 @@ const FAQS = [
     a: 'AI developers building agent workflows, API providers wanting distribution to AI agents, and startups that need to ship fast without infrastructure overhead.',
   },
   {
-    q: 'Is there a free tier?',
-    a: 'Yes. We have a generous free tier for developers. Sign up to get started instantly.',
+    q: 'How much does it cost to get started?',
+    a: 'Our Starter plan is just $5/month and includes enough API requests and keys to build and test your integration.',
   },
   {
     q: 'Can I add my own API to Callio?',

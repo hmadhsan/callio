@@ -6,7 +6,7 @@ import { ArrowRight, LayoutDashboard } from 'lucide-react';
 
 export default function AuthAwareCTA({
   loggedOutHref = '/signup',
-  loggedOutLabel = 'Get Started Free',
+  loggedOutLabel = 'Get Started',
   loggedInHref = '/dashboard',
   loggedInLabel = 'Go to Dashboard',
   className = '',

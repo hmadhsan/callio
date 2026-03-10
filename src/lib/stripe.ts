@@ -27,6 +27,14 @@ export const PLANS = {
   free: {
     name: 'Free',
     monthlyPrice: 0,
+    requestsPerMonth: 0,
+    maxKeys: 0,
+    features: [],
+    stripePriceId: null as string | null,
+  },
+  starter: {
+    name: 'Starter',
+    monthlyPrice: 5,
     requestsPerMonth: 50,
     maxKeys: 3,
     features: [
@@ -36,7 +44,7 @@ export const PLANS = {
       'MCP integration',
       'Community support',
     ],
-    stripePriceId: null as string | null,
+    stripePriceId: process.env.STRIPE_STARTER_PRICE_ID?.trim() || null,
   },
   pro: {
     name: 'Pro',

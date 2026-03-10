@@ -139,7 +139,7 @@ export default function HowItWorksPage() {
           <p className="text-white/70 mb-6 max-w-md mx-auto">Create an account, generate your API key, and start making calls in under 2 minutes.</p>
           <div className="flex gap-4 justify-center">
             <Link href="/signup" className="px-6 py-3 bg-white text-[var(--accent)] font-semibold rounded-lg hover:bg-gray-100 transition">
-              Create Free Account
+              Create Account
             </Link>
             <Link href="/docs" className="px-6 py-3 border border-white/30 font-semibold rounded-lg hover:bg-white/10 transition">
               Read Docs
