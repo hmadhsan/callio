@@ -47,11 +47,6 @@ export default function RootLayout({
           gtag('js', new Date());
           gtag('config', 'G-F9B384E3Q2');
         ` }} />
-        {/* Rewardful Affiliate Tracking */}
-        <script dangerouslySetInnerHTML={{
-          __html: `(function(w,r){w._rwq=r;w[r]=w[r]||function(){(w[r].q=w[r].q||[]).push(arguments)}})(window,'rewardful');`
-        }} />
-        <script async src='https://r.wdfl.co/rw.js' data-rewardful='YOUR_REWARDFUL_KEY'></script>
       </head>
       <body
         className="antialiased bg-[var(--page-bg)] text-[var(--ink)]"
