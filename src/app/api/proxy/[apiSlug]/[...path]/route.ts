@@ -21,7 +21,7 @@ async function authenticateRequest(request: NextRequest) {
       include: { user: true },
     });
 
-    if (apiKey && !apiKey.deletedAt) return { userId: apiKey.userId, workspaceId: apiKey.workspaceId, type: 'api_key', scopes: apiKey.scopes, keyId: apiKey.id, monthlyLimit: apiKey.monthlyLimit };
+    if (apiKey && !apiKey.deletedAt) return { userId: apiKey.userId, userEmail: apiKey.user?.email ?? null, workspaceId: apiKey.workspaceId, type: 'api_key', scopes: apiKey.scopes, keyId: apiKey.id, monthlyLimit: apiKey.monthlyLimit };
   }
 
   // Fallback to session cookie for playground testing 
@@ -30,7 +30,7 @@ async function authenticateRequest(request: NextRequest) {
     const user = await getUserFromSessionToken(token);
     if (user) {
       const workspace = await getActiveWorkspace(user.id);
-      return { userId: user.id, workspaceId: workspace?.id, type: 'session', scopes: [] as string[], keyId: null, monthlyLimit: null };
+      return { userId: user.id, userEmail: user.email, workspaceId: workspace?.id, type: 'session', scopes: [] as string[], keyId: null, monthlyLimit: null };
     }
   }
 
@@ -145,7 +145,7 @@ async function handler(
       include: { user: true },
     });
     let plan = (subscription?.plan || 'free') as keyof typeof PLANS;
-    if (subscription?.user?.email === 'hammadhassan616@gmail.com') {
+    if (auth.userEmail === 'hammadhassan616@gmail.com' || subscription?.user?.email === 'hammadhassan616@gmail.com') {
       plan = 'admin';
     }
     const limit = PLANS[plan]?.requestsPerMonth || PLANS.free.requestsPerMonth;
