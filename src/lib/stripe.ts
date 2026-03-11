@@ -31,6 +31,14 @@ export const PLANS = {
     maxKeys: 0,
     features: [],
     stripePriceId: null as string | null,
+  }, // Added closing brace and comma
+  admin: {
+    name: 'Admin',
+    monthlyPrice: 0,
+    requestsPerMonth: Infinity,
+    maxKeys: Infinity,
+    features: ['Unlimited everything (Admin only)'],
+    stripePriceId: null as string | null,
   },
   starter: {
     name: 'Starter',

@@ -32,7 +32,10 @@ export default async function DashboardPage() {
   const subscription = await prisma.subscription.findUnique({
     where: { userId: user.id },
   });
-  const planId = (subscription?.plan || 'free') as keyof typeof PLANS;
+  let planId = (subscription?.plan || 'free') as keyof typeof PLANS;
+  if (user.email === 'hmadhsan@gmail.com') {
+    planId = 'admin';
+  }
   const planConfig = PLANS[planId];
   const maxKeys = planConfig.maxKeys;
 

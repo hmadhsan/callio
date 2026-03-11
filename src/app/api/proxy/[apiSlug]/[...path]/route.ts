@@ -142,8 +142,12 @@ async function handler(
     // ── Usage limit check ──────────────────────────────────
     const subscription = await prisma.subscription.findUnique({
       where: { userId: auth.userId },
+      include: { user: true },
     });
-    const plan = (subscription?.plan || 'free') as keyof typeof PLANS;
+    let plan = (subscription?.plan || 'free') as keyof typeof PLANS;
+    if (subscription?.user?.email === 'hmadhsan@gmail.com') {
+      plan = 'admin';
+    }
     const limit = PLANS[plan]?.requestsPerMonth || PLANS.free.requestsPerMonth;
 
     const periodStart = subscription?.currentPeriodStart
