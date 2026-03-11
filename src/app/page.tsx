@@ -439,28 +439,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Book a demo ── */}
-      <section id="demo" className="py-20 sm:py-24 border-t border-[var(--line)]">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-display">See it in action</h2>
-          <p className="mt-4 text-[var(--muted)] text-lg max-w-xl mx-auto">
-            Pick a time and we&apos;ll walk you through everything — tailored to your use case.
-          </p>
-          <a
-            href="https://cal.com/hammad-hassan-py6mdj/callio-demo?overlayCalendar=true"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--accent)] text-white text-lg font-semibold hover:bg-[var(--accent-strong)] transition shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
-          >
-            Schedule a call <CalendarDays className="w-5 h-5" />
-          </a>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted)]">
-            <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--ink)]" /> 20-min session</span>
-            <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--ink)]" /> Tailored walkthrough</span>
-            <span className="inline-flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--ink)]" /> No commitment</span>
-          </div>
-        </div>
-      </section>
+
 
       {/* ── Contact Us ── */}
       <section id="contact" className="py-20 sm:py-24 bg-[var(--accent)] text-white">
@@ -508,7 +487,6 @@ export default function Home() {
                   <Link href="/how-it-works" className="block hover:text-white transition">How it works</Link>
                   <Link href="/mcp" className="block hover:text-white transition">MCP Server</Link>
                   <Link href="/docs" className="block hover:text-white transition">Docs</Link>
-                  <a href="https://cal.com/hammad-hassan-py6mdj/callio-demo?overlayCalendar=true" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition">Book a demo</a>
                 </div>
               </div>
               <div>
