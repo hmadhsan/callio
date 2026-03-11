@@ -44,7 +44,7 @@ export const PLANS = {
       'MCP integration',
       'Community support',
     ],
-    stripePriceId: process.env.STRIPE_STARTER_PRICE_ID?.trim() || null,
+    get stripePriceId() { return process.env.STRIPE_STARTER_PRICE_ID?.trim() || null; },
   },
   pro: {
     name: 'Pro',
@@ -60,7 +60,7 @@ export const PLANS = {
       'MCP integration',
       'Webhook forwarding',
     ],
-    stripePriceId: process.env.STRIPE_PRO_PRICE_ID?.trim() || null,
+    get stripePriceId() { return process.env.STRIPE_PRO_PRICE_ID?.trim() || null; },
   },
   team: {
     name: 'Team',
@@ -78,7 +78,7 @@ export const PLANS = {
       'Team members (coming soon)',
       'Custom rate limits',
     ],
-    stripePriceId: process.env.STRIPE_TEAM_PRICE_ID?.trim() || null,
+    get stripePriceId() { return process.env.STRIPE_TEAM_PRICE_ID?.trim() || null; },
   },
 } as const;
 
