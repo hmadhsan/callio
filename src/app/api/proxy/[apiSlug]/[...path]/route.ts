@@ -145,7 +145,7 @@ async function handler(
       include: { user: true },
     });
     let plan = (subscription?.plan || 'free') as keyof typeof PLANS;
-    if (subscription?.user?.email === 'hmadhsan@gmail.com') {
+    if (subscription?.user?.email === 'hammadhassan616@gmail.com') {
       plan = 'admin';
     }
     const limit = PLANS[plan]?.requestsPerMonth || PLANS.free.requestsPerMonth;

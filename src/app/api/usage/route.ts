@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     });
 
     let plan = subscription?.plan || 'free';
-    if (user.email === 'hmadhsan@gmail.com') {
+    if (user.email === 'hammadhassan616@gmail.com') {
       plan = 'admin';
     }
     const planConfig = getPlan(plan);

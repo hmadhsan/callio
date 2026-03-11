@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       where: { userId: user.id },
     });
     let plan = (subscription?.plan || 'free') as keyof typeof PLANS;
-    if (user.email === 'hmadhsan@gmail.com') {
+    if (user.email === 'hammadhassan616@gmail.com') {
       plan = 'admin';
     }
     const maxKeys = PLANS[plan]?.maxKeys ?? PLANS.free.maxKeys;

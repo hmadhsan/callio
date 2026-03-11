@@ -33,7 +33,7 @@ export default async function DashboardPage() {
     where: { userId: user.id },
   });
   let planId = (subscription?.plan || 'free') as keyof typeof PLANS;
-  if (user.email === 'hmadhsan@gmail.com') {
+  if (user.email === 'hammadhassan616@gmail.com') {
     planId = 'admin';
   }
   const planConfig = PLANS[planId];
