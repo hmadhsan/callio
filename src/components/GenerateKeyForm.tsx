@@ -19,6 +19,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
   const [isGenerating, setIsGenerating] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [upgradePrompt, setUpgradePrompt] = useState(false);
+  const [upgradeMessage, setUpgradeMessage] = useState('');
   const [generatedKey, setGeneratedKey] = useState('');
   const [copied, setCopied] = useState(false);
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
       } else {
         if (response.status === 403 && data?.upgrade) {
           setShowForm(false);
+          setUpgradeMessage(data?.error || 'You need to upgrade your plan to generate API keys.');
           setUpgradePrompt(true);
         } else {
           alert(data?.error || 'Failed to generate key');
@@ -140,7 +142,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
                 API key limit reached
               </h3>
               <p className="mt-1 text-sm text-gray-600">
-                Your plan limit is 3 API keys. Upgrade to <span className="font-medium text-gray-900">Pro</span> for 10 keys, 5,000 requests/month, and priority support.
+                {upgradeMessage}
               </p>
               <div className="mt-4 flex items-center gap-3">
                 <Link
@@ -150,7 +152,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                   </svg>
-                  Upgrade to Pro
+                  Get Started
                 </Link>
                 <button
                   onClick={() => setUpgradePrompt(false)}

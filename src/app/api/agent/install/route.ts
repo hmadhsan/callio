@@ -47,8 +47,11 @@ export async function POST(request: NextRequest) {
         where: { workspaceId: workspace.id },
       });
       if (existingKeyCount >= maxKeys) {
+        const errorMsg = maxKeys === 0
+          ? 'Subscribe to a plan to start connecting agents.'
+          : `Your ${PLANS[plan]?.name || 'Free'} plan allows a maximum of ${maxKeys} agent connection${maxKeys === 1 ? '' : 's'}. Please upgrade to connect more.`;
         return NextResponse.json({
-          error: `Your ${PLANS[plan]?.name || 'Free'} plan allows a maximum of ${maxKeys} agent connection${maxKeys === 1 ? '' : 's'}. Please upgrade to connect more.`,
+          error: errorMsg,
           upgrade: true,
         }, { status: 403 });
       }

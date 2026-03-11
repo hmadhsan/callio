@@ -38,8 +38,11 @@ export async function POST(request: NextRequest) {
         where: { workspaceId: workspace.id },
       });
       if (totalKeyCount >= maxKeys) {
+        const errorMsg = maxKeys === 0
+          ? 'Subscribe to a plan to start generating API keys and connecting agents.'
+          : `Your ${PLANS[plan]?.name || 'Free'} plan allows ${maxKeys} agent connection${maxKeys === 1 ? '' : 's'}. Upgrade to connect more.`;
         return NextResponse.json({
-          error: `Your ${PLANS[plan]?.name || 'Free'} plan allows ${maxKeys} agent connection${maxKeys === 1 ? '' : 's'}. Upgrade to connect more.`,
+          error: errorMsg,
           upgrade: 'https://callio.dev/pricing',
         }, { status: 403 });
       }
