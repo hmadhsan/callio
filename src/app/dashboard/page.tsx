@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { getCurrentUserWithWorkspace } from '@/lib/auth';
+import { getCurrentUserWithWorkspace, isAdmin } from '@/lib/auth';
 import { getAllApis } from '@/lib/apiService';
 import prisma from '@/lib/prisma';
 import GenerateKeyForm from '@/components/GenerateKeyForm';
@@ -33,7 +33,7 @@ export default async function DashboardPage() {
     where: { userId: user.id },
   });
   let planId = (subscription?.plan || 'free') as keyof typeof PLANS;
-  if (user.email === 'hammadhassan616@gmail.com') {
+  if (isAdmin(user.email)) {
     planId = 'admin';
   }
   const planConfig = PLANS[planId];

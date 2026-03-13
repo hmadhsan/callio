@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import { hashApiKey } from '@/lib/keys';
 import { PLANS } from '@/lib/stripe';
 import { decryptProviderKey } from '@/lib/crypto';
-import { getUserFromSessionToken, getActiveWorkspace, SESSION_COOKIE } from '@/lib/auth';
+import { getUserFromSessionToken, getActiveWorkspace, SESSION_COOKIE, isAdmin } from '@/lib/auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -145,7 +145,7 @@ async function handler(
       include: { user: true },
     });
     let plan = (subscription?.plan || 'free') as keyof typeof PLANS;
-    if (auth.userEmail === 'hammadhassan616@gmail.com' || subscription?.user?.email === 'hammadhassan616@gmail.com') {
+    if (isAdmin(auth.userEmail)) {
       plan = 'admin';
     }
     const limit = PLANS[plan]?.requestsPerMonth || PLANS.free.requestsPerMonth;

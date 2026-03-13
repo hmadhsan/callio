@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { getUserFromSessionToken, getActiveWorkspace, SESSION_COOKIE } from '@/lib/auth';
+import { getUserFromSessionToken, getActiveWorkspace, SESSION_COOKIE, isAdmin } from '@/lib/auth';
 import { generateApiKey } from '@/lib/keys';
 import { PLANS } from '@/lib/stripe';
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       where: { userId: user.id },
     });
     let plan = (subscription?.plan || 'free') as keyof typeof PLANS;
-    if (user.email === 'hammadhassan616@gmail.com') {
+    if (isAdmin(user.email)) {
       plan = 'admin';
     }
     const maxKeys = PLANS[plan]?.maxKeys ?? PLANS.free.maxKeys;

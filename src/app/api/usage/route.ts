@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentUserWithWorkspace } from '@/lib/auth';
+import { getCurrentUserWithWorkspace, isAdmin } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { PLANS, getPlan } from '@/lib/stripe';
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     });
 
     let plan = subscription?.plan || 'free';
-    if (user.email === 'hammadhassan616@gmail.com') {
+    if (isAdmin(user.email)) {
       plan = 'admin';
     }
     const planConfig = getPlan(plan);
