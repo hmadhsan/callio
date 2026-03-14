@@ -33,7 +33,8 @@ function SignupForm() {
       if (data.requiresVerification) {
         router.push(`/verify-email?email=${encodeURIComponent(email)}`);
       } else if (data.success) {
-        router.push('/dashboard');
+        const redirect = searchParams.get('redirect');
+        router.push(redirect || '/dashboard');
       } else {
         setError(data.error || 'Signup failed');
       }

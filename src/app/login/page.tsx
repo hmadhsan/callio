@@ -38,7 +38,8 @@ function LoginForm() {
       });
       const data = await res.json();
       if (data.success) {
-        router.push('/dashboard');
+        const redirect = searchParams.get('redirect');
+        router.push(redirect || '/dashboard');
       } else if (data.requiresVerification) {
         setUnverifiedEmail(data.email || email);
         setError('');

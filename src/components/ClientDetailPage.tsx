@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, Check, ExternalLink, Zap, Lock, Globe, Play, BookOpen } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
 import AddToAgentButton from '@/components/AddToAgentButton';
@@ -56,6 +57,31 @@ interface ClientDetailPageProps {
 
 export default function ClientDetailPage({ api, endpoints }: ClientDetailPageProps) {
   const [showPlayground, setShowPlayground] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        setUser(data?.user || null);
+        setIsAuthLoading(false);
+      })
+      .catch(() => {
+        setUser(null);
+        setIsAuthLoading(false);
+      });
+  }, []);
+
+  const handleTryIt = () => {
+    if (!user && !isAuthLoading) {
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    setShowPlayground(true);
+  };
 
 
 
@@ -152,7 +178,8 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
               <div className="space-y-2">
                 {endpoints.length > 0 && (
                   <button
-                    onClick={() => setShowPlayground(true)}
+                    onClick={handleTryIt}
+                    disabled={isAuthLoading}
                     className="w-full px-4 py-3 bg-[var(--accent)] hover:bg-[var(--accent-strong)] text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
                   >
                     <Play className="w-4 h-4" />
@@ -309,7 +336,8 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
             <AddToAgentButton apiSlug={api.slug} buttonClassName="px-8 py-3.5 bg-[var(--accent)] hover:bg-[var(--accent-strong)] disabled:bg-gray-300 text-white text-sm font-semibold rounded-lg transition flex items-center justify-center gap-2 min-w-[180px]" />
             {endpoints.length > 0 && (
               <button
-                onClick={() => setShowPlayground(true)}
+                onClick={handleTryIt}
+                disabled={isAuthLoading}
                 className="px-8 py-3.5 border border-[var(--line)] text-[var(--ink)] text-sm font-semibold rounded-lg hover:bg-[var(--soft)] transition flex items-center justify-center gap-2 min-w-[180px]"
               >
                 <Play className="w-4 h-4" />
