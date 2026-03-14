@@ -229,7 +229,7 @@ export default function ZapierDocsPage() {
                         Replace <code className="bg-gray-200 px-1.5 py-0.5 rounded text-xs">&lt;your-api-slug&gt;</code> with any API slug from the Callio marketplace, e.g.:
                     </p>
                     <div className="flex flex-wrap gap-2">
-                        {['openai', 'stripe', 'sendgrid', 'github', 'slack', 'airtable'].map((slug) => (
+                        {['openai', 'sendgrid', 'github', 'slack', 'airtable', 'apollo'].map((slug) => (
                             <Link
                                 key={slug}
                                 href={`/apis/${slug}`}

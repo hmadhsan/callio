@@ -14,7 +14,6 @@ import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
   { icon: Mail, name: 'Email', desc: 'Send, verify, find' },
-  { icon: CreditCard, name: 'Payments', desc: 'Stripe, billing' },
   { icon: Database, name: 'Data', desc: 'Enrich, scrape, extract' },
   { icon: MessageSquare, name: 'Messaging', desc: 'SMS, chat, notifications' },
   { icon: BarChart3, name: 'Analytics', desc: 'Tracking, insights' },
@@ -93,7 +92,7 @@ export default function Home() {
             One gateway for every API<br className="hidden sm:block" /> your agents need.
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
-            Give your agents access to any API — search, payments, email, data, and more. Authentication, discovery, and execution handled automatically.
+            Give your agents access to any API — search, email, data, and more. Authentication, discovery, and execution handled automatically.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <AuthAwareCTA

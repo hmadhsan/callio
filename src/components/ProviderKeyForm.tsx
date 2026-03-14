@@ -9,7 +9,6 @@ interface ProviderKeyFormProps {
 
 const SLUG_HINTS: Record<string, { placeholder: string; example: string }> = {
   openai: { placeholder: 'sk-proj-...', example: 'Your OpenAI API key (starts with sk-)' },
-  stripe: { placeholder: 'sk_test_... or sk_live_...', example: 'Your Stripe secret key' },
   github: { placeholder: 'ghp_...', example: 'Your GitHub personal access token' },
   sendgrid: { placeholder: 'SG....', example: 'Your SendGrid API key' },
   slack: { placeholder: 'xoxb-...', example: 'Your Slack bot token' },
@@ -32,7 +31,7 @@ export default function ProviderKeyForm({ apiSlug }: ProviderKeyFormProps) {
     // Validate: reject Callio keys
     const trimmed = providerKey.trim();
     if (trimmed.startsWith('callio_')) {
-      setError('⚠️ This is your Callio key, NOT your provider key. Enter the API key from the provider (e.g. OpenAI, Stripe) instead.');
+      setError('⚠️ This is your Callio key, NOT your provider key. Enter the API key from the provider (e.g. OpenAI, SendGrid) instead.');
       return;
     }
     if (!trimmed || trimmed.length < 10) {
@@ -77,7 +76,7 @@ export default function ProviderKeyForm({ apiSlug }: ProviderKeyFormProps) {
         Step 1: Save your provider key
       </div>
       <p className="text-xs text-gray-600 mb-4 leading-relaxed">
-        This is <strong>NOT</strong> your Callio key. Enter the API key from the provider&apos;s dashboard (e.g. {hint.example}).
+        This is <strong>NOT</strong> your Callio key. Enter the API key from the provider&apos;s dashboard (e.g. OpenAI/SendGrid).
       </p>
       <div className="space-y-3">
         <input

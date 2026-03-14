@@ -86,7 +86,7 @@ export default function DocsPage() {
                 <pre className="text-green-400 text-xs font-mono">Authorization: Bearer callio_your_key_here</pre>
               </div>
               <p className="text-[var(--muted)] text-sm">
-                For APIs that require provider authentication (e.g., Stripe, OpenAI), save your provider API key in the API detail page. Callio will automatically attach it when proxying your requests.
+                For APIs that require provider authentication (e.g., OpenAI, SendGrid), save your provider API key in the API detail page. Callio will automatically attach it when proxying your requests.
               </p>
             </div>
           </section>

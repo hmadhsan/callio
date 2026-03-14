@@ -153,7 +153,7 @@ export default function McpPage() {
                 <div className="space-y-2">
                   {[
                     '"Search for email APIs on Callio"',
-                    '"What endpoints does the Stripe API have?"',
+                    '"What endpoints does the SendGrid API have?"',
                     '"Get post #1 from JSONPlaceholder through Callio"',
                     '"Search for AI companies using Apollo API"',
                   ].map((example) => (

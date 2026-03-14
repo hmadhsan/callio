@@ -38,7 +38,7 @@ export default function HowItWorksPage() {
                 <h2 className="text-2xl font-bold">Browse the Marketplace</h2>
               </div>
               <p className="text-[var(--muted)] mb-4">
-                Explore APIs and skills organized by category. From data enrichment to web scraping, payment processing to AI models — find exactly what you need.
+                Explore APIs and skills organized by category. From data enrichment to web scraping, email services to AI models — find exactly what you need.
               </p>
               <Link href="/browse" className="text-sm text-[var(--accent)] hover:underline flex items-center gap-1">
                 Browse APIs <ArrowRight className="w-3 h-3" />
@@ -50,7 +50,7 @@ export default function HowItWorksPage() {
                 <div className="flex-1 h-8 bg-[var(--soft)] rounded-lg" />
               </div>
               <div className="grid grid-cols-2 gap-3">
-                {['💳 Stripe', '📧 SendGrid', '🤖 OpenAI', '💬 Slack', '📊 Analytics', '🔍 Scraper'].map((item) => (
+                {['📧 SendGrid', '🤖 OpenAI', '💬 Slack', '📊 Analytics', '🔍 Scraper', '🌐 Globe'].map((item) => (
                   <div key={item} className="bg-[var(--soft)] rounded-lg p-3 text-sm">{item}</div>
                 ))}
               </div>
@@ -97,7 +97,7 @@ export default function HowItWorksPage() {
             <div className="bg-[#1a1a1a] rounded-xl p-6">
               <pre className="text-green-400 text-xs font-mono overflow-x-auto">
 {`curl -X GET \\
-  "https://callio.dev/api/proxy/stripe/charges" \\
+  "https://callio.dev/api/proxy/jsonplaceholder/posts/1" \\
   -H "Authorization: Bearer callio_..." \\
 
 # Response

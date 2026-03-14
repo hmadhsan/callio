@@ -233,7 +233,7 @@ export default function PricingPage() {
             <div>
               <h3 className="font-semibold mb-1">Do I need my own API keys for providers?</h3>
               <p className="text-sm text-[var(--muted)]">
-                For most APIs, yes — you bring your own provider key (e.g., OpenAI key, Stripe key). Callio manages the routing and auth injection. Some public APIs work without any provider key.
+                For most APIs, yes — you bring your own provider key (e.g., OpenAI key, SendGrid key). Callio manages the routing and auth injection. Some public APIs work without any provider key.
               </p>
             </div>
             <div>
