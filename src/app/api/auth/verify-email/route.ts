@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
                         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
                             <h2 style="color: #000;">Welcome to Callio!</h2>
                             <p>Hi ${user.name || 'there'},</p>
-                            <p>Your email has been verified and your account is ready to go! You now have access to 50+ APIs through a single gateway.</p>
+                            <p>Your email has been verified and your account is ready to go! You now have access to 90+ APIs through a single gateway.</p>
                             <p><strong>Here's how to get started:</strong></p>
                             <ol>
                                 <li>Browse available APIs in the marketplace</li>

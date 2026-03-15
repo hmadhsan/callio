@@ -39,7 +39,7 @@ export default function McpPage() {
             Model Context Protocol
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-            Connect your AI agent to 50+ APIs
+            Connect your AI agent to 90+ APIs
           </h1>
           <p className="text-lg text-[var(--muted)] max-w-2xl mx-auto mb-8">
             Install the Callio MCP server and give Claude Code, Cursor, Antigravity, or any MCP-compatible agent instant access to the entire API ecosystem.
@@ -181,7 +181,7 @@ export default function McpPage() {
                 <Box className="w-5 h-5 text-blue-600" />
               </div>
               <h3 className="font-semibold mb-1">search_apis</h3>
-              <p className="text-sm text-[var(--muted)]">Discover and browse 50+ APIs by name, category, or description.</p>
+              <p className="text-sm text-[var(--muted)]">Discover and browse 90+ APIs by name, category, or description.</p>
             </div>
             <div className="bg-white rounded-xl border border-[var(--line)] p-6">
               <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center mb-3">

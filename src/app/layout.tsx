@@ -4,11 +4,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Callio — The API Gateway for AI Agents",
-  description: "50+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy. Works with Claude Code, Cursor & Antigravity.",
+  description: "90+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy. Works with Claude Code, Cursor & Antigravity.",
   metadataBase: new URL("https://callio.dev"),
   openGraph: {
     title: "Callio — The API Gateway for AI Agents",
-    description: "50+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy.",
+    description: "90+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy.",
     url: "https://callio.dev",
     siteName: "Callio",
     images: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Callio — The API Gateway for AI Agents",
-    description: "50+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy.",
+    description: "90+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy.",
     images: ["/twitter-image.png"],
   },
 };

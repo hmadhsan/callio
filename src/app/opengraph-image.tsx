@@ -116,7 +116,7 @@ export default function OGImage() {
               marginBottom: 40,
             }}
           >
-            50+ APIs. One key. Works with Claude Code, Cursor & Antigravity.
+            90+ APIs. One key. Works with Claude Code, Cursor & Antigravity.
           </div>
 
           {/* Stats row */}
@@ -127,7 +127,7 @@ export default function OGImage() {
             }}
           >
             {[
-              { num: '50+', label: 'APIs' },
+              { num: '90+', label: 'APIs' },
               { num: '399', label: 'Endpoints' },
               { num: 'MCP', label: 'Ready' },
             ].map((stat) => (

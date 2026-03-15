@@ -1,6 +1,6 @@
 # Callio MCP Server
 
-Give AI agents access to **50+ APIs** through one tool — powered by the [Model Context Protocol](https://modelcontextprotocol.io).
+Give AI agents access to **90+ APIs** through one tool — powered by the [Model Context Protocol](https://modelcontextprotocol.io).
 
 Works with **Claude Code**, **Cursor**, **Antigravity**, and any MCP-compatible AI tool.
 

@@ -3,7 +3,7 @@
 /**
  * Callio MCP Server
  * 
- * Gives AI agents (Claude Code, Cursor, Antigravity, etc.) access to 50+ APIs
+ * Gives AI agents (Claude Code, Cursor, Antigravity, etc.) access to 90+ APIs
  * through the Callio gateway using the Model Context Protocol.
  * 
  * Usage:

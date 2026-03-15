@@ -2,7 +2,7 @@
 
 The official Node.js SDK for Callio — the API Gateway for AI Agents.
 
-Callio gives you a single API key to access 50+ APIs (Search, Payments, Data, Messaging, AI, etc.) without managing individual credentials, rate limits, or auth flows.
+Callio gives you a single API key to access 90+ APIs (Search, Payments, Data, Messaging, AI, etc.) without managing individual credentials, rate limits, or auth flows.
 
 ## Installation
 

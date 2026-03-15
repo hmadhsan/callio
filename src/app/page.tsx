@@ -111,7 +111,7 @@ export default function Home() {
           {/* Stats row */}
           <div id="stats" className="mt-12 flex flex-wrap gap-8 text-sm">
             <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">50+</div>
+              <div className="text-2xl font-semibold text-[var(--ink)]">90+</div>
               <div className="text-[var(--muted)]">APIs available</div>
             </div>
             <div className="w-px bg-[var(--line)]" />
@@ -304,7 +304,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl sm:text-4xl font-display">Connect Antigravity, Cursor &amp; more</h2>
               <p className="mt-4 text-[#a1a1aa] text-lg">
-                Install our MCP server and your AI agent gets instant access to 50+ APIs. Search, browse, and call any API using natural language.
+                Install our MCP server and your AI agent gets instant access to 90+ APIs. Search, browse, and call any API using natural language.
               </p>
               <div className="mt-6 space-y-3">
                 {[
