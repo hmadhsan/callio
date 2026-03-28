@@ -205,6 +205,32 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <div className="mt-12">
+            <div className="bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-4 sm:p-6">
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <h3 className="text-lg sm:text-xl font-semibold">Watch how Callio works</h3>
+                <a
+                  href="https://youtu.be/laXk4u5vwEI"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[var(--accent)] hover:underline inline-flex items-center gap-1"
+                >
+                  Open on YouTube <ArrowRight className="w-3 h-3" />
+                </a>
+              </div>
+              <div className="relative w-full overflow-hidden rounded-xl border border-[var(--line)]" style={{ paddingTop: '56.25%' }}>
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube.com/embed/laXk4u5vwEI"
+                  title="How Callio Works"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
           
           {/* Product Hunt Badge */}
           <div className="mt-16 flex justify-center">
