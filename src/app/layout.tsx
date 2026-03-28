@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     siteName: "Callio",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Callio API Gateway",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Callio — The API Gateway for AI Agents",
     description: "90+ APIs, 399 endpoints, one key. Connect your AI agent to any API through MCP or REST proxy.",
-    images: ["/twitter-image.png"],
+    images: ["/twitter-image"],
   },
 };
 

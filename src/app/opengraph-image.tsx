@@ -1,181 +1,181 @@
-import { ImageResponse } from 'next/og';
+import { ImageResponse } from "next/og";
 
-export const runtime = 'edge';
-export const alt = 'Callio — The API Gateway for AI Agents';
+export const runtime = "edge";
+export const alt = "Callio - The API Gateway for AI Agents";
 export const size = { width: 1200, height: 630 };
-export const contentType = 'image/png';
+export const contentType = "image/png";
 
 export default function OGImage() {
   return new ImageResponse(
     (
       <div
         style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          background: '#ffffff',
-          fontFamily: 'system-ui, sans-serif',
-          position: 'relative',
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          background: "linear-gradient(130deg, #091a2b 0%, #11263d 45%, #1a3553 100%)",
+          fontFamily: "Segoe UI, Helvetica Neue, Arial, sans-serif",
+          position: "relative",
+          color: "#ffffff",
+          overflow: "hidden",
         }}
       >
-        {/* Subtle grid pattern */}
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
+            top: -180,
+            right: -120,
+            width: 520,
+            height: 520,
+            borderRadius: 999,
+            background: "radial-gradient(circle, rgba(255,133,51,0.5) 0%, rgba(255,133,51,0) 70%)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: -220,
+            left: -120,
+            width: 560,
+            height: 560,
+            borderRadius: 999,
+            background: "radial-gradient(circle, rgba(35,183,232,0.38) 0%, rgba(35,183,232,0) 72%)",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
             inset: 0,
             backgroundImage:
-              'linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
+              "linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)",
+            backgroundSize: "52px 52px",
+            opacity: 0.24,
           }}
         />
 
-        {/* Top accent bar */}
         <div
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 6,
-            background: '#111111',
-          }}
-        />
-
-        {/* Content */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '0 80px',
+            width: "100%",
+            padding: "56px 64px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            zIndex: 1,
           }}
         >
-          {/* Logo mark */}
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 16,
-              marginBottom: 40,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            <div
-              style={{
-                width: 56,
-                height: 56,
-                borderRadius: 14,
-                background: '#111111',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ffffff',
-                fontSize: 28,
-                fontWeight: 800,
-                letterSpacing: '-0.02em',
-              }}
-            >
-              C
-            </div>
-            <span
-              style={{
-                fontSize: 48,
-                fontWeight: 800,
-                color: '#111111',
-                letterSpacing: '-0.03em',
-              }}
-            >
-              callio
-            </span>
-          </div>
-
-          {/* Tagline */}
-          <div
-            style={{
-              fontSize: 36,
-              fontWeight: 600,
-              color: '#111111',
-              textAlign: 'center',
-              lineHeight: 1.3,
-              marginBottom: 24,
-            }}
-          >
-            The API Gateway for AI Agents
-          </div>
-
-          {/* Description */}
-          <div
-            style={{
-              fontSize: 20,
-              color: '#6b7280',
-              textAlign: 'center',
-              maxWidth: 700,
-              lineHeight: 1.5,
-              marginBottom: 40,
-            }}
-          >
-            90+ APIs. One key. Works with Claude Code, Cursor & Antigravity.
-          </div>
-
-          {/* Stats row */}
-          <div
-            style={{
-              display: 'flex',
-              gap: 48,
-            }}
-          >
-            {[
-              { num: '90+', label: 'APIs' },
-              { num: '399', label: 'Endpoints' },
-              { num: 'MCP', label: 'Ready' },
-            ].map((stat) => (
+            <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
               <div
-                key={stat.label}
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
+                  width: 64,
+                  height: 64,
+                  borderRadius: 16,
+                  border: "2px solid rgba(255,255,255,0.7)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 34,
+                  fontWeight: 900,
+                  background: "rgba(0,0,0,0.24)",
                 }}
               >
-                <span
-                  style={{
-                    fontSize: 32,
-                    fontWeight: 800,
-                    color: '#111111',
-                  }}
-                >
-                  {stat.num}
-                </span>
-                <span
-                  style={{
-                    fontSize: 16,
-                    color: '#9ca3af',
-                    marginTop: 4,
-                  }}
-                >
-                  {stat.label}
-                </span>
+                C
               </div>
-            ))}
+              <div
+                style={{
+                  fontSize: 48,
+                  fontWeight: 900,
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                callio
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "10px 16px",
+                borderRadius: 999,
+                fontSize: 18,
+                fontWeight: 700,
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.35)",
+              }}
+            >
+              MCP + REST
+            </div>
           </div>
-        </div>
 
-        {/* Bottom URL bar */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 32,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-          }}
-        >
-          <span style={{ fontSize: 18, color: '#9ca3af' }}>callio.dev</span>
+          <div style={{ display: "flex", flexDirection: "column", maxWidth: 980 }}>
+            <div
+              style={{
+                fontSize: 64,
+                fontWeight: 900,
+                lineHeight: 1.04,
+                letterSpacing: "-0.04em",
+                textWrap: "balance",
+              }}
+            >
+              The API Gateway for AI Agents
+            </div>
+            <div
+              style={{
+                fontSize: 28,
+                color: "rgba(233,244,255,0.92)",
+                marginTop: 20,
+                lineHeight: 1.34,
+              }}
+            >
+              90+ APIs and 399 endpoints with one key. Plug into Claude Code, Cursor, and Antigravity in minutes.
+            </div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+            <div style={{ display: "flex", gap: 14 }}>
+              {[
+                { value: "90+", label: "APIs" },
+                { value: "399", label: "Endpoints" },
+                { value: "One Key", label: "Unified Auth" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "14px 18px",
+                    minWidth: 168,
+                    borderRadius: 14,
+                    background: "rgba(8,12,20,0.45)",
+                    border: "1px solid rgba(255,255,255,0.24)",
+                  }}
+                >
+                  <span style={{ fontSize: 34, fontWeight: 900, lineHeight: 1 }}>{item.value}</span>
+                  <span style={{ fontSize: 16, marginTop: 4, color: "rgba(236,244,251,0.9)" }}>{item.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                color: "#ffd0af",
+              }}
+            >
+              callio.dev
+            </div>
+          </div>
         </div>
       </div>
     ),
-    { ...size }
+    size
   );
 }
