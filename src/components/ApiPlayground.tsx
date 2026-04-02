@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Play,
   Copy,
@@ -28,9 +28,19 @@ interface EndpointInfo {
 interface ApiPlaygroundProps {
   apiSlug: string;
   endpoints: EndpointInfo[];
-  baseUrl: string;
   allowUnauthenticated?: boolean;
+  initialReplay?: {
+    method?: string;
+    path?: string;
+  };
   onClose?: () => void;
+}
+
+interface PlaygroundResponse {
+  status: number;
+  statusText: string;
+  data: unknown;
+  responseTime: number;
 }
 
 const methodColors: Record<string, string> = {
@@ -53,6 +63,51 @@ const isSimpleListArray = (param: Parameter) =>
 // Detect boolean parameters
 const isBooleanParam = (param: Parameter) =>
   param.type === 'boolean';
+
+function normalizePath(path: string) {
+  if (!path) return '/';
+  return `/${path.replace(/^\/+/, '')}`.replace(/\/+/g, '/');
+}
+
+function matchEndpointFromReplay(endpoints: EndpointInfo[], replay?: { method?: string; path?: string }) {
+  if (!replay?.path) return { endpoint: endpoints[0] || null, parameters: {} as Record<string, string> };
+
+  const replayMethod = replay.method?.toUpperCase();
+  const normalizedReplayPath = normalizePath(replay.path);
+
+  for (const endpoint of endpoints) {
+    if (replayMethod && endpoint.method.toUpperCase() !== replayMethod) continue;
+
+    const templatePath = normalizePath(endpoint.path);
+    const templateParts = templatePath.split('/').filter(Boolean);
+    const replayParts = normalizedReplayPath.split('/').filter(Boolean);
+    if (templateParts.length !== replayParts.length) continue;
+
+    const extracted: Record<string, string> = {};
+    let matches = true;
+
+    for (let index = 0; index < templateParts.length; index++) {
+      const templatePart = templateParts[index];
+      const replayPart = replayParts[index];
+
+      if (/^\{.+\}$/.test(templatePart)) {
+        extracted[templatePart.slice(1, -1)] = decodeURIComponent(replayPart);
+        continue;
+      }
+
+      if (templatePart !== replayPart) {
+        matches = false;
+        break;
+      }
+    }
+
+    if (matches) {
+      return { endpoint, parameters: extracted };
+    }
+  }
+
+  return { endpoint: endpoints[0] || null, parameters: {} as Record<string, string> };
+}
 
 // Transform a raw user input into the correct value for the API
 const transformParamValue = (param: Parameter, rawValue: string): unknown => {
@@ -102,21 +157,29 @@ const transformParamValue = (param: Parameter, rawValue: string): unknown => {
 export default function ApiPlayground({
   apiSlug,
   endpoints,
-  baseUrl,
   allowUnauthenticated,
+  initialReplay,
   onClose,
 }: ApiPlaygroundProps) {
-  const [selectedEndpoint, setSelectedEndpoint] = useState<EndpointInfo | null>(
-    endpoints[0] || null
+  const initialSelection = useMemo(
+    () => matchEndpointFromReplay(endpoints, initialReplay),
+    [endpoints, initialReplay]
   );
-  // Optional key if they really want to test with one, but we default to session auth
-  const [callioApiKey, setCallioApiKey] = useState('');
-  const [parameters, setParameters] = useState<Record<string, string>>({});
+  const [selectedEndpoint, setSelectedEndpoint] = useState<EndpointInfo | null>(initialSelection.endpoint);
+  const callioApiKey = '';
+  const [parameters, setParameters] = useState<Record<string, string>>(initialSelection.parameters);
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<PlaygroundResponse | null>(null);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [limitReached, setLimitReached] = useState<{ used: number; limit: number; plan: string } | null>(null);
+
+  useEffect(() => {
+    setSelectedEndpoint(initialSelection.endpoint);
+    setParameters(initialSelection.parameters);
+    setResponse(null);
+    setError('');
+  }, [initialSelection]);
 
   if (!selectedEndpoint) {
     return (
@@ -125,14 +188,6 @@ export default function ApiPlayground({
       </div>
     );
   }
-
-  const buildUrl = () => {
-    let url = `${baseUrl}${selectedEndpoint.path}`;
-    Object.entries(parameters).forEach(([key, value]) => {
-      url = url.replace(`{${key}}`, value);
-    });
-    return url;
-  };
 
   const buildCurlCommand = () => {
     // Build the Callio proxy URL
@@ -226,34 +281,40 @@ export default function ApiPlayground({
         headers['Authorization'] = `Bearer ${callioApiKey}`;
       }
 
+      const startTime = Date.now();
       const response = await fetch(proxyPath, {
         method: selectedEndpoint.method,
         headers,
         body: requestBody,
       });
+      const responseTime = Date.now() - startTime;
 
       // Handle non-JSON responses gracefully
       const responseText = await response.text();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let data: any;
+      let data: unknown;
       try {
         data = JSON.parse(responseText);
       } catch {
         data = { raw: responseText || '(empty response)' };
       }
+      const dataObject = typeof data === 'object' && data !== null ? data as Record<string, unknown> : {};
 
-      if (response.status === 429 && data.upgrade) {
-        setLimitReached({ used: data.used, limit: data.limit, plan: data.plan });
+      if (response.status === 429 && typeof dataObject.upgrade === 'string') {
+        setLimitReached({
+          used: typeof dataObject.used === 'number' ? dataObject.used : 0,
+          limit: typeof dataObject.limit === 'number' ? dataObject.limit : 0,
+          plan: typeof dataObject.plan === 'string' ? dataObject.plan : 'free'
+        });
         setError('Monthly request limit reached');
       } else if (!response.ok) {
         // Convert error to string, handle various formats
         let errorMsg;
-        if (typeof data.error === 'string') {
-          errorMsg = data.error;
-        } else if (data.message) {
-          errorMsg = data.message;
-        } else if (data.raw) {
-          const rawStr = String(data.raw);
+        if (typeof dataObject.error === 'string') {
+          errorMsg = dataObject.error;
+        } else if (typeof dataObject.message === 'string') {
+          errorMsg = dataObject.message;
+        } else if ('raw' in dataObject) {
+          const rawStr = String(dataObject.raw);
           errorMsg = rawStr.toLowerCase().includes('<!doctype html>')
             ? `Received HTML response instead of JSON (Status ${response.status}). The endpoint might differ from documentation or the URL might be malformed.`
             : (rawStr.length > 500 ? rawStr.substring(0, 500) + '...' : rawStr);
@@ -262,9 +323,9 @@ export default function ApiPlayground({
         }
 
         // Check if it's a provider key issue
-        if (errorMsg.includes('PROVIDER_KEY_MISSING') || data.code === 'PROVIDER_KEY_MISSING' || errorMsg.includes('Provider API key')) {
+        if (errorMsg.includes('PROVIDER_KEY_MISSING') || dataObject.code === 'PROVIDER_KEY_MISSING' || errorMsg.includes('Provider API key')) {
           errorMsg = `You haven't saved your provider API key yet. Scroll down to "Connect your provider key" and save your actual provider key (e.g. sk-... for OpenAI). Do NOT use your callio_ key there.`;
-        } else if (data.code === 'PROVIDER_KEY_INVALID' || errorMsg.includes('provider key is invalid')) {
+        } else if (dataObject.code === 'PROVIDER_KEY_INVALID' || errorMsg.includes('provider key is invalid')) {
           errorMsg = `Your saved provider key is wrong (you may have accidentally saved your Callio key instead). Scroll down and re-save the correct provider key (e.g. sk-... for OpenAI).`;
         } else if (errorMsg.includes('Incorrect API key') || errorMsg.includes('invalid_api_key')) {
           errorMsg = `Your provider key is invalid. You may have saved your Callio key instead of your real provider key. Scroll down and re-save the correct key (e.g. sk-... for OpenAI).`;
@@ -277,7 +338,7 @@ export default function ApiPlayground({
           status: response.status,
           statusText: response.statusText,
           data,
-          responseTime: 0, // Would need to track this
+          responseTime,
         });
       }
     } catch (err) {
@@ -366,7 +427,7 @@ export default function ApiPlayground({
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-xs text-blue-900 font-bold mb-2">✨ Magic Authentication</p>
                   <p className="text-xs text-blue-800 leading-relaxed mb-2">
-                    Because you are logged in, we are automatically authenticating this request using your session! You don't need to copy-paste your Callio API key here.
+                    Because you are logged in, we are automatically authenticating this request using your session! You don&apos;t need to copy-paste your Callio API key here.
                     <br /><br />
                     <strong>Note:</strong> API Keys and Scopes generated on your Dashboard apply <em>only</em> to external agents. The Playground gives you full access via your browser session.
                   </p>
@@ -561,14 +622,14 @@ export default function ApiPlayground({
                       <div className="bg-yellow-900/20 border border-yellow-700 rounded-lg p-4">
                         <p className="text-sm font-bold text-yellow-300 mb-2">💡 Need your API key?</p>
                         <p className="text-sm text-yellow-200 leading-relaxed">
-                          Click &quot;Get API Credentials&quot; button above to get instructions on how to obtain your actual provider API key.
+                          Click &quot;Get API Credentials&quot; above to get instructions on how to obtain your actual provider API key.
                         </p>
                       </div>
                     )}
                   </div>
                 ) : (
                   <p className="text-sm text-gray-500">
-                    Fill in parameters and click "Send Request"
+                    Fill in parameters and click &quot;Send Request&quot;
                   </p>
                 )}
               </div>

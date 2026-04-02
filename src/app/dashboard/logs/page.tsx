@@ -2,9 +2,10 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getCurrentUserWithWorkspace } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { ArrowLeft, Activity, Search, Filter } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
 import UserNav from '@/components/UserNav';
+import LogsExplorer from '@/components/LogsExplorer';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +22,19 @@ export default async function LogsPage() {
         orderBy: { createdAt: 'desc' },
         take: 100,
     });
+
+    const apiKeyIds = Array.from(new Set(records.map((record) => record.apiKeyId).filter((id): id is string => Boolean(id))));
+    const apiKeys = apiKeyIds.length > 0
+        ? await prisma.apiKey.findMany({
+            where: { id: { in: apiKeyIds } },
+            select: {
+                id: true,
+                name: true,
+                keyLast4: true,
+            }
+        })
+        : [];
+    const apiKeyMap = new Map(apiKeys.map((apiKey) => [apiKey.id, apiKey]));
 
     return (
         <div className="min-h-screen bg-[var(--page-bg)]">
@@ -51,80 +65,17 @@ export default async function LogsPage() {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-xl border border-[var(--line)] shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-[var(--line)] bg-[var(--soft)] flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-sm font-medium text-[var(--ink)]">
-                            <Activity className="w-4 h-4 text-[var(--accent)]" />
-                            Recent Activity
-                        </div>
-                    </div>
-
-                    {records.length > 0 ? (
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">
-                                <thead className="bg-[var(--soft)]/50 border-b border-[var(--line)]">
-                                    <tr>
-                                        <th className="px-6 py-3 font-medium text-[var(--muted)]">Timestamp</th>
-                                        <th className="px-6 py-3 font-medium text-[var(--muted)]">API</th>
-                                        <th className="px-6 py-3 font-medium text-[var(--muted)]">Method & Path</th>
-                                        <th className="px-6 py-3 font-medium text-[var(--muted)]">Status</th>
-                                        <th className="px-6 py-3 font-medium text-[var(--muted)] text-right">Latency</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-[var(--line)]">
-                                    {records.map((record) => {
-                                        const statusColor =
-                                            record.status >= 200 && record.status < 300 ? 'bg-green-100 text-green-700 border-green-200' :
-                                                record.status >= 400 && record.status < 500 ? 'bg-amber-100 text-amber-700 border-amber-200' :
-                                                    record.status >= 500 ? 'bg-red-100 text-red-700 border-red-200' :
-                                                        'bg-gray-100 text-gray-700 border-gray-200';
-
-                                        return (
-                                            <tr key={record.id} className="hover:bg-[var(--soft)]/50 transition">
-                                                <td className="px-6 py-4 whitespace-nowrap text-[var(--muted)]">
-                                                    {new Date(record.createdAt).toLocaleString(undefined, {
-                                                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
-                                                    })}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap font-medium text-[var(--ink)]">
-                                                    {record.apiSlug}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${record.method === 'GET' ? 'bg-blue-100 text-blue-700' :
-                                                            record.method === 'POST' ? 'bg-green-100 text-green-700' :
-                                                                record.method === 'DELETE' ? 'bg-red-100 text-red-700' :
-                                                                    'bg-gray-100 text-gray-700'
-                                                            }`}>
-                                                            {record.method}
-                                                        </span>
-                                                        <span className="font-mono text-xs text-[var(--muted)] truncate max-w-[200px]" title={`/${record.path}`}>
-                                                            /{record.path}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className={`text-xs font-semibold px-2 py-1 rounded-md border ${statusColor}`}>
-                                                        {record.status === 0 ? 'Pending' : record.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-right text-[var(--muted)]">
-                                                    {record.latencyMs}ms
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : (
-                        <div className="p-12 text-center text-[var(--muted)]">
-                            <Activity className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                            <p>No requests have been made yet.</p>
-                            <p className="text-sm mt-1">Connect an agent and start using APIs to see logs here.</p>
-                        </div>
-                    )}
-                </div>
+                <LogsExplorer records={records.map((record) => ({
+                    id: record.id,
+                    apiSlug: record.apiSlug,
+                    apiKeyId: record.apiKeyId,
+                    method: record.method,
+                    path: record.path,
+                    status: record.status,
+                    latencyMs: record.latencyMs,
+                    createdAt: record.createdAt.toISOString(),
+                    apiKey: record.apiKeyId ? apiKeyMap.get(record.apiKeyId) ?? null : null,
+                }))} />
             </div>
         </div>
     );

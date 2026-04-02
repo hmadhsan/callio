@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { ChevronLeft, Check, ExternalLink, Zap, Lock, Globe, Play, BookOpen } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
 import AddToAgentButton from '@/components/AddToAgentButton';
@@ -55,12 +55,28 @@ interface ClientDetailPageProps {
   endpoints: Endpoint[];
 }
 
+interface AuthUser {
+  id: string;
+  email: string;
+}
+
 export default function ClientDetailPage({ api, endpoints }: ClientDetailPageProps) {
   const [showPlayground, setShowPlayground] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const replayRequest = useMemo(() => {
+    const shouldOpen = searchParams.get('playground') === '1';
+    if (!shouldOpen) return null;
+
+    return {
+      method: searchParams.get('method') || undefined,
+      path: searchParams.get('path') || undefined,
+    };
+  }, [searchParams]);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -75,9 +91,22 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
       });
   }, []);
 
+  useEffect(() => {
+    if (!replayRequest || isAuthLoading) return;
+
+    if (!user) {
+      const currentPath = `${pathname}?${searchParams.toString()}`;
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
+      return;
+    }
+
+    setShowPlayground(true);
+  }, [isAuthLoading, pathname, replayRequest, router, searchParams, user]);
+
   const handleTryIt = () => {
     if (!user && !isAuthLoading) {
-      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+      const currentPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
       return;
     }
     setShowPlayground(true);
@@ -267,7 +296,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
               </div>
               <div>
                 <h3 className="font-semibold text-lg mb-1 text-gray-900">Try It Instantly</h3>
-                <p className="text-gray-600 text-sm">Click "Try It" above to test the API in the playground</p>
+                <p className="text-gray-600 text-sm">Click &quot;Try It&quot; above to test the API in the playground</p>
               </div>
             </div>
 
@@ -280,7 +309,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
               </div>
               <div>
                 <h3 className="font-semibold text-lg mb-1 text-gray-900">Add to Your Agent</h3>
-                <p className="text-gray-600 text-sm">Click "Add to Agent" to get your API key and integrate</p>
+                <p className="text-gray-600 text-sm">Click &quot;Add to Agent&quot; to get your API key and integrate</p>
               </div>
             </div>
           </div>
@@ -359,8 +388,8 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
         <ApiPlayground
           apiSlug={api.slug}
           endpoints={endpoints}
-          baseUrl={api.baseUrl || ''}
           allowUnauthenticated={api.allowUnauthenticated}
+          initialReplay={replayRequest ?? undefined}
           onClose={() => setShowPlayground(false)}
         />
       )}
