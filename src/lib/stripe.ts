@@ -27,11 +27,16 @@ export const PLANS = {
   free: {
     name: 'Free',
     monthlyPrice: 0,
-    requestsPerMonth: 0,
-    maxKeys: 0,
-    features: [],
+    requestsPerMonth: 5,
+    maxKeys: 1,
+    features: [
+      '5 API requests/month',
+      '1 API key',
+      'Browse catalog & MCP',
+      'Upgrade anytime',
+    ],
     stripePriceId: null as string | null,
-  }, // Added closing brace and comma
+  },
   admin: {
     name: 'Admin',
     monthlyPrice: 0,

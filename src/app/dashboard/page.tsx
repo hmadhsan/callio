@@ -46,7 +46,11 @@ export default async function DashboardPage() {
     where: { userId: user.id, createdAt: { gte: periodStart } },
   });
 
-  const usagePercent = Math.min(Math.round((usageCount / planConfig.requestsPerMonth) * 100), 100);
+  const requestLimit = planConfig.requestsPerMonth;
+  const usagePercent =
+    requestLimit === Infinity
+      ? 0
+      : Math.min(Math.round((usageCount / requestLimit) * 100), 100);
   const barColor = usagePercent >= 90 ? 'bg-red-500' : usagePercent >= 70 ? 'bg-amber-500' : 'bg-green-500';
 
   // Fetch Favorite APIs
@@ -109,7 +113,10 @@ export default async function DashboardPage() {
             </div>
             <p className="text-3xl font-bold">
               {usageCount}
-              <span className="text-sm font-normal text-[var(--muted)]"> / {planConfig.requestsPerMonth.toLocaleString()}</span>
+              <span className="text-sm font-normal text-[var(--muted)]">
+                {' '}
+                / {requestLimit === Infinity ? '∞' : requestLimit.toLocaleString()}
+              </span>
             </p>
             <div className="w-full bg-gray-100 rounded-full h-2 mt-3 mb-2">
               <div className={`${barColor} h-2 rounded-full transition-all`} style={{ width: `${usagePercent}%` }} />

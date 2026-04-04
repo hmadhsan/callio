@@ -8,6 +8,22 @@ import CallioLogo from '@/components/CallioLogo';
 
 const plans = [
   {
+    id: 'free',
+    name: 'Free',
+    price: 0,
+    period: '',
+    description: 'Try the proxy and MCP before you pay',
+    features: [
+      '5 API requests/month',
+      '1 API key',
+      'Access to all APIs',
+      'MCP integration',
+    ],
+    cta: 'Sign up free',
+    href: '/signup',
+    highlighted: false,
+  },
+  {
     id: 'starter',
     name: 'Starter',
     price: 5,
@@ -126,8 +142,14 @@ function PricingCard({ plan }: { plan: typeof plans[0] }) {
       <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
       <p className="text-sm text-[var(--muted)] mb-4">{plan.description}</p>
       <div className="mb-6">
-        <span className="text-4xl font-bold">${plan.price}</span>
-        <span className="text-[var(--muted)] text-sm ml-1">{plan.period}</span>
+        {plan.price === 0 ? (
+          <span className="text-4xl font-bold">Free</span>
+        ) : (
+          <>
+            <span className="text-4xl font-bold">${plan.price}</span>
+            <span className="text-[var(--muted)] text-sm ml-1">{plan.period}</span>
+          </>
+        )}
       </div>
       <ul className="space-y-3 mb-8 flex-1">
         {plan.features.map((f) => (
@@ -200,7 +222,7 @@ export default function PricingPage() {
         </div>
 
         {/* Plans Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-20">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
           {plans.map((plan) => (
             <PricingCard key={plan.id} plan={plan} />
           ))}
@@ -216,6 +238,12 @@ export default function PricingPage() {
               <h3 className="font-semibold mb-1">What counts as an API request?</h3>
               <p className="text-sm text-[var(--muted)]">
                 Every call through the Callio proxy counts as one request, regardless of the upstream API or method.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">What is included on the Free plan?</h3>
+              <p className="text-sm text-[var(--muted)]">
+                New accounts get <strong>5 proxy requests per month</strong> and <strong>one</strong> API key so you can test integrations and MCP. Upgrade to Starter or higher for more requests and keys.
               </p>
             </div>
             <div>

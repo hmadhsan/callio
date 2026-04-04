@@ -33,6 +33,10 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    const limit = planConfig?.requestsPerMonth ?? PLANS.free.requestsPerMonth;
+    const percentage =
+      limit === Infinity ? 0 : Math.min(Math.round((usageCount / limit) * 100), 100);
+
     return NextResponse.json({
       plan,
       status: subscription?.status || 'active',
@@ -40,8 +44,8 @@ export async function GET(request: NextRequest) {
       currentPeriodEnd: subscription?.currentPeriodEnd || null,
       usage: {
         used: usageCount,
-        limit: planConfig?.requestsPerMonth || PLANS.free.requestsPerMonth,
-        percentage: Math.round((usageCount / (planConfig?.requestsPerMonth || PLANS.free.requestsPerMonth)) * 100),
+        limit,
+        percentage,
       },
     });
   } catch (error: unknown) {

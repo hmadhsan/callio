@@ -253,7 +253,7 @@ export default function McpPage() {
             Ready to supercharge your agent?
           </h2>
           <p className="text-[var(--muted)] mb-8">
-            Get started in under 2 minutes. Starter tier includes 50 API calls/month.
+            Get started in under 2 minutes. Free accounts include 5 proxy requests/month; paid plans add more.
           </p>
           <Link
             href="/signup"
