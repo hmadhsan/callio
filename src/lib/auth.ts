@@ -177,7 +177,7 @@ export async function getCurrentUserWithWorkspace() {
   return { user, workspace };
 }
 
-const ADMIN_EMAILS = ['hammadhassan616@gmail.com', 'hmadhsan97@gmail.com'];
+const ADMIN_EMAILS = ['hammadhassan616@gmail.com'];
 
 export function isAdmin(email: string | null | undefined) {
   if (!email) return false;
