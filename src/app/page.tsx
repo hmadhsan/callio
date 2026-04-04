@@ -28,11 +28,11 @@ const API_CATEGORIES = [
 const FAQS = [
   {
     q: 'What is Callio?',
-    a: 'Callio is an API marketplace and gateway built for AI agents. It lets your agents discover, authenticate, and call any API through a single unified interface.',
+    a: 'Callio is the API gateway for AI agents. It gives developers one interface to discover, authenticate, and call 90+ APIs.',
   },
   {
     q: 'How is this different from just calling APIs directly?',
-    a: 'With Callio, you don\'t manage individual API keys, handle different auth flows, or write custom integration code for each API. One setup, all APIs.',
+    a: 'Instead of wiring up separate APIs one by one, you use one gateway. Callio handles auth, routing, and integration overhead for you.',
   },
   {
     q: 'Who is Callio for?',
@@ -86,13 +86,13 @@ export default function Home() {
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--line)] bg-white/80">
             <Sparkles className="w-4 h-4 text-[var(--accent)]" />
-            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--accent)]">API marketplace for agents</span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--accent)]">The API gateway for AI agents</span>
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl font-display font-bold tracking-tight leading-tight max-w-3xl">
-            One gateway for every API<br className="hidden sm:block" /> your agents need.
+            One API gateway<br className="hidden sm:block" /> for AI agents.
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
-            Give your agents access to any API — search, email, data, and more. Authentication, discovery, and execution handled automatically.
+            Give agents one unified way to discover, authenticate, and call 90+ APIs so developers can ship faster with less integration overhead.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <AuthAwareCTA
@@ -174,7 +174,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Connect once</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
-                  Get a single API key. That&apos;s your access to the entire Callio marketplace — no per-API setup.
+                  Get one Callio key and connect to the entire gateway instead of setting up every API separately.
                 </p>
               </div>
             </div>
@@ -187,7 +187,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Discover APIs</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
-                  Browse or let your agent search for the right API. Callio handles auth, rate limits, and routing.
+                  Browse available APIs or let your agent find the right one. Callio handles discovery, auth, and routing.
                 </p>
               </div>
             </div>
@@ -200,38 +200,12 @@ export default function Home() {
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Execute &amp; ship</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
-                  Call any API through one unified endpoint. Your agent handles the rest — you ship faster.
+                  Call any API through one unified interface. Your team spends less time on plumbing and more time shipping.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-12">
-            <div className="bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-4 sm:p-6">
-              <div className="flex items-center justify-between gap-3 mb-4">
-                <h3 className="text-lg sm:text-xl font-semibold">Watch how Callio works</h3>
-                <a
-                  href="https://youtu.be/laXk4u5vwEI"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-[var(--accent)] hover:underline inline-flex items-center gap-1"
-                >
-                  Open on YouTube <ArrowRight className="w-3 h-3" />
-                </a>
-              </div>
-              <div className="relative w-full overflow-hidden rounded-xl border border-[var(--line)]" style={{ paddingTop: '56.25%' }}>
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/laXk4u5vwEI"
-                  title="How Callio Works"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-          </div>
-          
           {/* Product Hunt Badge */}
           <div className="mt-16 flex justify-center">
             <a href="https://www.producthunt.com/products/callio-3/launches/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer">
@@ -248,7 +222,7 @@ export default function Home() {
           <div>
             <h2 className="text-3xl sm:text-4xl font-display">Simple to integrate</h2>
             <p className="mt-4 text-[var(--muted)] text-lg">
-              One API key. One endpoint. Every API your agent needs — no boilerplate, no per-service auth headaches.
+              One key and one interface for the APIs your agents need, without the usual auth work and custom integrations.
             </p>
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex items-start gap-2">
@@ -274,13 +248,13 @@ export default function Home() {
             <div className="mt-2"><span className="text-[#60a5fa]">const</span> callio = <span className="text-[#60a5fa]">new</span> <span className="text-[#fbbf24]">CallioClient</span>(<span className="text-[#34d399]">&apos;callio_your_api_key&apos;</span>);</div>
 
             <div className="mt-4 text-[#6b7280]"># 3. Call ANY API through the unified proxy</div>
-            <div><span className="text-[#6b7280]">/* OpenAI */</span></div>
+            <div><span className="text-[#6b7280]">{'/* OpenAI */'}</span></div>
             <div><span className="text-[#60a5fa]">await</span> callio.<span className="text-[#fbbf24]">post</span>(<span className="text-[#34d399]">&apos;openai&apos;</span>, <span className="text-[#34d399]">&apos;v1/chat/completions&apos;</span>, {`{`}</div>
             <div className="ml-4">model: <span className="text-[#34d399]">&apos;gpt-4&apos;</span>,</div>
             <div className="ml-4">messages: [{`{`} role: <span className="text-[#34d399]">&apos;user&apos;</span>, content: <span className="text-[#34d399]">&apos;Hi!&apos;</span> {`}`}]</div>
             <div>{`}`});</div>
 
-            <div className="mt-4 text-[#6b7280]">/* Same key, different API — just change the slug! */</div>
+            <div className="mt-4 text-[#6b7280]">{'/* Same key, different API - just change the slug! */'}</div>
             <div><span className="text-[#60a5fa]">await</span> callio.<span className="text-[#fbbf24]">post</span>(<span className="text-[#34d399]">&apos;sendgrid&apos;</span>, <span className="text-[#34d399]">&apos;v3/mail/send&apos;</span>, {`{`}</div>
             <div className="ml-4">to: <span className="text-[#34d399]">&apos;user@co.com&apos;</span>, subject: <span className="text-[#34d399]">&apos;Hello&apos;</span></div>
             <div>{`}`});</div>
@@ -330,7 +304,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl sm:text-4xl font-display">Connect Antigravity, Cursor &amp; more</h2>
               <p className="mt-4 text-[#a1a1aa] text-lg">
-                Install our MCP server and your AI agent gets instant access to 90+ APIs. Search, browse, and call any API using natural language.
+                Install the MCP server and your AI agent gets instant access to 90+ APIs through the same unified gateway.
               </p>
               <div className="mt-6 space-y-3">
                 {[
@@ -392,7 +366,7 @@ export default function Home() {
           <div className="text-center mb-14">
             <h2 className="text-3xl sm:text-4xl font-display">APIs for everything</h2>
             <p className="mt-3 text-[var(--muted)] text-lg max-w-xl mx-auto">
-              Search, payments, AI, scraping, messaging — all accessible through one gateway.
+              Search, payments, AI, scraping, messaging, and more through one gateway for agents.
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -427,7 +401,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-semibold mb-2">AI developers</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
-                Give your agents real-world capabilities. One API key to search the web, send emails, process payments, enrich data, and more.
+                Give your agents real-world capabilities without stitching together dozens of integrations yourself.
               </p>
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-white p-8">
@@ -436,7 +410,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-semibold mb-2">API providers</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
-                List your API on Callio and get instant distribution to thousands of AI agents. No sales team needed — agents discover and use your API automatically.
+                List your API on Callio and get distribution into the growing ecosystem of AI agents and agentic products.
               </p>
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-white p-8">
@@ -445,7 +419,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-semibold mb-2">Startups</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
-                Ship in days, not months. Skip the infrastructure work — Callio handles auth, rate limiting, and routing so you can focus on your product.
+                Ship faster by skipping auth, routing, and API plumbing. Focus your team on product, not infrastructure glue.
               </p>
             </div>
           </div>
@@ -501,7 +475,7 @@ export default function Home() {
                 </svg>
                 <span className="text-white font-semibold">Callio</span>
               </div>
-              <p className="text-sm max-w-xs">The API marketplace for AI agents. One gateway to discover, authenticate, and execute any API.</p>
+              <p className="text-sm max-w-xs">The API gateway for AI agents. One unified interface to discover, authenticate, and call 90+ APIs.</p>
             </div>
             <div className="flex gap-12 text-sm">
               <div>

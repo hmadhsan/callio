@@ -4,6 +4,18 @@ Give AI agents access to **90+ APIs** through one tool — powered by the [Model
 
 Works with **Claude Code**, **Cursor**, **Antigravity**, and any MCP-compatible AI tool.
 
+## How it works
+
+1. **MCP** lets a client (Cursor, Antigravity, etc.) spawn a small server and expose **tools** to the model. This repo implements that server in Node (`stdio` transport).
+
+2. **Three tools** cover the whole marketplace:
+   - **`search_apis`** / **`get_api_info`** — Read-only; they call Callio’s public catalog (`/api/browse`, `/api/browse/:slug`). No Callio API key required for these HTTP calls.
+   - **`call_api`** — Sends authenticated requests to `CALLIO_BASE_URL/api/proxy/{slug}/…` with `Authorization: Bearer <CALLIO_API_KEY>`, same as using the [Callio HTTP proxy](https://callio.dev/docs#api-proxy) from code.
+
+3. **Provider keys** (OpenAI, SendGrid, …) are not set in MCP env. Users save them on each API’s page at [callio.dev](https://callio.dev); the proxy attaches them when forwarding.
+
+4. **Docs:** [callio.dev/mcp](https://callio.dev/mcp) (overview), [callio.dev/docs#mcp](https://callio.dev/docs#mcp) (Cursor, troubleshooting, tool table).
+
 ## Quick Start
 
 ### 1. Get your Callio API key

@@ -26,6 +26,7 @@ export default function DocsPage() {
               <li><a href="#quick-start" className="hover:text-[var(--accent)] transition">Quick Start</a></li>
               <li><a href="#authentication" className="hover:text-[var(--accent)] transition">Authentication</a></li>
               <li><a href="#api-proxy" className="hover:text-[var(--accent)] transition">API Proxy</a></li>
+              <li><a href="#mcp" className="hover:text-[var(--accent)] transition">MCP (Cursor &amp; agents)</a></li>
               <li><a href="#agent-integration" className="hover:text-[var(--accent)] transition">Agent Integration</a></li>
               <li><a href="#official-sdk" className="hover:text-[var(--accent)] transition">Official SDK</a></li>
               <li><a href="#code-examples" className="hover:text-[var(--accent)] transition">Code Examples</a></li>
@@ -128,6 +129,90 @@ export default function DocsPage() {
             </div>
           </section>
 
+          {/* MCP */}
+          <section id="mcp" className="mb-12 scroll-mt-24">
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <Terminal className="w-5 h-5" />
+              MCP (Cursor, Antigravity, Claude Code)
+            </h2>
+            <div className="bg-white rounded-xl border border-[var(--line)] p-6 space-y-6">
+              <p className="text-[var(--muted)] text-sm leading-relaxed">
+                <strong>MCP</strong> (Model Context Protocol) lets an AI client talk to external tools over a standard channel. Callio ships an MCP server so your agent can use the marketplace without a separate integration per API. Product overview:{' '}
+                <Link href="/mcp" className="text-[var(--accent)] hover:underline">callio.dev/mcp</Link>.
+              </p>
+
+              <div>
+                <h3 className="font-semibold mb-2">What runs where</h3>
+                <ul className="text-sm text-[var(--muted)] space-y-2 list-disc list-inside">
+                  <li><strong>Your machine:</strong> the Callio MCP process (usually via <code className="text-xs bg-[var(--soft)] px-1 rounded font-mono">npx … callio-mcp</code> or <code className="text-xs bg-[var(--soft)] px-1 rounded font-mono">node</code> on the server file). Cursor / Antigravity start it and list its tools.</li>
+                  <li><strong>Callio&apos;s servers:</strong> catalog (<code className="text-xs bg-[var(--soft)] px-1 rounded font-mono">/api/browse</code>) and the authenticated proxy (<code className="text-xs bg-[var(--soft)] px-1 rounded font-mono">/api/proxy/…</code>) when a tool needs to execute a request.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">The three tools (and what they map to)</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-[var(--line)] text-left">
+                        <th className="py-2 pr-4 font-semibold text-[var(--ink)]">MCP tool</th>
+                        <th className="py-2 pr-4 font-semibold text-[var(--ink)]">Purpose</th>
+                        <th className="py-2 font-semibold text-[var(--ink)]">Callio key?</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-[var(--muted)]">
+                      <tr className="border-b border-[var(--line)] align-top">
+                        <td className="py-3 pr-4 font-mono text-xs text-[var(--ink)]">search_apis</td>
+                        <td className="py-3 pr-4">Search the catalog (like Browse). Optional <code className="font-mono text-xs">query</code> / <code className="font-mono text-xs">category</code>.</td>
+                        <td className="py-3">No</td>
+                      </tr>
+                      <tr className="border-b border-[var(--line)] align-top">
+                        <td className="py-3 pr-4 font-mono text-xs text-[var(--ink)]">get_api_info</td>
+                        <td className="py-3 pr-4">Full detail for one API: endpoints, params, auth notes. Pass <code className="font-mono text-xs">slug</code>.</td>
+                        <td className="py-3">No</td>
+                      </tr>
+                      <tr className="align-top">
+                        <td className="py-3 pr-4 font-mono text-xs text-[var(--ink)]">call_api</td>
+                        <td className="py-3 pr-4">HTTP call through the proxy: <code className="font-mono text-xs">slug</code>, <code className="font-mono text-xs">path</code>, <code className="font-mono text-xs">method</code>, optional <code className="font-mono text-xs">body</code> / <code className="font-mono text-xs">query</code>.</td>
+                        <td className="py-3"><strong>Yes</strong> — set <code className="font-mono text-xs">CALLIO_API_KEY</code> in MCP env.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">Configure Cursor</h3>
+                <p className="text-[var(--muted)] text-sm mb-3">
+                  Project file: <code className="text-xs bg-[var(--soft)] px-1.5 py-0.5 rounded font-mono">.cursor/mcp.json</code>. Set <code className="text-xs font-mono">CALLIO_API_KEY</code> and restart MCP (or restart Cursor). Settings → Tools &amp; MCP should show <strong>callio</strong> connected with three tools.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">Configure Antigravity / Claude Code</h3>
+                <p className="text-[var(--muted)] text-sm mb-3">
+                  Same JSON shape: <code className="text-xs font-mono">mcpServers.callio</code> with <code className="text-xs font-mono">command</code>, <code className="text-xs font-mono">args</code>, and <code className="text-xs font-mono">env.CALLIO_API_KEY</code>. Paths differ by app (Antigravity: MCP settings; Claude Code: <code className="text-xs font-mono">~/.claude/claude_desktop_config.json</code>).
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">Optional: custom base URL</h3>
+                <p className="text-[var(--muted)] text-sm">
+                  Advanced/self-hosted: set <code className="text-xs bg-[var(--soft)] px-1.5 py-0.5 rounded font-mono">CALLIO_BASE_URL</code> (default <code className="text-xs font-mono">https://callio.dev</code>).
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">If something fails</h3>
+                <ul className="text-sm text-[var(--muted)] space-y-2 list-disc list-inside">
+                  <li><strong>401 on call_api:</strong> Key missing, revoked, or no workspace — generate a new key on the dashboard and update MCP env, then restart.</li>
+                  <li><strong>Provider errors (OpenAI, etc.):</strong> Add your provider key on that API&apos;s page on Callio (BYOK).</li>
+                  <li><strong>Tools missing:</strong> Restart MCP; confirm the process path in config matches your install (<code className="font-mono text-xs">npx</code> vs local <code className="font-mono text-xs">node</code>).</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
           {/* Agent Integration */}
           <section id="agent-integration" className="mb-12 scroll-mt-24">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -136,7 +221,10 @@ export default function DocsPage() {
             </h2>
             <div className="bg-white rounded-xl border border-[var(--line)] p-6 space-y-4">
               <p className="text-[var(--muted)] text-sm">
-                Give your AI agent access to any API in the Callio marketplace. Use the &quot;Add to Agent&quot; button on any API page, or configure manually:
+                For <strong>Cursor, Antigravity, and Claude Code</strong>, use the <Link href="#mcp" className="text-[var(--accent)] hover:underline">MCP section</Link> above — that is the supported way to give agents catalog + proxy access with one config.
+              </p>
+              <p className="text-[var(--muted)] text-sm">
+                For custom agents or apps that call HTTP directly, use your Callio API key with the proxy URL:
               </p>
               <div className="bg-[#1a1a1a] rounded-lg p-4 overflow-x-auto">
                 <pre className="text-green-400 text-xs font-mono">
@@ -148,7 +236,7 @@ export default function DocsPage() {
 }`}
                 </pre>
               </div>
-              <p className="text-[var(--muted)] text-sm">Your agent can then call any API through the proxy endpoint with the single key.</p>
+              <p className="text-[var(--muted)] text-sm">You can also use the &quot;Add to Agent&quot; flow on individual API pages where available.</p>
             </div>
           </section>
 

@@ -44,3 +44,7 @@ next-env.d.ts
 
 .vercel
 .env*.local
+
+# Local MCP config may contain secrets
+.cursor/mcp.json
+tmp-og-live.png

@@ -63,6 +63,51 @@ export default function McpPage() {
         </div>
       </section>
 
+      {/* How MCP + Callio works */}
+      <section className="py-16 border-b border-[var(--line)] bg-[var(--soft)]/40">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-2xl font-bold text-center mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+            How MCP works with Callio
+          </h2>
+          <p className="text-center text-[var(--muted)] text-sm max-w-2xl mx-auto mb-10">
+            <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">
+              Model Context Protocol (MCP)
+            </a>{' '}
+            is how tools like Cursor and Antigravity connect to external capabilities. The editor starts a small MCP server; the AI can call <strong>tools</strong> that server exposes (instead of you wiring one integration per API).
+          </p>
+
+          <div className="bg-white rounded-xl border border-[var(--line)] p-6 mb-8">
+            <h3 className="font-semibold mb-3 text-sm uppercase tracking-wide text-[var(--muted)]">End-to-end flow</h3>
+            <ol className="space-y-3 text-sm text-[var(--ink)] list-decimal list-inside">
+              <li>You add the Callio MCP server to your config and set <code className="text-xs bg-[var(--soft)] px-1.5 py-0.5 rounded font-mono">CALLIO_API_KEY</code>.</li>
+              <li>Cursor / Antigravity launches that server as a subprocess (stdio). It appears under <strong>Settings → MCP</strong> with three tools.</li>
+              <li>When you chat, the model can invoke <strong>search_apis</strong> and <strong>get_api_info</strong> — they read Callio&apos;s public catalog (same data as <Link href="/browse" className="text-[var(--accent)] hover:underline">Browse</Link>).</li>
+              <li>To actually <strong>execute</strong> an API through Callio&apos;s gateway, the model uses <strong>call_api</strong>. That sends a request to <code className="text-xs bg-[var(--soft)] px-1.5 py-0.5 rounded font-mono">https://callio.dev/api/proxy/…</code> with your key — same as the HTTP proxy in our <Link href="/docs#api-proxy" className="text-[var(--accent)] hover:underline">docs</Link>.</li>
+              <li>For upstream APIs that need your own provider key (OpenAI, SendGrid, etc.), save it once on the API&apos;s page on Callio; the proxy attaches it when <strong>call_api</strong> runs.</li>
+            </ol>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4 text-sm">
+            <div className="bg-white rounded-xl border border-[var(--line)] p-5">
+              <h3 className="font-semibold mb-2">Why only three tools?</h3>
+              <p className="text-[var(--muted)]">
+                One tool per vendor would mean hundreds of MCP tools. Callio exposes <strong>discover → describe → call</strong> so the agent can use any listed API without new MCP releases per provider.
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-[var(--line)] p-5">
+              <h3 className="font-semibold mb-2">After you edit config</h3>
+              <p className="text-[var(--muted)]">
+                Restart the MCP server (Cursor: Command Palette → MCP restart, or restart the app) so new env vars and keys load. Confirm the server shows a green status and lists all three tools.
+              </p>
+            </div>
+          </div>
+
+          <p className="text-center mt-8 text-sm text-[var(--muted)]">
+            Full reference: <Link href="/docs#mcp" className="text-[var(--accent)] hover:underline">Documentation → MCP</Link>
+          </p>
+        </div>
+      </section>
+
       {/* Compatible tools */}
       <section className="py-16 border-b border-[var(--line)]">
         <div className="max-w-4xl mx-auto px-6">

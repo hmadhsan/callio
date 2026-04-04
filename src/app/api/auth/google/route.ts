@@ -1,15 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getOAuthAppUrl } from '@/lib/oauth-app-url';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   if (!clientId) {
     return NextResponse.json({ error: 'Google OAuth not configured' }, { status: 500 });
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://callio.dev';
+  const appUrl = getOAuthAppUrl(request);
   const redirectUri = `${appUrl}/api/auth/google/callback`;
 
   const params = new URLSearchParams({

@@ -124,7 +124,7 @@ export default function OGImage() {
                 textWrap: "balance",
               }}
             >
-              The API Gateway for AI Agents
+              One API Gateway for AI Agents
             </div>
             <div
               style={{
@@ -134,7 +134,7 @@ export default function OGImage() {
                 lineHeight: 1.34,
               }}
             >
-              90+ APIs and 399 endpoints with one key. Plug into Claude Code, Cursor, and Antigravity in minutes.
+              Discover, authenticate, and call 90+ APIs through one unified interface.
             </div>
           </div>
 

@@ -287,3 +287,20 @@ model ContactMessage {
   @@index([createdAt])
 }
 
+model MarketingPost {
+  id          String    @id @default(cuid())
+  platform    String
+  status      String    @default("SCHEDULED") // DRAFT, SCHEDULED, PUBLISHED, FAILED
+  topic       String?
+  content     String
+  scheduledFor DateTime
+  publishedAt DateTime?
+  externalId  String?
+  externalUrl String?
+  error       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([platform, status, scheduledFor])
+  @@index([scheduledFor])
+}

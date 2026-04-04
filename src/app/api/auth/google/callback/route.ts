@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { createSession, getSessionCookieOptions, SESSION_COOKIE } from '@/lib/auth';
+import { getOAuthAppUrl } from '@/lib/oauth-app-url';
 import { Resend } from 'resend';
 
 export const runtime = 'nodejs';
@@ -27,7 +28,7 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const code = url.searchParams.get('code');
     const error = url.searchParams.get('error');
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://callio.dev';
+    const appUrl = getOAuthAppUrl(request);
 
     if (error) {
       return NextResponse.redirect(`${appUrl}/login?error=google_denied`);
@@ -60,7 +61,19 @@ export async function GET(request: NextRequest) {
     });
 
     if (!tokenRes.ok) {
-      console.error('Google token exchange failed:', await tokenRes.text());
+      const errText = await tokenRes.text();
+      console.error('Google token exchange failed:', errText);
+      try {
+        const j = JSON.parse(errText) as { error?: string };
+        if (j.error === 'invalid_grant') {
+          return NextResponse.redirect(`${appUrl}/login?error=invalid_grant`);
+        }
+        if (j.error === 'redirect_uri_mismatch') {
+          return NextResponse.redirect(`${appUrl}/login?error=redirect_uri_mismatch`);
+        }
+      } catch {
+        /* not JSON */
+      }
       return NextResponse.redirect(`${appUrl}/login?error=token_exchange_failed`);
     }
 
@@ -118,7 +131,7 @@ export async function GET(request: NextRequest) {
               workspace: {
                 create: {
                   name: 'Personal Workspace',
-                  slug: `personal-${googleUser.sub.substring(0, 8)}`,
+                  slug: `personal-${googleUser.sub.replace(/[^a-zA-Z0-9-]/g, '-').slice(0, 64)}`,
                 }
               }
             }
@@ -165,7 +178,7 @@ export async function GET(request: NextRequest) {
     return response;
   } catch (error: unknown) {
     console.error('Google OAuth callback error:', error instanceof Error ? error.message : error);
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://callio.dev';
+    const appUrl = getOAuthAppUrl(request);
     return NextResponse.redirect(`${appUrl}/login?error=oauth_failed`);
   }
 }

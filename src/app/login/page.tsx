@@ -20,9 +20,29 @@ function LoginForm() {
   const [unverifiedEmail, setUnverifiedEmail] = useState('');
 
   useEffect(() => {
-    const err = searchParams.get('error');
-    if (err === 'google_denied') setError('Google sign-in was cancelled.');
-    else if (err) setError('Google sign-in failed. Please try again.');
+    const raw = searchParams.get('error');
+    if (!raw) return;
+    const err = decodeURIComponent(raw).trim();
+    const messages: Record<string, string> = {
+      google_denied: 'Google sign-in was cancelled.',
+      oauth_not_configured: 'Google sign-in is not configured on this server.',
+      token_exchange_failed:
+        'Google could not complete sign-in. Usually the Authorized redirect URI in Google Cloud Console does not match this site exactly (check https, www, and path /api/auth/google/callback). Redeploy after changing NEXT_PUBLIC_APP_URL.',
+      redirect_uri_mismatch:
+        'Google rejected the redirect URL. In Google Cloud → Credentials → your OAuth client, add the exact callback URL this app uses (both https://www.callio.dev and https://callio.dev if needed), then save and wait a few minutes.',
+      invalid_grant:
+        'That sign-in session expired or was already used. Click “Continue with Google” again (avoid double-clicks).',
+      userinfo_failed: 'Could not read your Google profile. Please try again.',
+      no_email: 'Your Google account has no email on file. Use a different Google account or sign in with email.',
+      no_code: 'Sign-in was interrupted before completion. Please try again.',
+      oauth_failed:
+        'Something went wrong while finishing sign-in (database or session). Try again or use email / magic link.',
+      'invalid-token': 'That email link is invalid or expired. Request a new one from the login page.',
+    };
+    setError(
+      messages[err] ??
+        `Sign-in could not finish (error code: ${err}). Check the URL matches your Google OAuth redirect URIs and redeploy after env changes.`
+    );
   }, [searchParams]);
 
   const handlePasswordLogin = async (e: React.FormEvent) => {
