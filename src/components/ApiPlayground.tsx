@@ -166,7 +166,8 @@ export default function ApiPlayground({
     [endpoints, initialReplay]
   );
   const [selectedEndpoint, setSelectedEndpoint] = useState<EndpointInfo | null>(initialSelection.endpoint);
-  const callioApiKey = '';
+  const [callioApiKey, setCallioApiKey] = useState('');
+  const [showCallioKey, setShowCallioKey] = useState(false);
   const [parameters, setParameters] = useState<Record<string, string>>(initialSelection.parameters);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<PlaygroundResponse | null>(null);
@@ -209,8 +210,9 @@ export default function ApiPlayground({
       const qs = qp.toString();
       if (qs) proxyUrl += `?${qs}`;
     }
+    const keySnippet = callioApiKey.trim() ? callioApiKey.trim() : 'YOUR_CALLIO_API_KEY';
     let curl = `curl -X ${selectedEndpoint.method} "${proxyUrl}" \\`;
-    curl += `\n  -H "Authorization: Bearer YOUR_CALLIO_API_KEY" \\`;
+    curl += `\n  -H "Authorization: Bearer ${keySnippet}" \\`;
     curl += `\n  -H "Content-Type: application/json"`;
 
     if (['POST', 'PUT', 'PATCH'].includes(selectedEndpoint.method)) {
@@ -232,6 +234,16 @@ export default function ApiPlayground({
   };
 
   const handleTestRequest = async () => {
+    const trimmedKey = callioApiKey.trim();
+    if (!trimmedKey) {
+      setError('Add your Callio API key below (Dashboard → Keys). The playground does not use your login session for proxy auth.');
+      return;
+    }
+    if (!trimmedKey.startsWith('callio_')) {
+      setError('Callio API keys start with callio_. Paste the key from Dashboard → Keys, not your provider key.');
+      return;
+    }
+
     setLoading(true);
     setError('');
     setResponse(null);
@@ -270,22 +282,18 @@ export default function ApiPlayground({
         if (qs) proxyPath += `?${qs}`;
       }
 
-      // Call through Callio's proxy
-      // The browser will automatically send the session cookie, which our proxy now accepts!
+      // Call through Callio proxy with Bearer only (no session cookie — matches curl / MCP)
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${trimmedKey}`,
       };
-
-      // If they provided one manually, use it
-      if (callioApiKey) {
-        headers['Authorization'] = `Bearer ${callioApiKey}`;
-      }
 
       const startTime = Date.now();
       const response = await fetch(proxyPath, {
         method: selectedEndpoint.method,
         headers,
         body: requestBody,
+        credentials: 'omit',
       });
       const responseTime = Date.now() - startTime;
 
@@ -422,21 +430,38 @@ export default function ApiPlayground({
           {/* Center - Parameters & Input */}
           <div className="flex-1 border-r border-gray-200 overflow-y-auto p-6 bg-white">
             <div className="max-w-xl">
-              {/* Note about Auth */}
+              {/* Callio API key (required — same as curl / MCP) */}
               <div className="mb-8">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-xs text-blue-900 font-bold mb-2">✨ Magic Authentication</p>
-                  <p className="text-xs text-blue-800 leading-relaxed mb-2">
-                    Because you are logged in, we are automatically authenticating this request using your session! You don&apos;t need to copy-paste your Callio API key here.
-                    <br /><br />
-                    <strong>Note:</strong> API Keys and Scopes generated on your Dashboard apply <em>only</em> to external agents. The Playground gives you full access via your browser session.
-                  </p>
-                  {!allowUnauthenticated && (
-                    <p className="text-xs text-blue-800 leading-relaxed font-semibold">
-                      Note: You still need to save your Provider API Key below before testing.
-                    </p>
-                  )}
+                <label className="block text-sm font-bold text-gray-900 mb-2">
+                  Callio API key <span className="text-red-500">*</span>
+                </label>
+                <p className="text-xs text-gray-600 mb-2">
+                  Paste your <code className="bg-gray-100 px-1 rounded font-mono text-[11px]">callio_…</code> key from{' '}
+                  <a href="/keys" className="text-blue-600 hover:underline font-medium">Dashboard → Keys</a>.
+                  Requests here use the same Bearer auth as the proxy and MCP — not your browser login.
+                </p>
+                <div className="relative">
+                  <input
+                    type={showCallioKey ? 'text' : 'password'}
+                    value={callioApiKey}
+                    onChange={(e) => setCallioApiKey(e.target.value)}
+                    placeholder="callio_…"
+                    autoComplete="off"
+                    className="w-full px-3 py-2 pr-24 border border-gray-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCallioKey(!showCallioKey)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 hover:text-gray-800"
+                  >
+                    {showCallioKey ? 'Hide' : 'Show'}
+                  </button>
                 </div>
+                {!allowUnauthenticated && (
+                  <p className="text-xs text-gray-600 mt-3">
+                    For upstream APIs that need it, also save your <strong>provider</strong> key in &quot;Connect your provider key&quot; on this page.
+                  </p>
+                )}
               </div>
 
               {/* Parameters */}
