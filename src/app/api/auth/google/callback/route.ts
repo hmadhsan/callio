@@ -1,4 +1,6 @@
+import { randomBytes } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { createSession, getSessionCookieOptions, SESSION_COOKIE } from '@/lib/auth';
 import { getOAuthAppUrl } from '@/lib/oauth-app-url';
@@ -95,15 +97,21 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${appUrl}/login?error=no_email`);
     }
 
-    // Find existing user by googleId or email
-    let user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { googleId: googleUser.sub },
-          { email: googleUser.email },
-        ],
-      },
-    });
+    // Store canonical email: PostgreSQL unique is case-sensitive; Google casing can mismatch DB rows.
+    const normalizedEmail = googleUser.email.toLowerCase().trim();
+
+    const findExisting = () =>
+      prisma.user.findFirst({
+        where: {
+          OR: [
+            { googleId: googleUser.sub },
+            { email: { equals: normalizedEmail, mode: 'insensitive' } },
+          ],
+        },
+      });
+
+    // Find existing user by googleId or email (case-insensitive)
+    let user = await findExisting();
 
     if (user) {
       // Link Google ID if not already linked
@@ -117,40 +125,50 @@ export async function GET(request: NextRequest) {
         });
       }
     } else {
-      // Create new user
-      user = await prisma.user.create({
-        data: {
-          email: googleUser.email,
-          name: googleUser.name || googleUser.given_name || null,
-          firstName: googleUser.given_name || null,
-          lastName: googleUser.family_name || null,
-          googleId: googleUser.sub,
-          memberships: {
-            create: {
-              role: 'OWNER',
-              workspace: {
-                create: {
-                  name: 'Personal Workspace',
-                  slug: `personal-${googleUser.sub.replace(/[^a-zA-Z0-9-]/g, '-').slice(0, 64)}`,
-                }
-              }
-            }
-          }
-        },
-      });
+      let createdNew = false;
+      try {
+        user = await prisma.user.create({
+          data: {
+            email: normalizedEmail,
+            name: googleUser.name || googleUser.given_name || null,
+            firstName: googleUser.given_name || null,
+            lastName: googleUser.family_name || null,
+            googleId: googleUser.sub,
+            memberships: {
+              create: {
+                role: 'OWNER',
+                workspace: {
+                  create: {
+                    name: 'Personal Workspace',
+                    slug: `personal-${randomBytes(4).toString('hex')}`,
+                  },
+                },
+              },
+            },
+          },
+        });
+        createdNew = true;
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+          user = await findExisting();
+        }
+        if (!user) throw e;
+      }
 
-      // Send Onboarding Email for new Google signups
-      const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-      let fromEmail = process.env.RESEND_FROM_ONBOARDING || 'onboarding@callio.dev';
-      fromEmail = fromEmail.replace(/["']/g, '').trim();
+      // Onboarding email must never block sign-in (Resend can throw on bad config / network).
+      if (createdNew && user) {
+        try {
+          const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+          let fromEmail = process.env.RESEND_FROM_ONBOARDING || 'onboarding@callio.dev';
+          fromEmail = fromEmail.replace(/["']/g, '').trim();
 
-      if (resend) {
-        console.log(`Sending onboarding email from ${fromEmail} to ${googleUser.email}`);
-        const { error: resendError } = await resend.emails.send({
-          from: `Callio <${fromEmail}>`,
-          to: googleUser.email,
-          subject: `Welcome to Callio! 🚀`,
-          html: `
+          if (resend) {
+            console.log(`Sending onboarding email from ${fromEmail} to ${normalizedEmail}`);
+            const { error: resendError } = await resend.emails.send({
+              from: `Callio <${fromEmail}>`,
+              to: normalizedEmail,
+              subject: `Welcome to Callio! 🚀`,
+              html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
               <h2 style="color: #000;">Welcome to Callio!</h2>
               <p>Hi ${user.name || googleUser.given_name || 'there'},</p>
@@ -160,11 +178,15 @@ export async function GET(request: NextRequest) {
               </div>
               <p>If you have any questions, just reply to this email!</p>
             </div>
-          `
-        });
+          `,
+            });
 
-        if (resendError) {
-          console.error("Resend API failed to send onboarding email (Google):", resendError);
+            if (resendError) {
+              console.error('Resend API failed to send onboarding email (Google):', resendError);
+            }
+          }
+        } catch (emailErr) {
+          console.error('Onboarding email (Google) failed:', emailErr);
         }
       }
     }
@@ -177,7 +199,12 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error: unknown) {
-    console.error('Google OAuth callback error:', error instanceof Error ? error.message : error);
+    const msg = error instanceof Error ? error.message : String(error);
+    const meta =
+      error instanceof Prisma.PrismaClientKnownRequestError
+        ? ` code=${error.code} meta=${JSON.stringify(error.meta)}`
+        : '';
+    console.error('Google OAuth callback error:', msg + meta, error);
     const appUrl = getOAuthAppUrl(request);
     return NextResponse.redirect(`${appUrl}/login?error=oauth_failed`);
   }
