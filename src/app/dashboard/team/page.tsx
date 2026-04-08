@@ -35,7 +35,7 @@ export default async function TeamPage() {
     return (
         <div className="min-h-screen bg-[var(--page-bg)]">
             {/* Nav */}
-            <nav className="border-b border-[var(--line)] bg-white/80 backdrop-blur-md sticky top-0 z-50">
+            <nav className="border-b border-[var(--line)] bg-[var(--nav-bg)] backdrop-blur-md sticky top-0 z-50">
                 <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
                     <CallioLogo size={30} />
                     <div className="flex items-center gap-4">

@@ -15,7 +15,7 @@ export default async function NewApiPage() {
 
   return (
     <div className="min-h-screen bg-[var(--page-bg)]">
-      <nav className="border-b border-[var(--line)] bg-white/80 backdrop-blur-md sticky top-0 z-50">
+      <nav className="border-b border-[var(--line)] bg-[var(--nav-bg)] backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">
             <ArrowLeft className="w-4 h-4" />

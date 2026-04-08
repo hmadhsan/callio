@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, ArrowRight, Loader2 } from 'lucide-react';
 import { CallioMark } from '@/components/CallioLogo';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function ForgotPasswordPage() {
     const router = useRouter();
@@ -39,7 +40,10 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--page-bg)] flex items-center justify-center px-4">
+        <div className="relative min-h-screen bg-[var(--page-bg)] flex items-center justify-center px-4">
+            <div className="absolute top-4 right-4 z-10">
+                <ThemeToggle />
+            </div>
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
@@ -50,7 +54,7 @@ export default function ForgotPasswordPage() {
                     <p className="text-[var(--muted)]">Enter your email and we&apos;ll send you a reset link.</p>
                 </div>
 
-                <div className="bg-white rounded-2xl border border-[var(--line)] p-8 shadow-sm">
+                <div className="bg-[var(--background)] rounded-2xl border border-[var(--line)] p-8 shadow-sm">
                     {success ? (
                         <div className="text-center py-4">
                             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">

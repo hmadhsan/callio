@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Lock, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 import { CallioMark } from '@/components/CallioLogo';
+import ThemeToggle from '@/components/ThemeToggle';
 
 function ResetPasswordForm() {
     const router = useRouter();
@@ -67,7 +68,7 @@ function ResetPasswordForm() {
 
     if (!token) {
         return (
-            <div className="bg-white rounded-2xl border border-[var(--line)] p-8 shadow-sm text-center py-12">
+            <div className="bg-[var(--background)] rounded-2xl border border-[var(--line)] p-8 shadow-sm text-center py-12">
                 <p className="text-red-500 font-medium mb-4">Invalid or missing reset token.</p>
                 <Link href="/forgot-password" className="text-[var(--accent)] hover:underline">
                     Request a new link
@@ -77,7 +78,7 @@ function ResetPasswordForm() {
     }
 
     return (
-        <div className="bg-white rounded-2xl border border-[var(--line)] p-8 shadow-sm">
+        <div className="bg-[var(--background)] rounded-2xl border border-[var(--line)] p-8 shadow-sm">
             {success ? (
                 <div className="text-center py-4">
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -154,7 +155,10 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
     return (
-        <div className="min-h-screen bg-[var(--page-bg)] flex items-center justify-center px-4">
+        <div className="relative min-h-screen bg-[var(--page-bg)] flex items-center justify-center px-4">
+            <div className="absolute top-4 right-4 z-10">
+                <ThemeToggle />
+            </div>
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
@@ -166,7 +170,7 @@ export default function ResetPasswordPage() {
                 </div>
 
                 <Suspense fallback={
-                    <div className="flex justify-center p-12 bg-white rounded-2xl border border-[var(--line)]">
+                    <div className="flex justify-center p-12 bg-[var(--background)] rounded-2xl border border-[var(--line)]">
                         <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
                     </div>
                 }>

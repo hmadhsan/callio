@@ -57,7 +57,7 @@ export default function FavoriteButton({ apiId, initialIsFavorite }: FavoriteBut
             className={`p-2 rounded-full backdrop-blur-sm transition-all absolute top-3 right-3 z-10 
         ${isFavorite
                     ? 'bg-amber-100/80 text-amber-500 hover:bg-amber-200/80 hover:scale-110 shadow-sm'
-                    : 'bg-white/80 text-[var(--muted)] hover:bg-gray-100 hover:text-[var(--ink)] hover:scale-110'
+                    : 'bg-[var(--soft)] text-[var(--muted)] hover:bg-[var(--line)] hover:text-[var(--ink)] hover:scale-110'
                 }
       `}
             title={isFavorite ? "Remove from favorites" : "Add to favorites"}

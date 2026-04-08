@@ -5,6 +5,7 @@ import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { Mail, CheckCircle, RefreshCw } from 'lucide-react';
 import CallioLogo from '@/components/CallioLogo';
+import ThemeToggle from '@/components/ThemeToggle';
 
 function VerifyEmailContent() {
     const searchParams = useSearchParams();
@@ -31,12 +32,15 @@ function VerifyEmailContent() {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--page-bg)] flex flex-col items-center justify-center px-4">
+        <div className="relative min-h-screen bg-[var(--page-bg)] flex flex-col items-center justify-center px-4">
+            <div className="absolute top-4 right-4 z-10">
+                <ThemeToggle />
+            </div>
             <div className="mb-10">
                 <CallioLogo size={32} />
             </div>
 
-            <div className="w-full max-w-md bg-white border border-[var(--line)] rounded-2xl p-8 text-center shadow-sm">
+            <div className="w-full max-w-md bg-[var(--background)] border border-[var(--line)] rounded-2xl p-8 text-center shadow-sm">
                 <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
                     <Mail className="w-8 h-8 text-blue-500" />
                 </div>

@@ -36,8 +36,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('callio-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`,
+          }}
+        />
         {/* Google Analytics (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-F9B384E3Q2"></script>
         <script dangerouslySetInnerHTML={{
@@ -48,9 +53,7 @@ export default function RootLayout({
           gtag('config', 'G-F9B384E3Q2');
         ` }} />
       </head>
-      <body
-        className="antialiased bg-[var(--page-bg)] text-[var(--ink)]"
-      >
+      <body className="antialiased min-h-screen bg-[var(--page-bg)] text-[var(--ink)] transition-colors duration-200">
         {children}
         <Analytics />
       </body>
