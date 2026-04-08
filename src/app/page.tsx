@@ -64,15 +64,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--page-bg)] text-[var(--ink)]">
       {/* Nav */}
-      <header className="sticky top-0 z-50 backdrop-blur-sm bg-[var(--nav-bg)] border-b border-[var(--line)]">
+      <header className="sticky top-0 z-50 backdrop-blur-sm bg-[rgba(250,250,250,0.8)] border-b border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <CallioLogoComponent size={34} />
-          <nav className="hidden sm:flex items-center gap-6 text-sm text-[var(--muted)]">
-            <Link href="/browse" className="hover:text-[var(--ink)] transition">Browse APIs</Link>
-            <Link href="/mcp" className="hover:text-[var(--ink)] transition">MCP</Link>
-            <Link href="/pricing" className="hover:text-[var(--ink)] transition">Pricing</Link>
-            <Link href="/docs" className="hover:text-[var(--ink)] transition">Docs</Link>
-            <Link href="/how-it-works" className="hover:text-[var(--ink)] transition">How it works</Link>
+          <nav className="hidden sm:flex items-center gap-6 text-sm">
+            <Link href="/browse" className="hover:text-[var(--accent)] transition">Browse APIs</Link>
+            <Link href="/mcp" className="hover:text-[var(--accent)] transition">MCP</Link>
+            <Link href="/pricing" className="hover:text-[var(--accent)] transition">Pricing</Link>
+            <Link href="/docs" className="hover:text-[var(--accent)] transition">Docs</Link>
+            <Link href="/how-it-works" className="hover:text-[var(--accent)] transition">How it works</Link>
 
           </nav>
           <UserNav variant="landing" />
@@ -84,9 +84,9 @@ export default function Home() {
       <section id="hero" className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_55%),radial-gradient(circle_at_80%_10%,rgba(0,0,0,0.03),transparent_45%)]" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--line)] bg-[var(--soft)]">
-            <Sparkles className="w-4 h-4 text-[var(--ink)]" />
-            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--ink)]">The API gateway for AI agents</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--line)] bg-white/80">
+            <Sparkles className="w-4 h-4 text-[var(--accent)]" />
+            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--accent)]">The API gateway for AI agents</span>
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl font-display font-bold tracking-tight leading-tight max-w-3xl">
             One API gateway<br className="hidden sm:block" /> for AI agents.
@@ -100,7 +100,7 @@ export default function Home() {
             />
             <Link
               href="/browse"
-              className="px-6 py-3 rounded-full border border-[var(--line)] bg-[var(--background)] text-[var(--ink)] hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
+              className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
             >
               Browse APIs <Search className="w-4 h-4" />
             </Link>
@@ -149,7 +149,7 @@ export default function Home() {
               </div>
             </div>
             <span className="text-[var(--line)]">|</span>
-            <Link href="/mcp" className="text-[var(--muted)] hover:text-[var(--ink)] transition font-medium">View all integrations →</Link>
+            <Link href="/mcp" className="hover:text-[var(--accent)] transition font-medium">View all integrations →</Link>
           </div>
 
           {/* Animated Hero Diagram */}
@@ -373,9 +373,9 @@ export default function Home() {
             {API_CATEGORIES.map((cat) => (
               <div
                 key={cat.name}
-                className="group rounded-xl border border-[var(--line)] bg-[var(--page-bg)] hover:border-zinc-400/60 dark:hover:border-zinc-500 hover:shadow-md transition p-5 cursor-default"
+                className="group rounded-xl border border-[var(--line)] bg-[var(--page-bg)] hover:border-[var(--accent)] hover:shadow-md transition p-5 cursor-default"
               >
-                <cat.icon className="w-6 h-6 text-[var(--ink)] mb-3 group-hover:scale-110 transition-transform" />
+                <cat.icon className="w-6 h-6 text-[var(--accent)] mb-3 group-hover:scale-110 transition-transform" />
                 <div className="font-semibold text-sm">{cat.name}</div>
                 <div className="text-xs text-[var(--muted)] mt-0.5">{cat.desc}</div>
               </div>
@@ -397,7 +397,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             <div className="rounded-2xl border border-[var(--line)] bg-white p-8">
               <div className="w-12 h-12 rounded-xl bg-[var(--soft)] flex items-center justify-center mb-5">
-                <Cpu className="w-6 h-6 text-[var(--ink)]" />
+                <Cpu className="w-6 h-6 text-[var(--accent)]" />
               </div>
               <h3 className="text-lg font-semibold mb-2">AI developers</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
@@ -406,7 +406,7 @@ export default function Home() {
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-white p-8">
               <div className="w-12 h-12 rounded-xl bg-[var(--soft)] flex items-center justify-center mb-5">
-                <Globe className="w-6 h-6 text-[var(--ink)]" />
+                <Globe className="w-6 h-6 text-[var(--accent)]" />
               </div>
               <h3 className="text-lg font-semibold mb-2">API providers</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
@@ -415,7 +415,7 @@ export default function Home() {
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-white p-8">
               <div className="w-12 h-12 rounded-xl bg-[var(--soft)] flex items-center justify-center mb-5">
-                <Rocket className="w-6 h-6 text-[var(--ink)]" />
+                <Rocket className="w-6 h-6 text-[var(--accent)]" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Startups</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
@@ -450,7 +450,7 @@ export default function Home() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-zinc-100 text-zinc-950 font-semibold rounded-full hover:bg-zinc-50 transition text-sm"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--accent)] font-semibold rounded-full hover:bg-white/90 transition text-sm"
             >
               <MessageSquare className="w-4 h-4" />
               Contact Us

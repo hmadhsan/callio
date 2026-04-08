@@ -3,8 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { User, LogOut, Key, LayoutDashboard, ChevronDown, Settings, Users, Star } from 'lucide-react';
-import ThemeToggle from '@/components/ThemeToggle';
+import { User, LogOut, Key, LayoutDashboard, ChevronDown, Settings, Users, Star, DollarSign } from 'lucide-react';
 
 interface UserInfo {
   id: string;
@@ -60,8 +59,7 @@ export default function UserNav({ variant = 'default' }: UserNavProps) {
   if (!user) {
     if (variant === 'landing') {
       return (
-        <div className="flex items-center gap-3 sm:gap-4">
-          <ThemeToggle />
+        <div className="flex items-center gap-4">
           <Link href="/login" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">
             Log in
           </Link>
@@ -75,8 +73,7 @@ export default function UserNav({ variant = 'default' }: UserNavProps) {
       );
     }
     return (
-      <div className="flex items-center gap-2 sm:gap-3">
-        <ThemeToggle />
+      <div className="flex items-center gap-3">
         <Link href="/login" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">
           Sign in
         </Link>
@@ -99,12 +96,10 @@ export default function UserNav({ variant = 'default' }: UserNavProps) {
     .join('');
 
   return (
-    <div className="flex items-center gap-2">
-      <ThemeToggle />
-      <div ref={ref} className="relative">
+    <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--background)] hover:bg-[var(--soft)] px-3 py-1.5 transition"
+        className="flex items-center gap-2 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] px-3 py-1.5 transition"
       >
         <div className="w-7 h-7 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-xs font-bold">
           {initials}
@@ -116,7 +111,7 @@ export default function UserNav({ variant = 'default' }: UserNavProps) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 rounded-lg border border-[var(--line)] bg-[var(--background)] shadow-lg z-50 py-1">
+        <div className="absolute right-0 mt-2 w-56 rounded-lg border border-[var(--line)] bg-white shadow-lg z-50 py-1">
           {/* User info */}
           <div className="px-4 py-3 border-b border-[var(--line)]">
             <p className="text-sm font-semibold text-[var(--ink)] truncate">{user.name || 'User'}</p>
@@ -186,7 +181,6 @@ export default function UserNav({ variant = 'default' }: UserNavProps) {
           </div>
         </div>
       )}
-      </div>
     </div>
   );
 }

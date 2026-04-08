@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 import { CallioMark } from '@/components/CallioLogo';
-import ThemeToggle from '@/components/ThemeToggle';
 
 function SignupForm() {
   const router = useRouter();
@@ -47,10 +46,7 @@ function SignupForm() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[var(--page-bg)] flex items-center justify-center px-4">
-      <div className="absolute top-4 right-4 z-10">
-        <ThemeToggle />
-      </div>
+    <div className="min-h-screen bg-[var(--page-bg)] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
@@ -61,7 +57,7 @@ function SignupForm() {
           <p className="text-[var(--muted)]">Start building with the API marketplace</p>
         </div>
 
-        <div className="bg-[var(--background)] rounded-2xl border border-[var(--line)] p-8 shadow-sm">
+        <div className="bg-white rounded-2xl border border-[var(--line)] p-8 shadow-sm">
           {/* Google Sign Up */}
           <a
             href={inviteToken ? `/api/auth/google?invite=${inviteToken}` : `/api/auth/google`}

@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Mail, Lock, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 import { Suspense } from 'react';
 import { CallioMark } from '@/components/CallioLogo';
-import ThemeToggle from '@/components/ThemeToggle';
 
 function LoginForm() {
   const router = useRouter();
@@ -110,7 +109,7 @@ function LoginForm() {
           <p className="text-[var(--muted)]">Sign in to your account</p>
         </div>
 
-        <div className="bg-[var(--background)] rounded-2xl border border-[var(--line)] p-8 shadow-sm">
+        <div className="bg-white rounded-2xl border border-[var(--line)] p-8 shadow-sm">
           {/* Google Sign In */}
           <a
             href="/api/auth/google"
