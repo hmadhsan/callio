@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import {
   CalendarDays, Sparkles, Zap, Lock, Rocket, Gauge, Check, ArrowRight,
@@ -10,6 +11,7 @@ import AuthAwareCTA from '@/components/AuthAwareCTA';
 import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
+import { CALENDLY_DEMO_URL } from '@/lib/site';
 
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
@@ -25,7 +27,7 @@ const API_CATEGORIES = [
   { icon: Layers, name: 'Storage', desc: 'Files, S3, CDN' },
 ];
 
-const FAQS = [
+const FAQS: { q: string; a: ReactNode }[] = [
   {
     q: 'What is Callio?',
     a: 'Callio is the API gateway for AI agents. It gives developers one interface to discover, authenticate, and call 90+ APIs.',
@@ -44,18 +46,31 @@ const FAQS = [
   },
   {
     q: 'Can I add my own API to Callio?',
-    a: 'Absolutely. API providers can list their APIs on Callio and get instant distribution to thousands of AI agents. Book a demo to learn more.',
+    a: (
+      <>
+        Absolutely. API providers can list their APIs on Callio and get instant distribution to thousands of AI agents.{' '}
+        <a
+          href={CALENDLY_DEMO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[var(--accent)] underline font-medium"
+        >
+          Book a demo
+        </a>{' '}
+        to learn more.
+      </>
+    ),
   },
 ];
 
-function FAQItem({ q, a }: { q: string; a: string }) {
+function FAQItem({ q, a }: { q: string; a: ReactNode }) {
   return (
     <details className="group border-b border-[var(--line)]">
       <summary className="flex items-center justify-between py-5 cursor-pointer text-left">
         <span className="font-medium text-[var(--ink)] pr-4">{q}</span>
         <ChevronDown className="w-5 h-5 text-[var(--muted)] shrink-0 group-open:rotate-180 transition-transform" />
       </summary>
-      <p className="pb-5 text-[var(--muted)] leading-relaxed">{a}</p>
+      <div className="pb-5 text-[var(--muted)] leading-relaxed">{a}</div>
     </details>
   );
 }
@@ -448,9 +463,18 @@ export default function Home() {
             Have questions, feedback, or want to list your API? We&apos;d love to hear from you.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href={CALENDLY_DEMO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--accent)] font-semibold rounded-full hover:bg-white/90 transition text-sm"
+            >
+              <CalendarDays className="w-4 h-4" />
+              Book a demo
+            </a>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--accent)] font-semibold rounded-full hover:bg-white/90 transition text-sm"
+              className="inline-flex items-center gap-2 px-8 py-3.5 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition text-sm"
             >
               <MessageSquare className="w-4 h-4" />
               Contact Us
@@ -500,6 +524,14 @@ export default function Home() {
               <div>
                 <div className="text-white font-semibold mb-3">Company</div>
                 <div className="space-y-2">
+                  <a
+                    href={CALENDLY_DEMO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block hover:text-white transition"
+                  >
+                    Book a demo
+                  </a>
                   <a href="#contact" className="block hover:text-white transition">Contact</a>
                 </div>
               </div>

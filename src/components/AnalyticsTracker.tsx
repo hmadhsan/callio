@@ -67,10 +67,12 @@ export default function AnalyticsTracker() {
                 text.includes('Sign Up') ||
                 text.includes('Upgrade') ||
                 text.includes('View Demo') ||
+                text.includes('Book a demo') ||
                 text.includes('Browse APIs') ||
                 href === '/signup' ||
                 href === '/pricing' ||
-                href === '/browse'
+                href === '/browse' ||
+                href.includes('calendly.com')
             ) {
                 window.gtag?.('event', 'cta_click', {
                     event_category: 'conversion',

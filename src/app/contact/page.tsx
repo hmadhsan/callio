@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import { ArrowLeft, Mail, MessageSquare, Phone } from 'lucide-react';
+import { ArrowLeft, Mail, MessageSquare } from 'lucide-react';
 import UserNav from '@/components/UserNav';
 import CallioLogo from '@/components/CallioLogo';
 import ContactForm from '@/components/ContactForm';
+import BookDemoForm from '@/components/BookDemoForm';
+import { CALENDLY_DEMO_URL } from '@/lib/site';
 
 export const metadata = {
     title: 'Contact Us | Callio',
@@ -66,6 +68,17 @@ export default function ContactPage() {
                                 </div>
                             </div>
 
+                            <div className="rounded-2xl border border-[var(--line)] bg-[var(--page-bg)] p-6">
+                                <h3 className="text-[var(--ink)] font-bold mb-1">Book a demo</h3>
+                                <p className="text-[var(--muted)] text-sm mb-4">
+                                    Walk through Callio with us. Opens{' '}
+                                    <a href={CALENDLY_DEMO_URL} target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">
+                                        Calendly
+                                    </a>{' '}
+                                    in a new tab.
+                                </p>
+                                <BookDemoForm />
+                            </div>
 
                         </div>
                     </div>
