@@ -47,6 +47,29 @@ export default function RootLayout({
           gtag('js', new Date());
           gtag('config', 'G-F9B384E3Q2');
         ` }} />
+        {/* Apollo.io website tracker */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(function(){
+  function initApollo(){
+    var n=Math.random().toString(36).substring(7),
+    o=document.createElement("script");
+    o.src="https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache="+n;
+    o.async=true;
+    o.defer=true;
+    o.onload=function(){
+      if (window.trackingFunctions && window.trackingFunctions.onLoad) {
+        window.trackingFunctions.onLoad({appId:"69d956fbedd664001523ab5e"});
+      }
+    };
+    document.head.appendChild(o);
+  }
+  initApollo();
+})();
+            `.trim(),
+          }}
+        />
       </head>
       <body
         className="antialiased bg-[var(--page-bg)] text-[var(--ink)]"
