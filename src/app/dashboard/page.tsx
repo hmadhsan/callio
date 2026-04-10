@@ -43,7 +43,11 @@ export default async function DashboardPage() {
     || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
   const usageCount = await prisma.usageRecord.count({
-    where: { userId: user.id, createdAt: { gte: periodStart } },
+    where: {
+      userId: user.id,
+      createdAt: { gte: periodStart },
+      environment: 'production',
+    },
   });
 
   const requestLimit = planConfig.requestsPerMonth;
@@ -118,6 +122,7 @@ export default async function DashboardPage() {
                 / {requestLimit === Infinity ? '∞' : requestLimit.toLocaleString()}
               </span>
             </p>
+            <p className="text-xs text-[var(--muted)] mt-1">Production traffic only. Sandbox keys do not count.</p>
             <div className="w-full bg-gray-100 rounded-full h-2 mt-3 mb-2">
               <div className={`${barColor} h-2 rounded-full transition-all`} style={{ width: `${usagePercent}%` }} />
             </div>
@@ -212,6 +217,7 @@ export default async function DashboardPage() {
                   <tr>
                     <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">Key</th>
                     <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">Name</th>
+                    <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">Environment</th>
                     <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">API</th>
                     <th className="text-left px-4 py-2 font-medium text-[var(--muted)]">Created</th>
                     <th className="text-right px-4 py-2 font-medium text-[var(--muted)]">Actions</th>

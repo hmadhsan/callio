@@ -21,6 +21,17 @@ export default async function LogsPage() {
         where: { workspaceId: workspace.id },
         orderBy: { createdAt: 'desc' },
         take: 100,
+        select: {
+            id: true,
+            apiSlug: true,
+            apiKeyId: true,
+            method: true,
+            path: true,
+            status: true,
+            latencyMs: true,
+            createdAt: true,
+            environment: true,
+        },
     });
 
     const apiKeyIds = Array.from(new Set(records.map((record) => record.apiKeyId).filter((id): id is string => Boolean(id))));
@@ -74,6 +85,7 @@ export default async function LogsPage() {
                     status: record.status,
                     latencyMs: record.latencyMs,
                     createdAt: record.createdAt.toISOString(),
+                    environment: record.environment,
                     apiKey: record.apiKeyId ? apiKeyMap.get(record.apiKeyId) ?? null : null,
                 }))} />
             </div>

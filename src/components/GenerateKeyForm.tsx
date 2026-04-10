@@ -16,6 +16,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
   const [keyName, setKeyName] = useState('');
   const [scopes, setScopes] = useState<string[]>([]);
   const [monthlyLimit, setMonthlyLimit] = useState<number | ''>('');
+  const [environment, setEnvironment] = useState<'production' | 'sandbox'>('production');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [upgradePrompt, setUpgradePrompt] = useState(false);
@@ -37,7 +38,8 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
         body: JSON.stringify({
           name: keyName || 'Default API Key',
           scopes,
-          monthlyLimit: monthlyLimit === '' ? null : Number(monthlyLimit)
+          monthlyLimit: monthlyLimit === '' ? null : Number(monthlyLimit),
+          environment,
         }),
       });
 
@@ -79,6 +81,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
     setKeyName('');
     setScopes([]);
     setMonthlyLimit('');
+    setEnvironment('production');
   };
 
   // Show the generated key
@@ -197,6 +200,42 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
         </div>
 
         <div className="mb-5">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Environment</label>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <label className="flex items-start gap-2 cursor-pointer rounded-lg border border-gray-200 p-3 flex-1 has-[:checked]:border-gray-900 has-[:checked]:bg-gray-50">
+              <input
+                type="radio"
+                name="key-env"
+                checked={environment === 'production'}
+                onChange={() => setEnvironment('production')}
+                className="mt-0.5 border-gray-300 text-gray-900 focus:ring-gray-900"
+              />
+              <span>
+                <span className="block text-sm font-medium text-gray-900">Production</span>
+                <span className="block text-xs text-gray-500 mt-0.5">
+                  Counts toward your monthly plan quota. Key prefix <code className="text-[11px] bg-gray-100 px-1 rounded">callio_live_</code>
+                </span>
+              </span>
+            </label>
+            <label className="flex items-start gap-2 cursor-pointer rounded-lg border border-gray-200 p-3 flex-1 has-[:checked]:border-gray-900 has-[:checked]:bg-gray-50">
+              <input
+                type="radio"
+                name="key-env"
+                checked={environment === 'sandbox'}
+                onChange={() => setEnvironment('sandbox')}
+                className="mt-0.5 border-gray-300 text-gray-900 focus:ring-gray-900"
+              />
+              <span>
+                <span className="block text-sm font-medium text-gray-900">Sandbox</span>
+                <span className="block text-xs text-gray-500 mt-0.5">
+                  Does not use plan quota (good for testing). Key prefix <code className="text-[11px] bg-gray-100 px-1 rounded">callio_test_</code>
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div className="mb-5">
           <label className="block text-sm font-medium text-gray-700 mb-2">API Access Scope</label>
           <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -272,6 +311,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
               setKeyName('');
               setScopes([]);
               setMonthlyLimit('');
+              setEnvironment('production');
               setShowForm(false);
             }}
             className="px-5 py-2.5 bg-white text-gray-700 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition"

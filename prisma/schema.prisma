@@ -11,6 +11,11 @@ datasource db {
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
+enum ApiKeyEnvironment {
+  production
+  sandbox
+}
+
 model BetaSignup {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -149,24 +154,26 @@ model Endpoint {
 }
 
 model ApiKey {
-  id           String    @id @default(cuid())
+  id           String            @id @default(cuid())
   apiId        String?
-  api          Api?      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  api          Api?              @relation(fields: [apiId], references: [id], onDelete: Cascade)
   userId       String
-  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspaceId  String
-  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace    Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   name         String
-  keyHash      String    @unique
+  keyHash      String            @unique
   keyLast4     String
-  scopes       String[]  @default([])
+  scopes       String[]          @default([])
   monthlyLimit Int? // Optional limit for requests per month
   deletedAt    DateTime? // Soft-delete: key stays in DB so plan limit is always enforced
-  createdAt    DateTime  @default(now())
+  environment  ApiKeyEnvironment @default(production) // sandbox keys do not count toward plan quota
+  createdAt    DateTime          @default(now())
 
   @@index([apiId])
   @@index([userId])
   @@index([workspaceId])
+  @@index([workspaceId, environment])
 }
 
 model ApiCredential {
@@ -208,23 +215,25 @@ model Subscription {
 }
 
 model UsageRecord {
-  id          String    @id @default(cuid())
+  id          String            @id @default(cuid())
   userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspace   Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   apiSlug     String
   apiKeyId    String? // References the ApiKey that made the request (if applicable)
   method      String
   path        String
   status      Int
   latencyMs   Int
-  createdAt   DateTime  @default(now())
+  environment ApiKeyEnvironment @default(production)
+  createdAt   DateTime          @default(now())
 
   @@index([userId, createdAt])
   @@index([apiSlug])
   @@index([createdAt])
   @@index([workspaceId])
+  @@index([workspaceId, environment, createdAt])
 }
 
 // ── Workspaces ──────────────────────────────────────────

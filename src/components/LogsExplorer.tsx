@@ -13,6 +13,7 @@ type LogRecord = {
   status: number;
   latencyMs: number;
   createdAt: string;
+  environment: 'production' | 'sandbox';
   apiKey: {
     id: string;
     name: string;
@@ -103,6 +104,7 @@ export default function LogsExplorer({ records }: LogsExplorerProps) {
         record.apiKey?.name,
         record.apiKey?.keyLast4,
         record.status,
+        record.environment,
       ]
         .filter(Boolean)
         .join(' ')
@@ -142,7 +144,7 @@ export default function LogsExplorer({ records }: LogsExplorerProps) {
   }, [filteredRecords]);
 
   const exportCsv = () => {
-    const header = ['timestamp', 'api', 'method', 'path', 'status', 'latency_ms', 'key_name'];
+    const header = ['timestamp', 'api', 'method', 'path', 'status', 'latency_ms', 'environment', 'key_name'];
     const rows = filteredRecords.map((record) => [
       record.createdAt,
       record.apiSlug,
@@ -150,6 +152,7 @@ export default function LogsExplorer({ records }: LogsExplorerProps) {
       `/${record.path}`,
       record.status,
       record.latencyMs,
+      record.environment,
       record.apiKey ? `${record.apiKey.name} (...${record.apiKey.keyLast4})` : 'Browser session',
     ]);
 
@@ -272,6 +275,7 @@ export default function LogsExplorer({ records }: LogsExplorerProps) {
                     <th className="px-6 py-3 font-medium text-[var(--muted)]">Timestamp</th>
                     <th className="px-6 py-3 font-medium text-[var(--muted)]">API</th>
                     <th className="px-6 py-3 font-medium text-[var(--muted)]">Method & Path</th>
+                    <th className="px-6 py-3 font-medium text-[var(--muted)]">Env</th>
                     <th className="px-6 py-3 font-medium text-[var(--muted)]">Key</th>
                     <th className="px-6 py-3 font-medium text-[var(--muted)]">Status</th>
                     <th className="px-6 py-3 font-medium text-[var(--muted)] text-right">Latency</th>
@@ -295,6 +299,17 @@ export default function LogsExplorer({ records }: LogsExplorerProps) {
                             /{record.path}
                           </span>
                         </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                            record.environment === 'sandbox'
+                              ? 'bg-amber-100 text-amber-900'
+                              : 'bg-slate-100 text-slate-800'
+                          }`}
+                        >
+                          {record.environment === 'sandbox' ? 'Sandbox' : 'Prod'}
+                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-[var(--muted)]">
                         {record.apiKey ? `${record.apiKey.name} (...${record.apiKey.keyLast4})` : 'Browser session'}
@@ -344,6 +359,10 @@ export default function LogsExplorer({ records }: LogsExplorerProps) {
                         <p className="text-xs uppercase tracking-wider text-[var(--muted)] mb-1">Latency</p>
                         <p className="font-medium text-[var(--ink)]">{selectedRecord.latencyMs}ms</p>
                       </div>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-[var(--muted)] mb-1">Environment</p>
+                      <p className="text-sm text-[var(--ink)] capitalize">{selectedRecord.environment}</p>
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-wider text-[var(--muted)] mb-1">Triggered By</p>

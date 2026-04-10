@@ -67,6 +67,7 @@ export default async function KeysPage() {
                   <tr>
                     <th className="text-left px-4 py-3 font-medium text-[var(--muted)]">Key</th>
                     <th className="text-left px-4 py-3 font-medium text-[var(--muted)]">Name</th>
+                    <th className="text-left px-4 py-3 font-medium text-[var(--muted)]">Environment</th>
                     <th className="text-left px-4 py-3 font-medium text-[var(--muted)]">API</th>
                     <th className="text-left px-4 py-3 font-medium text-[var(--muted)]">Created</th>
                     <th className="text-right px-4 py-3 font-medium text-[var(--muted)]">Actions</th>

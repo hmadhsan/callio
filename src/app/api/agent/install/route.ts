@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate a per-API key
-    const { raw, keyHash, keyLast4 } = generateApiKey();
+    const { raw, keyHash, keyLast4 } = generateApiKey('production');
 
     await prisma.apiKey.create({
       data: {
@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
         userId: user.id,
         workspaceId: workspace.id,
         apiId: api.id,
+        environment: 'production',
       },
     });
 

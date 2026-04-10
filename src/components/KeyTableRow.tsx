@@ -9,8 +9,11 @@ export default function KeyTableRow({ apiKey }: { apiKey: any }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
-  // Only show masked key (we don't store plain keys for security)
-  const displayKey = `callio_••••••••••••${apiKey?.keyLast4 || '****'}`;
+  const env = apiKey?.environment as string | undefined;
+  const displayKey =
+    env === 'sandbox'
+      ? `callio_test_••••••••••••${apiKey?.keyLast4 || '****'}`
+      : `callio_••••••••••••${apiKey?.keyLast4 || '****'}`;
 
   const handleCopy = async () => {
     // Message to copy since we don't have the plain key
@@ -47,6 +50,17 @@ export default function KeyTableRow({ apiKey }: { apiKey: any }) {
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
           <span className="text-sm font-medium text-gray-900">{apiKey?.name || 'Default API Key'}</span>
+        </td>
+        <td className="px-4 py-4 whitespace-nowrap">
+          {env === 'sandbox' ? (
+            <span className="inline-flex px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-900 border border-amber-200">
+              Sandbox
+            </span>
+          ) : (
+            <span className="inline-flex px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 border border-slate-200">
+              Production
+            </span>
+          )}
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
           <span className="text-sm text-gray-600">{apiKey?.api?.name || '—'}</span>

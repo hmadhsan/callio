@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getUserFromSessionToken, getActiveWorkspace, SESSION_COOKIE, isAdmin } from '@/lib/auth';
+import type { ApiKeyEnvironment } from '@prisma/client';
 import { generateApiKey } from '@/lib/keys';
 import { PLANS } from '@/lib/stripe';
 
@@ -48,11 +49,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const { name, scopes, monthlyLimit } = await request.json();
+    const body = await request.json();
+    const { name, scopes, monthlyLimit } = body;
     const keyName = name || 'Default API Key';
     const keyScopes = Array.isArray(scopes) ? scopes : [];
+    const environment: ApiKeyEnvironment =
+      body?.environment === 'sandbox' ? 'sandbox' : 'production';
 
-    const { raw, keyHash, keyLast4 } = generateApiKey();
+    const { raw, keyHash, keyLast4 } = generateApiKey(environment);
 
     await prisma.apiKey.create({
       data: {
@@ -63,12 +67,14 @@ export async function POST(request: NextRequest) {
         keyLast4,
         scopes: keyScopes,
         monthlyLimit: typeof monthlyLimit === 'number' ? monthlyLimit : null,
+        environment,
       },
     });
 
     return NextResponse.json({
       success: true,
       key: raw,
+      environment,
       message: 'Save this key — it won\'t be shown again.',
     }, { status: 201 });
   } catch (error: unknown) {

@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
         const records = await prisma.usageRecord.findMany({
             where: {
                 workspaceId: workspace.id,
+                environment: 'production',
                 createdAt: {
                     gte: cutoff,
                 }

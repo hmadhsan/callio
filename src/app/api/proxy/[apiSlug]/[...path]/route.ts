@@ -1,3 +1,4 @@
+import type { ApiKeyEnvironment } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { hashApiKey } from '@/lib/keys';
@@ -21,7 +22,18 @@ async function authenticateRequest(request: NextRequest) {
       include: { user: true },
     });
 
-    if (apiKey && !apiKey.deletedAt) return { userId: apiKey.userId, userEmail: apiKey.user?.email ?? null, workspaceId: apiKey.workspaceId, type: 'api_key', scopes: apiKey.scopes, keyId: apiKey.id, monthlyLimit: apiKey.monthlyLimit };
+    if (apiKey && !apiKey.deletedAt) {
+      return {
+        userId: apiKey.userId,
+        userEmail: apiKey.user?.email ?? null,
+        workspaceId: apiKey.workspaceId,
+        type: 'api_key' as const,
+        scopes: apiKey.scopes,
+        keyId: apiKey.id,
+        monthlyLimit: apiKey.monthlyLimit,
+        environment: apiKey.environment,
+      };
+    }
   }
 
   // Fallback to session cookie for playground testing 
@@ -30,7 +42,16 @@ async function authenticateRequest(request: NextRequest) {
     const user = await getUserFromSessionToken(token);
     if (user) {
       const workspace = await getActiveWorkspace(user.id);
-      return { userId: user.id, userEmail: user.email, workspaceId: workspace?.id, type: 'session', scopes: [] as string[], keyId: null, monthlyLimit: null };
+      return {
+        userId: user.id,
+        userEmail: user.email,
+        workspaceId: workspace?.id,
+        type: 'session' as const,
+        scopes: [] as string[],
+        keyId: null,
+        monthlyLimit: null,
+        environment: 'production' as ApiKeyEnvironment,
+      };
     }
   }
 
@@ -153,10 +174,14 @@ async function handler(
     const periodStart = subscription?.currentPeriodStart
       || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
+    const usageEnv: ApiKeyEnvironment =
+      auth.type === 'api_key' ? auth.environment : 'production';
+
     const usageCount = await prisma.usageRecord.count({
       where: {
         workspaceId: auth.workspaceId,
         createdAt: { gte: periodStart },
+        environment: 'production',
       },
     });
 
@@ -178,7 +203,7 @@ async function handler(
       }
     }
 
-    if (usageCount >= limit) {
+    if (usageEnv === 'production' && usageCount >= limit) {
       return NextResponse.json({
         error: 'Monthly request limit reached for this account',
         plan,
@@ -199,6 +224,7 @@ async function handler(
         path: pathStr,
         status: 0,
         latencyMs: 0,
+        environment: usageEnv,
       },
     });
 
@@ -251,6 +277,7 @@ async function handler(
     responseHeaders.set('content-type', upstream.headers.get('content-type') || 'application/json');
     responseHeaders.set('x-callio-proxy', 'true');
     responseHeaders.set('x-callio-api', apiSlug);
+    responseHeaders.set('x-callio-environment', usageEnv);
     responseHeaders.set('x-callio-upstream-status', String(upstream.status));
 
     return new NextResponse(responseBody, {
