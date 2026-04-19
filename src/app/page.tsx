@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import {
-  CalendarDays, Sparkles, Zap, Lock, Rocket, Gauge, Check, ArrowRight,
+  Sparkles, Zap, Lock, Rocket, Gauge, Check, ArrowRight,
   Search, Shield, Cpu, Globe, MessageSquare, Database, BarChart3, CreditCard,
   Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow
 } from 'lucide-react';
@@ -11,7 +11,6 @@ import AuthAwareCTA from '@/components/AuthAwareCTA';
 import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
-import { CALENDLY_DEMO_URL } from '@/lib/site';
 
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
@@ -49,14 +48,9 @@ const FAQS: { q: string; a: ReactNode }[] = [
     a: (
       <>
         Absolutely. API providers can list their APIs on Callio and get instant distribution to thousands of AI agents.{' '}
-        <a
-          href={CALENDLY_DEMO_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--accent)] underline font-medium"
-        >
-          Book a demo
-        </a>{' '}
+        <Link href="/contact" className="text-[var(--accent)] underline font-medium">
+          Contact us
+        </Link>{' '}
         to learn more.
       </>
     ),
@@ -463,15 +457,6 @@ export default function Home() {
             Have questions, feedback, or want to list your API? We&apos;d love to hear from you.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href={CALENDLY_DEMO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-[var(--accent)] font-semibold rounded-full hover:bg-white/90 transition text-sm"
-            >
-              <CalendarDays className="w-4 h-4" />
-              Book a demo
-            </a>
             <Link
               href="/contact"
               className="inline-flex items-center gap-2 px-8 py-3.5 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition text-sm"
@@ -524,14 +509,6 @@ export default function Home() {
               <div>
                 <div className="text-white font-semibold mb-3">Company</div>
                 <div className="space-y-2">
-                  <a
-                    href={CALENDLY_DEMO_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block hover:text-white transition"
-                  >
-                    Book a demo
-                  </a>
                   <a href="#contact" className="block hover:text-white transition">Contact</a>
                 </div>
               </div>
