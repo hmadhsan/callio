@@ -44,6 +44,12 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 const emojiFor = (cat: string) => CATEGORY_EMOJI[cat] ?? '✨';
 
+// "free" if the pricing string contains the word free (Free, Freemium,
+// "Free + paid tiers", "Free tier available", etc.). Otherwise "paid".
+type Tier = 'free' | 'paid';
+const tierOf = (pricing: string): Tier =>
+  /\bfree\b/i.test(pricing || '') ? 'free' : 'paid';
+
 export default function BrowseGrid({
   apis,
   initialFavoritedIds = []
@@ -53,7 +59,15 @@ export default function BrowseGrid({
 }) {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeTier, setActiveTier] = useState<Tier | null>(null);
 
+  // Tier counts (free vs paid across the whole catalog)
+  const tierCounts = useMemo(() => {
+    let free = 0;
+    let paid = 0;
+    apis.forEach((a) => (tierOf(a.pricing) === 'free' ? free++ : paid++));
+    return { free, paid };
+  }, [apis]);
 
   // Count per category (computed first so we can sort pills by it)
   const categoryCounts = useMemo(() => {
@@ -72,9 +86,13 @@ export default function BrowseGrid({
     });
   }, [apis, categoryCounts]);
 
-  // Filter APIs based on search and category
+  // Filter APIs based on search, tier, and category
   const filtered = useMemo(() => {
     let result = apis;
+
+    if (activeTier) {
+      result = result.filter((a) => tierOf(a.pricing) === activeTier);
+    }
 
     if (activeCategory) {
       result = result.filter((a) => a.category === activeCategory);
@@ -92,7 +110,7 @@ export default function BrowseGrid({
     }
 
     return result;
-  }, [apis, search, activeCategory]);
+  }, [apis, search, activeCategory, activeTier]);
 
   return (
     <>
@@ -114,6 +132,40 @@ export default function BrowseGrid({
             <X className="w-4 h-4" />
           </button>
         )}
+      </div>
+
+      {/* Tier Filter (Free / Paid) */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-xs font-medium text-[var(--muted)] mr-1">Pricing:</span>
+        <button
+          onClick={() => setActiveTier(null)}
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${!activeTier
+            ? 'bg-[var(--ink)] text-white border-[var(--ink)]'
+            : 'bg-white text-[var(--muted)] border-[var(--line)] hover:border-[var(--ink)] hover:text-[var(--ink)]'
+            }`}
+        >
+          All <span className="tabular-nums opacity-70">{apis.length}</span>
+        </button>
+        <button
+          onClick={() => setActiveTier(activeTier === 'free' ? null : 'free')}
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeTier === 'free'
+            ? 'bg-emerald-600 text-white border-emerald-600'
+            : 'bg-white text-emerald-700 border-emerald-200 hover:border-emerald-500'
+            }`}
+        >
+          <span className={`w-1.5 h-1.5 rounded-full ${activeTier === 'free' ? 'bg-white' : 'bg-emerald-500'}`} />
+          Free <span className="tabular-nums opacity-70">{tierCounts.free}</span>
+        </button>
+        <button
+          onClick={() => setActiveTier(activeTier === 'paid' ? null : 'paid')}
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeTier === 'paid'
+            ? 'bg-amber-600 text-white border-amber-600'
+            : 'bg-white text-amber-700 border-amber-200 hover:border-amber-500'
+            }`}
+        >
+          <span className={`w-1.5 h-1.5 rounded-full ${activeTier === 'paid' ? 'bg-white' : 'bg-amber-500'}`} />
+          Paid <span className="tabular-nums opacity-70">{tierCounts.paid}</span>
+        </button>
       </div>
 
       {/* Category Pills */}
@@ -146,9 +198,10 @@ export default function BrowseGrid({
       </div>
 
       {/* Results count */}
-      {(search || activeCategory) && (
+      {(search || activeCategory || activeTier) && (
         <p className="text-sm text-[var(--muted)] mb-4">
           {filtered.length} {filtered.length === 1 ? 'API' : 'APIs'} found
+          {activeTier && <span> · <strong className={activeTier === 'free' ? 'text-emerald-700' : 'text-amber-700'}>{activeTier === 'free' ? 'Free' : 'Paid'}</strong></span>}
           {activeCategory && <span> in <strong className="text-[var(--ink)]">{activeCategory}</strong></span>}
           {search && <span> matching &ldquo;<strong className="text-[var(--ink)]">{search}</strong>&rdquo;</span>}
         </p>
@@ -161,6 +214,11 @@ export default function BrowseGrid({
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 relative">
         {filtered.map((api) => {
           const isFavorited = initialFavoritedIds.includes(api.id);
+          const tier = tierOf(api.pricing);
+          const pricingChipClass =
+            tier === 'free'
+              ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+              : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200';
 
           return (
             <div key={api.id} className="relative group">
@@ -191,8 +249,14 @@ export default function BrowseGrid({
                     {api.endpointsCount} {api.endpointsCount === 1 ? 'endpoint' : 'endpoints'}
                   </span>
                   {api.pricing && (
-                    <span className="bg-[var(--soft)] px-2 py-0.5 rounded text-[10px] text-[var(--muted)]">
-                      {api.pricing}
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium ${pricingChipClass}`}
+                      title={api.pricing}
+                    >
+                      <span
+                        className={`w-1 h-1 rounded-full ${tier === 'free' ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                      />
+                      {tier === 'free' ? 'Free' : 'Paid'}
                     </span>
                   )}
                 </div>
@@ -206,7 +270,7 @@ export default function BrowseGrid({
         <div className="text-center py-16">
           <p className="text-[var(--muted)] text-lg mb-2">No APIs match your search.</p>
           <button
-            onClick={() => { setSearch(''); setActiveCategory(null); }}
+            onClick={() => { setSearch(''); setActiveCategory(null); setActiveTier(null); }}
             className="text-sm text-[var(--accent)] hover:underline"
           >
             Clear filters
