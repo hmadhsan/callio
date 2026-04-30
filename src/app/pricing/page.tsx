@@ -12,12 +12,12 @@ const plans = [
     name: 'Free',
     price: 0,
     period: '',
-    description: 'Try the proxy and MCP before you pay',
+    description: 'Try the proxy and MCP before you ship',
     features: [
-      '5 API requests/month',
-      '1 API key',
-      'Access to all APIs',
-      'MCP integration',
+      '5 proxy requests / month',
+      '1 sandbox API key',
+      'Full catalog access',
+      'MCP server install',
     ],
     cta: 'Sign up free',
     href: '/signup',
@@ -28,12 +28,12 @@ const plans = [
     name: 'Starter',
     price: 5,
     period: '/month',
-    description: 'Perfect for trying out Callio',
+    description: 'For solo builders prototyping agents',
     features: [
-      '50 API requests/month',
-      '3 API keys',
-      'Access to all APIs',
-      'MCP integration',
+      '50 proxy requests / month',
+      '3 keys (sandbox + production)',
+      'Full catalog access',
+      'MCP server install',
       'Community support',
     ],
     cta: 'Get Started',
@@ -45,18 +45,18 @@ const plans = [
     name: 'Pro',
     price: 20,
     period: '/month',
-    description: 'For developers building real products',
+    description: 'For agents and AI-native apps in production',
     features: [
-      '5,000 API requests/month',
-      '10 API keys',
-      'Access to all APIs',
-      'Full usage analytics',
-      'Priority support',
-      'MCP integration',
+      '5,000 proxy requests / month',
+      '10 keys (sandbox + production)',
+      'Full catalog access',
+      'Usage analytics & request logs',
+      'MCP server install',
       'Webhook forwarding',
+      'Priority support',
     ],
     cta: 'Upgrade to Pro',
-    href: null, // uses checkout
+    href: null,
     highlighted: true,
   },
   {
@@ -64,20 +64,20 @@ const plans = [
     name: 'Team',
     price: 99,
     period: '/month',
-    description: 'For teams scaling AI agents',
+    description: 'For teams scaling AI products on Callio',
     features: [
-      '50,000 API requests/month',
+      '50,000 proxy requests / month',
       'Unlimited keys & agents',
-      'Access to all APIs',
+      'Full catalog access',
       'Advanced analytics',
-      'Dedicated support',
-      'MCP integration',
+      'MCP server install',
       'Webhook forwarding',
-      'Team members (coming soon)',
       'Custom rate limits',
+      'Dedicated support',
+      'Team members (coming soon)',
     ],
     cta: 'Upgrade to Team',
-    href: null, // uses checkout
+    href: null,
     highlighted: false,
   },
 ];
@@ -214,10 +214,10 @@ export default function PricingPage() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-            Simple, transparent pricing
+            Pricing built around your agent traffic
           </h1>
           <p className="text-[var(--muted)] text-lg max-w-xl mx-auto">
-            Upgrade when you need more. No hidden fees, no surprises.
+            Start free. Pay as your agent calls more APIs in production. No hidden fees, cancel anytime.
           </p>
         </div>
 

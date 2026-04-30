@@ -34,7 +34,7 @@ function SignupForm() {
         router.push(`/verify-email?email=${encodeURIComponent(email)}`);
       } else if (data.success) {
         const redirect = searchParams.get('redirect');
-        router.push(redirect || '/dashboard');
+        router.push(redirect || '/dashboard?onboarding=1');
       } else {
         setError(data.error || 'Signup failed');
       }
@@ -54,7 +54,7 @@ function SignupForm() {
             <span className="text-2xl font-bold tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>Callio</span>
           </Link>
           <h1 className="text-2xl font-bold mb-2">Create your account</h1>
-          <p className="text-[var(--muted)]">Start building with the API marketplace</p>
+          <p className="text-[var(--muted)]">Get a key and wire your agent in minutes</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[var(--line)] p-8 shadow-sm">

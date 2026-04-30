@@ -83,8 +83,8 @@ export default async function KeysPage() {
           ) : (
             <div className="text-center py-10 mt-4">
               <Key className="w-10 h-10 text-[var(--muted)] mx-auto mb-3 opacity-40" />
-              <p className="text-[var(--muted)]">No API keys yet</p>
-              <p className="text-sm text-[var(--muted)]">Generate your first key to start calling APIs</p>
+              <p className="text-[var(--muted)]">No keys yet</p>
+              <p className="text-sm text-[var(--muted)]">Generate a sandbox key to prototype, or a production key to put your agent in front of real traffic.</p>
             </div>
           )}
         </div>

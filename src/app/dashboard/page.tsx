@@ -5,7 +5,7 @@ import { getAllApis } from '@/lib/apiService';
 import prisma from '@/lib/prisma';
 import GenerateKeyForm from '@/components/GenerateKeyForm';
 import KeyTableRow from '@/components/KeyTableRow';
-import { Key, Layers, Plus, ArrowRight, Settings, Zap, Star } from 'lucide-react';
+import { Key, Plus, ArrowRight, Settings, Zap, Star, Terminal, Sparkles } from 'lucide-react';
 import UserNav from '@/components/UserNav';
 import CallioLogo from '@/components/CallioLogo';
 import { PLANS } from '@/lib/stripe';
@@ -13,7 +13,13 @@ import DashboardCharts from '@/components/DashboardCharts';
 
 export const dynamic = 'force-dynamic';
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ onboarding?: string; verified?: string }>;
+}) {
+  const params = await searchParams;
+  const showOnboarding = params.onboarding === '1' || params.verified === '1';
   const { user, workspace } = await getCurrentUserWithWorkspace();
 
   if (!user || !workspace) {
@@ -85,7 +91,7 @@ export default async function DashboardPage() {
             <h1 className="text-3xl font-bold mb-1" style={{ fontFamily: 'var(--font-display)' }}>
               Dashboard
             </h1>
-            <p className="text-[var(--muted)]">Manage your API keys and explore available APIs</p>
+            <p className="text-[var(--muted)]">Your keys, traffic, and tools for the agent you&apos;re shipping.</p>
           </div>
           <Link
             href="/dashboard/new"
@@ -95,6 +101,39 @@ export default async function DashboardPage() {
             List an API
           </Link>
         </div>
+
+        {/* Onboarding banner — shown to brand-new users or zero-key users */}
+        {(showOnboarding || apiKeys.length === 0) && (
+          <div className="mb-8 rounded-2xl border border-[var(--line)] bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a] text-white p-6 sm:p-7 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.5),transparent_55%)]" />
+            <div className="relative flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+              <div className="flex-1 min-w-0">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 text-white/80 text-[10px] font-semibold uppercase tracking-wider mb-3">
+                  <Sparkles className="w-3 h-3" />
+                  Get your agent calling
+                </div>
+                <h2 className="text-xl sm:text-2xl font-display font-bold mb-2">Pick your path: MCP or HTTP</h2>
+                <p className="text-sm text-white/70 max-w-xl">
+                  Generate a key below, then drop the MCP server into Cursor / Claude / Antigravity, or call the proxy directly from your backend. Most builders get their first real call inside ten minutes.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+                <Link
+                  href="/mcp"
+                  className="px-4 py-2.5 bg-white text-[#0a0a0a] rounded-full text-sm font-semibold hover:bg-gray-100 transition inline-flex items-center gap-2"
+                >
+                  <Terminal className="w-4 h-4" /> Install MCP
+                </Link>
+                <Link
+                  href="/docs#quick-start"
+                  className="px-4 py-2.5 border border-white/20 text-white rounded-full text-sm font-semibold hover:bg-white/10 transition inline-flex items-center gap-2"
+                >
+                  HTTP quick start <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-3 gap-6 mb-10">
           {/* Agent Connections Card */}
@@ -187,13 +226,13 @@ export default async function DashboardPage() {
               <div className="w-12 h-12 bg-[var(--soft)] rounded-full flex items-center justify-center mb-4">
                 <Star className="w-6 h-6 text-[var(--muted)]" />
               </div>
-              <h3 className="text-[var(--ink)] font-medium mb-1">No favorite APIs are available</h3>
-              <p className="text-[var(--muted)] text-sm mb-6">You have the option to save favorite apis</p>
+              <h3 className="text-[var(--ink)] font-medium mb-1">Build your agent&apos;s toolbelt</h3>
+              <p className="text-[var(--muted)] text-sm mb-6 max-w-sm">Star the APIs your agent reaches for most so they live one click away here.</p>
               <Link
                 href="/browse"
                 className="px-5 py-2.5 bg-[var(--accent)] text-white text-sm font-medium rounded-lg hover:bg-[var(--accent-strong)] transition shadow-sm"
               >
-                Discover APIs
+                Browse the catalog
               </Link>
             </div>
           )}
@@ -231,7 +270,7 @@ export default async function DashboardPage() {
               </table>
             </div>
           ) : (
-            <p className="text-[var(--muted)] text-sm mt-4">No API keys yet. Generate one to start using APIs.</p>
+            <p className="text-[var(--muted)] text-sm mt-4">No keys yet. Generate a sandbox key above to test, or a production key to ship.</p>
           )}
         </div>
 

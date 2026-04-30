@@ -21,10 +21,10 @@ export default function HowItWorksPage() {
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-            How Callio Works
+            How Callio works
           </h1>
           <p className="text-xl text-[var(--muted)] max-w-2xl mx-auto">
-            One API key to discover, authenticate, and call any API. Built for developers and AI agents.
+            One key. One gateway. Every external API your agent or AI-native app needs to call, MCP-native and production-ready.
           </p>
         </div>
 
@@ -35,10 +35,10 @@ export default function HowItWorksPage() {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-8 h-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-sm font-bold">1</span>
-                <h2 className="text-2xl font-bold">Browse the Marketplace</h2>
+                <h2 className="text-2xl font-bold">Pick the tools your agent needs</h2>
               </div>
               <p className="text-[var(--muted)] mb-4">
-                Explore APIs and skills organized by category. From data enrichment to web scraping, email services to AI models — find exactly what you need.
+                Browse the catalog by category: search, comms, data, payments, identity, AI tooling, and more. The right APIs for whatever your agent has to do, in one place.
               </p>
               <Link href="/browse" className="text-sm text-[var(--accent)] hover:underline flex items-center gap-1">
                 Browse APIs <ArrowRight className="w-3 h-3" />
@@ -62,10 +62,10 @@ export default function HowItWorksPage() {
             <div className="md:order-2">
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-8 h-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-sm font-bold">2</span>
-                <h2 className="text-2xl font-bold">Get One API Key</h2>
+                <h2 className="text-2xl font-bold">Get one key (sandbox or prod)</h2>
               </div>
               <p className="text-[var(--muted)] mb-4">
-                Generate a single Callio API key from your dashboard. This key authenticates you across every API in the marketplace. No more juggling dozens of keys.
+                Generate a Callio key from your dashboard. Use a sandbox key while you build, switch to a production key for real traffic. One key authenticates every API in the catalog.
               </p>
               <Link href="/keys" className="text-sm text-[var(--accent)] hover:underline flex items-center gap-1">
                 Manage keys <ArrowRight className="w-3 h-3" />
@@ -85,10 +85,10 @@ export default function HowItWorksPage() {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-8 h-8 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-sm font-bold">3</span>
-                <h2 className="text-2xl font-bold">Call Any API</h2>
+                <h2 className="text-2xl font-bold">Call from MCP or HTTP</h2>
               </div>
               <p className="text-[var(--muted)] mb-4">
-                Route your requests through the Callio proxy. We handle authentication, rate limiting, and error handling. Your agent gets a unified interface.
+                Drop our MCP server into Cursor / Claude / Antigravity, or call the HTTP proxy directly from any backend or agent runtime. We handle auth, retries, and observability.
               </p>
               <Link href="/docs" className="text-sm text-[var(--accent)] hover:underline flex items-center gap-1">
                 Read the docs <ArrowRight className="w-3 h-3" />
@@ -113,16 +113,16 @@ export default function HowItWorksPage() {
         {/* Benefits Grid */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-center mb-10" style={{ fontFamily: 'var(--font-display)' }}>
-            Why developers choose Callio
+            Why agent builders choose Callio
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: Key, title: 'One Key for All', desc: 'Stop managing dozens of API keys. One Callio key unlocks every API in the marketplace.' },
-              { icon: Shield, title: 'Secure by Default', desc: 'Provider keys are encrypted and never exposed. Callio handles auth injection at the proxy level.' },
-              { icon: Zap, title: 'Zero Config', desc: 'No SDK, no client library. Just HTTP requests through the proxy with your Callio key.' },
-              { icon: Layers, title: 'Unified Interface', desc: 'Every API follows the same proxy pattern. Consistent error handling and response format.' },
-              { icon: Terminal, title: 'Agent-Ready', desc: 'Built for AI agents. One config block gives your agent access to the entire API ecosystem.' },
-              { icon: Search, title: 'Discovery', desc: 'Browse, search, and evaluate APIs before integrating. Interactive playground to test live.' },
+              { icon: Key, title: 'One key, every tool', desc: 'No more juggling N provider signups and N auth flows. One Callio key handles the whole catalog.' },
+              { icon: Terminal, title: 'MCP-native', desc: 'Plug into Cursor, Claude, and Antigravity in minutes. Your agent gets discovery, describe, and call as three tools.' },
+              { icon: Shield, title: 'BYOK + encrypted', desc: 'Save your provider keys once. They\u2019re AES-256 encrypted at rest and injected at the proxy, never exposed in logs.' },
+              { icon: Layers, title: 'Sandbox + production', desc: 'Build against a sandbox key, ship with a production key. Same gateway, separate quotas and traffic.' },
+              { icon: Zap, title: 'Just HTTP', desc: 'No vendor SDK lock-in. Call from any language or agent runtime that can speak HTTP.' },
+              { icon: Search, title: 'Observability built in', desc: 'See every routed call, status, and provider error in the dashboard. Trust the path your agent depends on.' },
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="bg-white rounded-xl border border-[var(--line)] p-6">
                 <Icon className="w-6 h-6 mb-3 text-[var(--accent)]" />
@@ -135,14 +135,14 @@ export default function HowItWorksPage() {
 
         {/* CTA */}
         <div className="text-center bg-[var(--accent)] rounded-2xl p-12 text-white">
-          <h2 className="text-3xl font-bold mb-3" style={{ fontFamily: 'var(--font-display)' }}>Ready to get started?</h2>
-          <p className="text-white/70 mb-6 max-w-md mx-auto">Create an account, generate your API key, and start making calls in under 2 minutes.</p>
-          <div className="flex gap-4 justify-center">
+          <h2 className="text-3xl font-bold mb-3" style={{ fontFamily: 'var(--font-display)' }}>Wire your agent in minutes</h2>
+          <p className="text-white/70 mb-6 max-w-md mx-auto">Sign up, grab a key, and pick your path: install MCP into your editor, or call the HTTP proxy from your stack.</p>
+          <div className="flex gap-4 justify-center flex-wrap">
             <Link href="/signup" className="px-6 py-3 bg-white text-[var(--accent)] font-semibold rounded-lg hover:bg-gray-100 transition">
-              Create Account
+              Get a key
             </Link>
-            <Link href="/docs" className="px-6 py-3 border border-white/30 font-semibold rounded-lg hover:bg-white/10 transition">
-              Read Docs
+            <Link href="/mcp" className="px-6 py-3 border border-white/30 font-semibold rounded-lg hover:bg-white/10 transition">
+              Install MCP
             </Link>
           </div>
         </div>

@@ -3,12 +3,12 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Callio — The API Gateway for AI Agents",
-  description: "One API gateway for AI agents. Discover, authenticate, and call 90+ APIs through a unified interface.",
+  title: "Callio \u2014 The API Gateway for AI Agents",
+  description: "One key. One gateway. Every tool your agent needs. MCP-native and production-ready for teams shipping AI agents and AI-native apps.",
   metadataBase: new URL("https://callio.dev"),
   openGraph: {
-    title: "Callio — The API Gateway for AI Agents",
-    description: "One API gateway for AI agents. Discover, authenticate, and call 90+ APIs through a unified interface.",
+    title: "Callio \u2014 The API Gateway for AI Agents",
+    description: "One key. One gateway. Every tool your agent needs. MCP-native and production-ready for teams shipping AI agents and AI-native apps.",
     url: "https://callio.dev",
     siteName: "Callio",
     images: [
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Callio API Gateway",
+        alt: "Callio \u2014 The API Gateway for AI Agents",
       },
     ],
     type: "website",
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Callio — The API Gateway for AI Agents",
-    description: "One API gateway for AI agents. Discover, authenticate, and call 90+ APIs through a unified interface.",
+    title: "Callio \u2014 The API Gateway for AI Agents",
+    description: "One key. One gateway. Every tool your agent needs. MCP-native and production-ready.",
     images: ["/twitter-image"],
   },
 };

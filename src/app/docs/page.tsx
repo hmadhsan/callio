@@ -37,7 +37,24 @@ export default function DocsPage() {
         {/* Main Content */}
         <div className="flex-1 max-w-3xl">
           <h1 className="text-4xl font-bold mb-3" style={{ fontFamily: 'var(--font-display)' }}>Documentation</h1>
-          <p className="text-[var(--muted)] text-lg mb-10">Everything you need to get started with Callio.</p>
+          <p className="text-[var(--muted)] text-lg mb-6">From your first call to a production-grade agent. Pick your path:</p>
+
+          <div className="grid sm:grid-cols-2 gap-4 mb-12">
+            <a href="#mcp" className="group rounded-xl border border-[var(--line)] bg-white p-5 hover:border-[var(--accent)] hover:shadow-md transition">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--accent)] mb-1">
+                <Terminal className="w-3.5 h-3.5" /> MCP path
+              </div>
+              <div className="font-semibold text-[var(--ink)]">Agents in Cursor, Claude, Antigravity</div>
+              <div className="text-sm text-[var(--muted)] mt-1">Install the Callio MCP server and your agent gets the catalog and proxy as three tools.</div>
+            </a>
+            <a href="#api-proxy" className="group rounded-xl border border-[var(--line)] bg-white p-5 hover:border-[var(--accent)] hover:shadow-md transition">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--accent)] mb-1">
+                <Layers className="w-3.5 h-3.5" /> HTTP path
+              </div>
+              <div className="font-semibold text-[var(--ink)]">Custom backends &amp; agent runtimes</div>
+              <div className="text-sm text-[var(--muted)] mt-1">Call any API in the catalog through one HTTP proxy with your Callio key in the header.</div>
+            </a>
+          </div>
 
           {/* Quick Start */}
           <section id="quick-start" className="mb-12 scroll-mt-24">
@@ -48,21 +65,21 @@ export default function DocsPage() {
             <div className="bg-white rounded-xl border border-[var(--line)] p-6 space-y-6">
               <div>
                 <h3 className="font-semibold mb-2">1. Create an account</h3>
-                <p className="text-[var(--muted)] text-sm mb-3">Sign up at callio.dev to get access to the dashboard and API key management.</p>
+                <p className="text-[var(--muted)] text-sm mb-3">Sign up to access the dashboard, API keys (sandbox &amp; production), usage logs, and the catalog.</p>
                 <Link href="/signup" className="text-sm text-[var(--accent)] hover:underline flex items-center gap-1">
                   Create account <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">2. Generate an API key</h3>
-                <p className="text-[var(--muted)] text-sm mb-3">Go to your dashboard and generate a Callio API key. This single key works across all APIs.</p>
+                <h3 className="font-semibold mb-2">2. Generate a Callio key</h3>
+                <p className="text-[var(--muted)] text-sm mb-3">One key for the entire catalog. Use a sandbox key while you build, switch to a production key when you ship.</p>
                 <div className="bg-[#1a1a1a] rounded-lg p-4">
                   <code className="text-green-400 text-xs font-mono">callio_a1b2c3d4e5f6...</code>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">3. Make your first API call</h3>
-                <p className="text-[var(--muted)] text-sm mb-3">Use your key to call any API through the Callio proxy:</p>
+                <h3 className="font-semibold mb-2">3. Make your first call (or install MCP)</h3>
+                <p className="text-[var(--muted)] text-sm mb-3">Hit the proxy from any HTTP client, or skip straight to <Link href="#mcp" className="text-[var(--accent)] hover:underline">MCP setup</Link> if your agent runs in Cursor / Claude / Antigravity.</p>
                 <div className="bg-[#1a1a1a] rounded-lg p-4 overflow-x-auto">
                   <pre className="text-green-400 text-xs font-mono">
                     {`curl -X GET "https://callio.dev/api/proxy/jsonplaceholder/posts/1" \\

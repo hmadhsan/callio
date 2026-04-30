@@ -39,10 +39,10 @@ export default async function BrowsePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-            Discover APIs
+            Tools for your agent
           </h1>
           <p className="text-[var(--muted)] text-lg max-w-2xl">
-            {apis.length} APIs across {categoryCount} categories. One key, any API.
+            {apis.length} APIs across {categoryCount} categories, all callable through one Callio key from your agent or backend.
           </p>
         </div>
 

@@ -45,17 +45,21 @@ export async function GET(request: NextRequest) {
                         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
                             <h2 style="color: #000;">Welcome to Callio!</h2>
                             <p>Hi ${user.name || 'there'},</p>
-                            <p>Your email has been verified and your account is ready to go! You now have access to 90+ APIs through a single gateway.</p>
-                            <p><strong>Here's how to get started:</strong></p>
+                            <p>Your email is verified and your account is ready. Callio is the API gateway for AI agents — one key, one proxy, 90+ APIs for whatever your agent needs to do.</p>
+                            <p><strong>Three steps to your first agent call:</strong></p>
                             <ol>
-                                <li>Browse available APIs in the marketplace</li>
-                                <li>Generate your Callio API key</li>
-                                <li>Start calling APIs from your agent or code</li>
+                                <li><strong>Generate a key</strong> — start with a sandbox key so tests don't count toward your plan quota.</li>
+                                <li><strong>Pick your path</strong> — install the MCP server into Cursor, Claude, or Antigravity (<a href="${appUrl}/mcp" style="color: #555;">setup guide</a>), or call the HTTP proxy directly from any backend or agent runtime.</li>
+                                <li><strong>Ship</strong> — swap to a production key when you're ready for real traffic, and watch usage in the dashboard.</li>
                             </ol>
-                            <div style="margin: 30px 0;">
-                                <a href="${appUrl}/dashboard"
-                                    style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
-                                    Go to your Dashboard
+                            <div style="margin: 30px 0; display: flex; gap: 12px; flex-wrap: wrap;">
+                                <a href="${appUrl}/dashboard?onboarding=1"
+                                    style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                                    Go to Dashboard
+                                </a>
+                                <a href="${appUrl}/mcp"
+                                    style="background-color: #fff; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; border: 1px solid #ccc; display: inline-block;">
+                                    Install MCP Server
                                 </a>
                             </div>
                             <p style="color: #888; font-size: 14px;">Need help? Visit our <a href="${appUrl}/docs" style="color: #555;">docs</a> or <a href="${appUrl}/contact" style="color: #555;">contact us</a>.</p>
@@ -70,7 +74,7 @@ export async function GET(request: NextRequest) {
 
         // Log the user in
         const session = await createSession(user.id);
-        const response = NextResponse.redirect(`${appUrl}/dashboard?verified=1`);
+        const response = NextResponse.redirect(`${appUrl}/dashboard?onboarding=1`);
         response.cookies.set(SESSION_COOKIE, session.token, getSessionCookieOptions());
 
         return response;

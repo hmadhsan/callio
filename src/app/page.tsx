@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import {
-  Sparkles, Zap, Lock, Rocket, Gauge, Check, ArrowRight,
-  Search, Shield, Cpu, Globe, MessageSquare, Database, BarChart3, CreditCard,
-  Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow
+  Sparkles, Lock, Rocket, Gauge, Check, ArrowRight,
+  Search, Shield, Cpu, Globe, MessageSquare, Database, BarChart3,
+  Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow, Key,
 } from 'lucide-react';
 import UserNav from '@/components/UserNav';
 import CallioLogoComponent from '@/components/CallioLogo';
@@ -29,29 +29,41 @@ const API_CATEGORIES = [
 const FAQS: { q: string; a: ReactNode }[] = [
   {
     q: 'What is Callio?',
-    a: 'Callio is the API gateway for AI agents. It gives developers one interface to discover, authenticate, and call 90+ APIs.',
+    a: 'Callio is the API gateway for AI agents and AI-native apps. One key and one interface in front of 90+ external APIs your agent or product needs to call.',
   },
   {
-    q: 'How is this different from just calling APIs directly?',
-    a: 'Instead of wiring up separate APIs one by one, you use one gateway. Callio handles auth, routing, and integration overhead for you.',
+    q: 'How is this different from calling each API directly?',
+    a: 'Instead of writing a client, auth flow, retry policy, and key rotation for every provider, you point your agent at Callio. We handle routing, auth injection, errors, and observability so you don\u2019t maintain N integrations yourself.',
   },
   {
     q: 'Who is Callio for?',
-    a: 'AI developers building agent workflows, API providers wanting distribution to AI agents, and startups that need to ship fast without infrastructure overhead.',
+    a: 'Teams building AI agents, AI-native SaaS, and dev tools that lean on a lot of external APIs. Typical user: a founder or engineer who wants to ship features instead of maintaining a folder full of API clients.',
   },
   {
-    q: 'How much does it cost to get started?',
-    a: 'Our Starter plan is just $5/month and includes enough API requests and keys to build and test your integration.',
-  },
-  {
-    q: 'Can I add my own API to Callio?',
+    q: 'How does the MCP integration work?',
     a: (
       <>
-        Absolutely. API providers can list their APIs on Callio and get instant distribution to thousands of AI agents.{' '}
-        <Link href="/contact" className="text-[var(--accent)] underline font-medium">
-          Contact us
-        </Link>{' '}
-        to learn more.
+        Drop our MCP server into Cursor, Claude, Antigravity, or any MCP-compatible client and your agent can call every API in the catalog with the same Callio key.{' '}
+        <Link href="/mcp" className="text-[var(--accent)] underline font-medium">
+          See setup
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
+    q: 'Do I need provider keys for the upstream APIs?',
+    a: 'For most providers you bring your own key once and Callio injects it on each request (BYOK). Some public APIs work without one. Either way, your provider credentials are encrypted at rest.',
+  },
+  {
+    q: 'How much does it cost to start?',
+    a: (
+      <>
+        There\u2019s a free tier to test the proxy and MCP, and paid plans starting at $5/month for builders who are integrating in real products.{' '}
+        <Link href="/pricing" className="text-[var(--accent)] underline font-medium">
+          See pricing
+        </Link>
+        .
       </>
     ),
   },
@@ -77,12 +89,14 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
           <CallioLogoComponent size={34} />
           <nav className="hidden sm:flex items-center gap-6 text-sm">
+            <Link href="/mcp" className="font-semibold hover:text-[var(--violet)] transition flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--violet)] inline-block" />
+              MCP
+            </Link>
             <Link href="/browse" className="hover:text-[var(--accent)] transition">Browse APIs</Link>
-            <Link href="/mcp" className="hover:text-[var(--accent)] transition">MCP</Link>
             <Link href="/pricing" className="hover:text-[var(--accent)] transition">Pricing</Link>
             <Link href="/docs" className="hover:text-[var(--accent)] transition">Docs</Link>
             <Link href="/how-it-works" className="hover:text-[var(--accent)] transition">How it works</Link>
-
           </nav>
           <UserNav variant="landing" />
         </div>
@@ -91,27 +105,30 @@ export default function Home() {
 
       {/* ── Hero ── */}
       <section id="hero" className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_55%),radial-gradient(circle_at_80%_10%,rgba(0,0,0,0.03),transparent_45%)]" />
+        {/* layered radial gradients — subtle violet wash on top of the existing neutral one */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_55%),radial-gradient(circle_at_85%_15%,rgba(124,58,237,0.10),transparent_50%),radial-gradient(circle_at_50%_90%,rgba(124,58,237,0.05),transparent_60%)]" />
+        {/* faint dotted grid for the "infra" feel */}
+        <div className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.06)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.9),transparent_85%)]" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--line)] bg-white/80">
-            <Sparkles className="w-4 h-4 text-[var(--accent)]" />
-            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--accent)]">The API gateway for AI agents</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--violet)]/20 bg-[var(--violet-soft)]">
+            <Sparkles className="w-4 h-4 text-[var(--violet)]" />
+            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--violet-strong)]">Built for AI agents &amp; AI-native apps</span>
           </div>
-          <h1 className="mt-6 text-4xl sm:text-6xl font-display font-bold tracking-tight leading-tight max-w-3xl">
-            One API gateway<br className="hidden sm:block" /> for AI agents.
+          <h1 className="mt-6 text-4xl sm:text-6xl font-display font-bold tracking-tight leading-[1.05] max-w-3xl">
+            Every tool your agent needs.<br className="hidden sm:block" /> <span className="italic text-[var(--ink)]">One key. One gateway.</span>
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
-            Give agents one unified way to discover, authenticate, and call 90+ APIs so developers can ship faster with less integration overhead.
+            Callio is the API gateway for teams shipping AI agents and AI-native products. One key, MCP-native install, and 90+ APIs your agent can call in production from day one.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <AuthAwareCTA
               className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition"
             />
             <Link
-              href="/browse"
+              href="/mcp"
               className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
             >
-              Browse APIs <Search className="w-4 h-4" />
+              Install MCP server <Terminal className="w-4 h-4" />
             </Link>
           </div>
 
@@ -121,28 +138,28 @@ export default function Home() {
           <div id="stats" className="mt-12 flex flex-wrap gap-8 text-sm">
             <div>
               <div className="text-2xl font-semibold text-[var(--ink)]">90+</div>
-              <div className="text-[var(--muted)]">APIs available</div>
+              <div className="text-[var(--muted)]">APIs in the catalog</div>
             </div>
             <div className="w-px bg-[var(--line)]" />
             <div>
               <div className="text-2xl font-semibold text-[var(--ink)]">1</div>
-              <div className="text-[var(--muted)]">API key needed</div>
+              <div className="text-[var(--muted)]">key for everything</div>
             </div>
             <div className="w-px bg-[var(--line)]" />
             <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">&lt;2 min</div>
-              <div className="text-[var(--muted)]">Setup time</div>
+              <div className="text-2xl font-semibold text-[var(--violet-strong)]">MCP-native</div>
+              <div className="text-[var(--muted)]">in Cursor, Claude, Antigravity</div>
             </div>
             <div className="w-px bg-[var(--line)] hidden sm:block" />
             <div className="hidden sm:block">
-              <div className="text-2xl font-semibold text-[var(--ink)]">99.9%</div>
-              <div className="text-[var(--muted)]">Uptime SLA</div>
+              <div className="text-2xl font-semibold text-[var(--ink)]">Sandbox + prod</div>
+              <div className="text-[var(--muted)]">environments built in</div>
             </div>
           </div>
 
           {/* Works with bar */}
           <div className="mt-10 flex flex-wrap items-center gap-4 text-sm text-[var(--muted)]">
-            <span className="font-medium">Works with</span>
+            <span className="font-medium">Plugs into</span>
             <div className="flex items-center gap-5">
               <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
                 <ClaudeLogo className="w-5 h-5" />
@@ -158,7 +175,7 @@ export default function Home() {
               </div>
             </div>
             <span className="text-[var(--line)]">|</span>
-            <Link href="/mcp" className="hover:text-[var(--accent)] transition font-medium">View all integrations →</Link>
+            <Link href="/mcp" className="hover:text-[var(--accent)] transition font-medium">All MCP setups →</Link>
           </div>
 
           {/* Animated Hero Diagram */}
@@ -170,46 +187,46 @@ export default function Home() {
       <section id="how-it-works" className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl font-display">How it works</h2>
-            <p className="mt-3 text-[var(--muted)] text-lg max-w-xl mx-auto">Three steps. That&apos;s it.</p>
+            <h2 className="text-3xl sm:text-4xl font-display">From signup to a calling agent in minutes</h2>
+            <p className="mt-3 text-[var(--muted)] text-lg max-w-xl mx-auto">Three steps. No SDK sprawl, no per-API auth flows.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {/* Step 1 */}
             <div className="relative group">
-              <div className="absolute -top-3 -left-2 text-6xl font-display text-[var(--line)] select-none">1</div>
-              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full">
+              <div className="absolute -top-3 -left-2 text-6xl font-display italic text-[var(--violet)]/15 select-none group-hover:text-[var(--violet)]/30 transition">1</div>
+              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full hover:border-[var(--violet)]/30 transition">
                 <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center mb-4">
-                  <Terminal className="w-5 h-5" />
+                  <Key className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Connect once</h3>
+                <h3 className="text-lg font-semibold mb-2">Get one key</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
-                  Get one Callio key and connect to the entire gateway instead of setting up every API separately.
+                  Sign up, grab a Callio key (sandbox or production). One key replaces dozens of provider signups for your agent.
                 </p>
               </div>
             </div>
             {/* Step 2 */}
             <div className="relative group">
-              <div className="absolute -top-3 -left-2 text-6xl font-display text-[var(--line)] select-none">2</div>
-              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full">
-                <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center mb-4">
-                  <Search className="w-5 h-5" />
+              <div className="absolute -top-3 -left-2 text-6xl font-display italic text-[var(--violet)]/15 select-none group-hover:text-[var(--violet)]/30 transition">2</div>
+              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full hover:border-[var(--violet)]/30 transition">
+                <div className="w-10 h-10 rounded-lg bg-[var(--violet)] text-white flex items-center justify-center mb-4">
+                  <Terminal className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Discover APIs</h3>
+                <h3 className="text-lg font-semibold mb-2">Install in your agent</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
-                  Browse available APIs or let your agent find the right one. Callio handles discovery, auth, and routing.
+                  Drop the MCP server into Cursor, Claude, or Antigravity. Or call our HTTP proxy from any backend or agent runtime.
                 </p>
               </div>
             </div>
             {/* Step 3 */}
             <div className="relative group">
-              <div className="absolute -top-3 -left-2 text-6xl font-display text-[var(--line)] select-none">3</div>
-              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full">
+              <div className="absolute -top-3 -left-2 text-6xl font-display italic text-[var(--violet)]/15 select-none group-hover:text-[var(--violet)]/30 transition">3</div>
+              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full hover:border-[var(--violet)]/30 transition">
                 <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center mb-4">
                   <Workflow className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Execute &amp; ship</h3>
+                <h3 className="text-lg font-semibold mb-2">Ship to production</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
-                  Call any API through one unified interface. Your team spends less time on plumbing and more time shipping.
+                  Watch traffic, retries, and errors in the dashboard. Move from sandbox to production keys when you&apos;re ready.
                 </p>
               </div>
             </div>
@@ -229,9 +246,9 @@ export default function Home() {
       <section id="code-snippet" className="py-20 sm:py-24 border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-10 items-center">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-display">Simple to integrate</h2>
+            <h2 className="text-3xl sm:text-4xl font-display">Drop into your agent stack</h2>
             <p className="mt-4 text-[var(--muted)] text-lg">
-              One key and one interface for the APIs your agents need, without the usual auth work and custom integrations.
+              Use it from Node, Python, Go, or directly from your agent runtime. One HTTP path, one key, every upstream you care about.
             </p>
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex items-start gap-2">
@@ -373,9 +390,9 @@ export default function Home() {
       <section id="apis" className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl font-display">APIs for everything</h2>
+            <h2 className="text-3xl sm:text-4xl font-display">A catalog tuned for agents</h2>
             <p className="mt-3 text-[var(--muted)] text-lg max-w-xl mx-auto">
-              Search, payments, AI, scraping, messaging, and more through one gateway for agents.
+              The categories agents actually need: search, comms, data, payments, identity, AI tooling, and more, all behind one key.
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -400,36 +417,42 @@ export default function Home() {
       <section className="py-20 sm:py-24 border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl font-display">Built for</h2>
-            <p className="mt-3 text-[var(--muted)] text-lg">Whether you build agents or provide APIs — Callio is for you.</p>
+            <h2 className="text-3xl sm:text-4xl font-display">Built for teams shipping AI</h2>
+            <p className="mt-3 text-[var(--muted)] text-lg">Wherever your agent runs, Callio is the one external API surface in front of it.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="rounded-2xl border border-[var(--line)] bg-white p-8">
               <div className="w-12 h-12 rounded-xl bg-[var(--soft)] flex items-center justify-center mb-5">
                 <Cpu className="w-6 h-6 text-[var(--accent)]" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">AI developers</h3>
+              <h3 className="text-lg font-semibold mb-2">Agent builders</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
-                Give your agents real-world capabilities without stitching together dozens of integrations yourself.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-[var(--line)] bg-white p-8">
-              <div className="w-12 h-12 rounded-xl bg-[var(--soft)] flex items-center justify-center mb-5">
-                <Globe className="w-6 h-6 text-[var(--accent)]" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">API providers</h3>
-              <p className="text-sm text-[var(--muted)] leading-relaxed">
-                List your API on Callio and get distribution into the growing ecosystem of AI agents and agentic products.
+                Give your agent search, comms, data, payments, and more without writing a new client and auth flow for every provider.
               </p>
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-white p-8">
               <div className="w-12 h-12 rounded-xl bg-[var(--soft)] flex items-center justify-center mb-5">
                 <Rocket className="w-6 h-6 text-[var(--accent)]" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Startups</h3>
+              <h3 className="text-lg font-semibold mb-2">AI-native startups</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">
-                Ship faster by skipping auth, routing, and API plumbing. Focus your team on product, not infrastructure glue.
+                Ship faster with one gateway in front of every external API your product depends on. Skip the integration backlog.
               </p>
+            </div>
+            <div className="rounded-2xl border border-[var(--violet)]/30 bg-white p-8 relative overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-[var(--violet)]/10 rounded-full blur-2xl" />
+              <div className="relative">
+                <div className="w-12 h-12 rounded-xl bg-[var(--violet-soft)] flex items-center justify-center mb-5">
+                  <Workflow className="w-6 h-6 text-[var(--violet-strong)]" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                  Devs in Cursor &amp; Claude
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--violet-strong)] bg-[var(--violet-soft)] px-2 py-0.5 rounded-full">MCP</span>
+                </h3>
+                <p className="text-sm text-[var(--muted)] leading-relaxed">
+                  Install our MCP server once and your editor or assistant can hit 90+ APIs through Callio with the same key.
+                </p>
+              </div>
             </div>
           </div>
         </div>

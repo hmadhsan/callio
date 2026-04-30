@@ -39,10 +39,10 @@ export default function McpPage() {
             Model Context Protocol
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-            Connect your AI agent to 90+ APIs
+            One MCP server. Every API your agent needs.
           </h1>
           <p className="text-lg text-[var(--muted)] max-w-2xl mx-auto mb-8">
-            Install the Callio MCP server and give Claude Code, Cursor, Antigravity, or any MCP-compatible agent instant access to the entire API ecosystem.
+            Drop the Callio MCP server into Cursor, Claude, Antigravity, or any MCP-compatible client and your agent can call 90+ APIs through one Callio key.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

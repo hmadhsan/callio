@@ -16,7 +16,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
   const [keyName, setKeyName] = useState('');
   const [scopes, setScopes] = useState<string[]>([]);
   const [monthlyLimit, setMonthlyLimit] = useState<number | ''>('');
-  const [environment, setEnvironment] = useState<'production' | 'sandbox'>('production');
+  const [environment, setEnvironment] = useState<'production' | 'sandbox'>('sandbox');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [upgradePrompt, setUpgradePrompt] = useState(false);
@@ -90,12 +90,12 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
       <div className="mb-6 rounded-xl border border-green-200 bg-green-50 p-6">
         <div className="flex items-center gap-2 mb-1">
           <Check className="w-5 h-5 text-green-600" />
-          <h3 className="text-base font-semibold text-green-800">API Key Generated!</h3>
+          <h3 className="text-base font-semibold text-green-800">Key generated</h3>
         </div>
         <p className="text-sm text-green-700 mb-4">
-          Copy this key now — you won&apos;t be able to see it again.
+          Copy it now — you won&apos;t be able to see it again. Then pick your path below.
         </p>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-5">
           <code className="flex-1 text-xs sm:text-sm bg-white border border-green-200 rounded-lg px-3.5 py-2.5 break-all font-mono select-all">
             {generatedKey}
           </code>
@@ -117,6 +117,23 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
             )}
           </button>
         </div>
+
+        {/* Next-step nudges */}
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <Link
+            href="/mcp"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition"
+          >
+            Install MCP server
+          </Link>
+          <Link
+            href="/docs#quick-start"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition"
+          >
+            HTTP quick start
+          </Link>
+        </div>
+
         <button
           onClick={handleDismissKey}
           className="text-sm text-green-700 hover:text-green-900 font-medium transition"
@@ -193,7 +210,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
             type="text"
             value={keyName}
             onChange={(e) => setKeyName(e.target.value)}
-            placeholder="Name your key (e.g., Production, Development)"
+            placeholder="Name your key (e.g., My Agent, Cursor Dev, Production)"
             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
             autoFocus
           />
@@ -213,7 +230,7 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
               <span>
                 <span className="block text-sm font-medium text-gray-900">Production</span>
                 <span className="block text-xs text-gray-500 mt-0.5">
-                  Counts toward your monthly plan quota. Key prefix <code className="text-[11px] bg-gray-100 px-1 rounded">callio_live_</code>
+                  Counts toward your plan quota. Use when you are ready to ship real agent traffic. Prefix: <code className="text-[11px] bg-gray-100 px-1 rounded">callio_live_</code>
                 </span>
               </span>
             </label>
@@ -226,9 +243,9 @@ export default function GenerateKeyForm({ apis = [] }: { apis?: ApiMinimal[] }) 
                 className="mt-0.5 border-gray-300 text-gray-900 focus:ring-gray-900"
               />
               <span>
-                <span className="block text-sm font-medium text-gray-900">Sandbox</span>
+                <span className="block text-sm font-medium text-gray-900">Sandbox <span className="text-[10px] font-semibold uppercase tracking-wider bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full ml-1">Recommended to start</span></span>
                 <span className="block text-xs text-gray-500 mt-0.5">
-                  Does not use plan quota (good for testing). Key prefix <code className="text-[11px] bg-gray-100 px-1 rounded">callio_test_</code>
+                  Does not count toward plan quota. Prototype and test your agent freely. Prefix: <code className="text-[11px] bg-gray-100 px-1 rounded">callio_test_</code>
                 </span>
               </span>
             </label>
