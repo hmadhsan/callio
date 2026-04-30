@@ -12,10 +12,10 @@ const plans = [
     name: 'Free',
     price: 0,
     period: '',
-    description: 'Try the proxy and MCP before you ship',
+    description: 'Prototype your agent, no card needed',
     features: [
-      '5 proxy requests / month',
-      '1 sandbox API key',
+      '500 proxy requests / month',
+      '2 sandbox keys',
       'Full catalog access',
       'MCP server install',
     ],
@@ -25,34 +25,36 @@ const plans = [
   },
   {
     id: 'starter',
-    name: 'Starter',
-    price: 5,
+    name: 'Builder',
+    price: 19,
     period: '/month',
-    description: 'For solo builders prototyping agents',
+    description: 'Ship your first AI product without watching every call',
     features: [
-      '50 proxy requests / month',
-      '3 keys (sandbox + production)',
+      '10,000 proxy requests / month',
+      '5 keys (sandbox + production)',
       'Full catalog access',
       'MCP server install',
+      'Usage analytics & request logs',
       'Community support',
     ],
-    cta: 'Get Started',
+    cta: 'Get started',
     href: null,
     highlighted: false,
   },
   {
     id: 'pro',
     name: 'Pro',
-    price: 20,
+    price: 49,
     period: '/month',
-    description: 'For agents and AI-native apps in production',
+    description: 'For agents in production that real users depend on',
     features: [
-      '5,000 proxy requests / month',
-      '10 keys (sandbox + production)',
+      '50,000 proxy requests / month',
+      '20 keys (sandbox + production)',
       'Full catalog access',
       'Usage analytics & request logs',
       'MCP server install',
       'Webhook forwarding',
+      '+$2 per 1,000 requests over limit',
       'Priority support',
     ],
     cta: 'Upgrade to Pro',
@@ -61,22 +63,23 @@ const plans = [
   },
   {
     id: 'team',
-    name: 'Team',
-    price: 99,
+    name: 'Scale',
+    price: 149,
     period: '/month',
-    description: 'For teams scaling AI products on Callio',
+    description: 'High-volume or multi-agent systems',
     features: [
-      '50,000 proxy requests / month',
+      '250,000 proxy requests / month',
       'Unlimited keys & agents',
       'Full catalog access',
       'Advanced analytics',
       'MCP server install',
       'Webhook forwarding',
+      '+$1.50 per 1,000 requests over limit',
       'Custom rate limits',
-      'Dedicated support',
       'Team members (coming soon)',
+      'Dedicated support',
     ],
-    cta: 'Upgrade to Team',
+    cta: 'Upgrade to Scale',
     href: null,
     highlighted: false,
   },
@@ -235,39 +238,39 @@ export default function PricingPage() {
           </h2>
           <div className="space-y-6">
             <div>
-              <h3 className="font-semibold mb-1">What counts as an API request?</h3>
+              <h3 className="font-semibold mb-1">What counts as a proxy request?</h3>
               <p className="text-sm text-[var(--muted)]">
-                Every call through the Callio proxy counts as one request, regardless of the upstream API or method.
+                Every HTTP call routed through the Callio gateway counts as one request, regardless of the upstream API, method, or payload size. Sandbox key traffic never counts toward your quota.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-1">What is included on the Free plan?</h3>
+              <h3 className="font-semibold mb-1">What does the Free plan include?</h3>
               <p className="text-sm text-[var(--muted)]">
-                New accounts get <strong>5 proxy requests per month</strong> and <strong>one</strong> API key so you can test integrations and MCP. Upgrade to Starter or higher for more requests and keys.
+                <strong>500 proxy requests per month</strong> and <strong>2 sandbox keys</strong> so you can build, test, and install MCP into your agent before committing to a paid tier. No card required.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">What happens if I go over my limit?</h3>
+              <p className="text-sm text-[var(--muted)]">
+                On Free and Builder, requests return a 429 until the next billing period or you upgrade. On Pro and Scale there is an overage rate ($2 and $1.50 per 1,000 requests respectively) so your agent keeps running — no hard cutoff.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Do I need my own provider keys?</h3>
+              <p className="text-sm text-[var(--muted)]">
+                For most upstream APIs, yes — you bring your own key (e.g., your OpenAI key, your SendGrid key) and Callio injects it at the proxy. It is stored AES-256 encrypted. Some public APIs work without any provider key.
               </p>
             </div>
             <div>
               <h3 className="font-semibold mb-1">Can I change plans anytime?</h3>
               <p className="text-sm text-[var(--muted)]">
-                Yes. Upgrade instantly, downgrade at the end of your billing period. No lock-in contracts.
+                Yes. Upgrade instantly and the new limits take effect immediately. Downgrade takes effect at the end of your current billing period. No lock-in contracts.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-1">What happens if I hit my limit?</h3>
+              <h3 className="font-semibold mb-1">Is there an enterprise or custom plan?</h3>
               <p className="text-sm text-[var(--muted)]">
-                API requests will return a 429 status with a link to upgrade. Your existing integrations keep working once you upgrade.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-1">Do I need my own API keys for providers?</h3>
-              <p className="text-sm text-[var(--muted)]">
-                For most APIs, yes — you bring your own provider key (e.g., OpenAI key, SendGrid key). Callio manages the routing and auth injection. Some public APIs work without any provider key.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-1">Is there an enterprise plan?</h3>
-              <p className="text-sm text-[var(--muted)]">
-                Yes — <Link href="/contact" className="text-[var(--accent)] hover:underline">contact us</Link> for custom limits, SLAs, and on-premise options.
+                Yes — <Link href="/contact" className="text-[var(--accent)] hover:underline">contact us</Link> for volume pricing, custom rate limits, SLAs, and on-premise options.
               </p>
             </div>
           </div>

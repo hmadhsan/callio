@@ -59,7 +59,7 @@ const FAQS: { q: string; a: ReactNode }[] = [
     q: 'How much does it cost to start?',
     a: (
       <>
-        There\u2019s a free tier to test the proxy and MCP, and paid plans starting at $5/month for builders who are integrating in real products.{' '}
+        There\u2019s a free tier with 500 proxy requests and 2 sandbox keys so you can actually build and test before paying. Paid plans start at $19/month (Builder) for real product traffic.{' '}
         <Link href="/pricing" className="text-[var(--accent)] underline font-medium">
           See pricing
         </Link>
