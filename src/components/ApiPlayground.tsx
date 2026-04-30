@@ -69,6 +69,21 @@ function normalizePath(path: string) {
   return `/${path.replace(/^\/+/, '')}`.replace(/\/+/g, '/');
 }
 
+function applyPathParams(pathTemplate: string, params: Record<string, string>) {
+  let resolved = pathTemplate;
+  for (const [key, value] of Object.entries(params)) {
+    if (!value) continue;
+    const encoded = encodeURIComponent(value);
+    resolved = resolved.replace(new RegExp(`\\{${key}\\}`, 'g'), encoded);
+    resolved = resolved.replace(new RegExp(`:${key}(?=/|$)`, 'g'), encoded);
+  }
+  return resolved;
+}
+
+function pathTemplateHasParam(pathTemplate: string, key: string) {
+  return pathTemplate.includes(`{${key}}`) || new RegExp(`:${key}(?=/|$)`).test(pathTemplate);
+}
+
 function matchEndpointFromReplay(endpoints: EndpointInfo[], replay?: { method?: string; path?: string }) {
   if (!replay?.path) return { endpoint: endpoints[0] || null, parameters: {} as Record<string, string> };
 
@@ -92,6 +107,11 @@ function matchEndpointFromReplay(endpoints: EndpointInfo[], replay?: { method?: 
 
       if (/^\{.+\}$/.test(templatePart)) {
         extracted[templatePart.slice(1, -1)] = decodeURIComponent(replayPart);
+        continue;
+      }
+
+      if (/^:.+/.test(templatePart)) {
+        extracted[templatePart.slice(1)] = decodeURIComponent(replayPart);
         continue;
       }
 
@@ -192,10 +212,7 @@ export default function ApiPlayground({
 
   const buildCurlCommand = () => {
     // Build the Callio proxy URL
-    let path = selectedEndpoint.path;
-    Object.entries(parameters).forEach(([key, value]) => {
-      path = path.replace(`{${key}}`, value);
-    });
+    const path = applyPathParams(selectedEndpoint.path, parameters);
 
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://callio.dev';
     let proxyUrl = `${origin}/api/proxy/${apiSlug}${path}`;
@@ -203,7 +220,7 @@ export default function ApiPlayground({
     if (['GET', 'DELETE', 'HEAD'].includes(selectedEndpoint.method)) {
       const qp = new URLSearchParams();
       for (const [key, value] of Object.entries(parameters)) {
-        if (value && !selectedEndpoint.path.includes(`{${key}}`)) {
+        if (value && !pathTemplateHasParam(selectedEndpoint.path, key)) {
           qp.set(key, value);
         }
       }
@@ -251,10 +268,7 @@ export default function ApiPlayground({
 
     try {
       // Build the path with parameters
-      let path = selectedEndpoint.path;
-      Object.entries(parameters).forEach(([key, value]) => {
-        path = path.replace(`{${key}}`, value);
-      });
+      const path = applyPathParams(selectedEndpoint.path, parameters);
 
       // Build the request body using smart parameter transforms
       let requestBody: string | undefined;
@@ -274,7 +288,7 @@ export default function ApiPlayground({
       if (['GET', 'DELETE', 'HEAD'].includes(selectedEndpoint.method)) {
         const queryParams = new URLSearchParams();
         for (const [key, value] of Object.entries(parameters)) {
-          if (value && !selectedEndpoint.path.includes(`{${key}}`)) {
+          if (value && !pathTemplateHasParam(selectedEndpoint.path, key)) {
             queryParams.set(key, value);
           }
         }

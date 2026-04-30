@@ -78,6 +78,20 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
     };
   }, [searchParams]);
 
+  const playgroundEndpoints = useMemo<Endpoint[]>(() => {
+    if (endpoints.length > 0) return endpoints;
+    if (!api.baseUrl) return [];
+    return [
+      {
+        id: `${api.slug}-default-get`,
+        method: 'GET',
+        path: '/',
+        description: 'Quick connectivity test to the API base URL',
+        parameters: [],
+      },
+    ];
+  }, [api.baseUrl, api.slug, endpoints]);
+
   useEffect(() => {
     fetch('/api/auth/me')
       .then((r) => r.ok ? r.json() : null)
@@ -205,7 +219,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
 
               {/* CTA Buttons */}
               <div className="space-y-2">
-                {endpoints.length > 0 && (
+                {playgroundEndpoints.length > 0 && (
                   <button
                     onClick={handleTryIt}
                     disabled={isAuthLoading}
@@ -363,7 +377,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <AddToAgentButton apiSlug={api.slug} buttonClassName="px-8 py-3.5 bg-[var(--accent)] hover:bg-[var(--accent-strong)] disabled:bg-gray-300 text-white text-sm font-semibold rounded-lg transition flex items-center justify-center gap-2 min-w-[180px]" />
-            {endpoints.length > 0 && (
+            {playgroundEndpoints.length > 0 && (
               <button
                 onClick={handleTryIt}
                 disabled={isAuthLoading}
@@ -387,7 +401,7 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
       {showPlayground && (
         <ApiPlayground
           apiSlug={api.slug}
-          endpoints={endpoints}
+          endpoints={playgroundEndpoints}
           allowUnauthenticated={api.allowUnauthenticated}
           initialReplay={replayRequest ?? undefined}
           onClose={() => setShowPlayground(false)}
