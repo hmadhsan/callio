@@ -44,11 +44,11 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 const emojiFor = (cat: string) => CATEGORY_EMOJI[cat] ?? '✨';
 
-// "free" if the pricing string contains the word free (Free, Freemium,
-// "Free + paid tiers", "Free tier available", etc.). Otherwise "paid".
-type Tier = 'free' | 'paid';
-const tierOf = (pricing: string): Tier =>
-  /\bfree\b/i.test(pricing || '') ? 'free' : 'paid';
+// "no-key" = works with just a Callio key (allowUnauthenticated).
+// "byok"   = user must bring their own provider key.
+type KeyTier = 'no-key' | 'byok';
+const keyTierOf = (api: { allowUnauthenticated: boolean }): KeyTier =>
+  api.allowUnauthenticated ? 'no-key' : 'byok';
 
 export default function BrowseGrid({
   apis,
@@ -59,14 +59,14 @@ export default function BrowseGrid({
 }) {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [activeTier, setActiveTier] = useState<Tier | null>(null);
+  const [activeKeyTier, setActiveKeyTier] = useState<KeyTier | null>(null);
 
-  // Tier counts (free vs paid across the whole catalog)
-  const tierCounts = useMemo(() => {
-    let free = 0;
-    let paid = 0;
-    apis.forEach((a) => (tierOf(a.pricing) === 'free' ? free++ : paid++));
-    return { free, paid };
+  // No-key vs BYOK counts across the whole catalog
+  const keyTierCounts = useMemo(() => {
+    let noKey = 0;
+    let byok = 0;
+    apis.forEach((a) => (keyTierOf(a) === 'no-key' ? noKey++ : byok++));
+    return { noKey, byok };
   }, [apis]);
 
   // Count per category (computed first so we can sort pills by it)
@@ -86,12 +86,12 @@ export default function BrowseGrid({
     });
   }, [apis, categoryCounts]);
 
-  // Filter APIs based on search, tier, and category
+  // Filter APIs based on search, key tier, and category
   const filtered = useMemo(() => {
     let result = apis;
 
-    if (activeTier) {
-      result = result.filter((a) => tierOf(a.pricing) === activeTier);
+    if (activeKeyTier) {
+      result = result.filter((a) => keyTierOf(a) === activeKeyTier);
     }
 
     if (activeCategory) {
@@ -110,7 +110,7 @@ export default function BrowseGrid({
     }
 
     return result;
-  }, [apis, search, activeCategory, activeTier]);
+  }, [apis, search, activeCategory, activeKeyTier]);
 
   return (
     <>
@@ -134,12 +134,12 @@ export default function BrowseGrid({
         )}
       </div>
 
-      {/* Tier Filter (Free / Paid) */}
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-xs font-medium text-[var(--muted)] mr-1">Pricing:</span>
+      {/* Key tier filter (no-key vs BYOK) */}
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <span className="text-xs font-medium text-[var(--muted)] mr-1">Setup:</span>
         <button
-          onClick={() => setActiveTier(null)}
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${!activeTier
+          onClick={() => setActiveKeyTier(null)}
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${!activeKeyTier
             ? 'bg-[var(--ink)] text-white border-[var(--ink)]'
             : 'bg-white text-[var(--muted)] border-[var(--line)] hover:border-[var(--ink)] hover:text-[var(--ink)]'
             }`}
@@ -147,24 +147,26 @@ export default function BrowseGrid({
           All <span className="tabular-nums opacity-70">{apis.length}</span>
         </button>
         <button
-          onClick={() => setActiveTier(activeTier === 'free' ? null : 'free')}
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeTier === 'free'
+          onClick={() => setActiveKeyTier(activeKeyTier === 'no-key' ? null : 'no-key')}
+          title="Works with just a Callio key — no provider account needed"
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeKeyTier === 'no-key'
             ? 'bg-emerald-600 text-white border-emerald-600'
             : 'bg-white text-emerald-700 border-emerald-200 hover:border-emerald-500'
             }`}
         >
-          <span className={`w-1.5 h-1.5 rounded-full ${activeTier === 'free' ? 'bg-white' : 'bg-emerald-500'}`} />
-          Free <span className="tabular-nums opacity-70">{tierCounts.free}</span>
+          <span className={`w-1.5 h-1.5 rounded-full ${activeKeyTier === 'no-key' ? 'bg-white' : 'bg-emerald-500'}`} />
+          No key needed <span className="tabular-nums opacity-70">{keyTierCounts.noKey}</span>
         </button>
         <button
-          onClick={() => setActiveTier(activeTier === 'paid' ? null : 'paid')}
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeTier === 'paid'
+          onClick={() => setActiveKeyTier(activeKeyTier === 'byok' ? null : 'byok')}
+          title="Bring your own provider API key — Callio injects it for you"
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeKeyTier === 'byok'
             ? 'bg-amber-600 text-white border-amber-600'
             : 'bg-white text-amber-700 border-amber-200 hover:border-amber-500'
             }`}
         >
-          <span className={`w-1.5 h-1.5 rounded-full ${activeTier === 'paid' ? 'bg-white' : 'bg-amber-500'}`} />
-          Paid <span className="tabular-nums opacity-70">{tierCounts.paid}</span>
+          <span className={`w-1.5 h-1.5 rounded-full ${activeKeyTier === 'byok' ? 'bg-white' : 'bg-amber-500'}`} />
+          BYOK <span className="tabular-nums opacity-70">{keyTierCounts.byok}</span>
         </button>
       </div>
 
@@ -198,10 +200,12 @@ export default function BrowseGrid({
       </div>
 
       {/* Results count */}
-      {(search || activeCategory || activeTier) && (
+      {(search || activeCategory || activeKeyTier) && (
         <p className="text-sm text-[var(--muted)] mb-4">
           {filtered.length} {filtered.length === 1 ? 'API' : 'APIs'} found
-          {activeTier && <span> · <strong className={activeTier === 'free' ? 'text-emerald-700' : 'text-amber-700'}>{activeTier === 'free' ? 'Free' : 'Paid'}</strong></span>}
+          {activeKeyTier && (
+            <span> · <strong className={activeKeyTier === 'no-key' ? 'text-emerald-700' : 'text-amber-700'}>{activeKeyTier === 'no-key' ? 'No key needed' : 'BYOK'}</strong></span>
+          )}
           {activeCategory && <span> in <strong className="text-[var(--ink)]">{activeCategory}</strong></span>}
           {search && <span> matching &ldquo;<strong className="text-[var(--ink)]">{search}</strong>&rdquo;</span>}
         </p>
@@ -214,9 +218,9 @@ export default function BrowseGrid({
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 relative">
         {filtered.map((api) => {
           const isFavorited = initialFavoritedIds.includes(api.id);
-          const tier = tierOf(api.pricing);
-          const pricingChipClass =
-            tier === 'free'
+          const keyTier = keyTierOf(api);
+          const keyChipClass =
+            keyTier === 'no-key'
               ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
               : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200';
 
@@ -248,17 +252,19 @@ export default function BrowseGrid({
                   <span className="bg-[var(--soft)] px-2 py-0.5 rounded text-[10px] text-[var(--muted)]">
                     {api.endpointsCount} {api.endpointsCount === 1 ? 'endpoint' : 'endpoints'}
                   </span>
-                  {api.pricing && (
+                  <span
+                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium ${keyChipClass}`}
+                    title={
+                      keyTier === 'no-key'
+                        ? `Works with just a Callio key. Pricing: ${api.pricing || 'Free'}`
+                        : `Bring your own provider key. Pricing: ${api.pricing || 'Varies'}`
+                    }
+                  >
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium ${pricingChipClass}`}
-                      title={api.pricing}
-                    >
-                      <span
-                        className={`w-1 h-1 rounded-full ${tier === 'free' ? 'bg-emerald-500' : 'bg-amber-500'}`}
-                      />
-                      {tier === 'free' ? 'Free' : 'Paid'}
-                    </span>
-                  )}
+                      className={`w-1 h-1 rounded-full ${keyTier === 'no-key' ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                    />
+                    {keyTier === 'no-key' ? 'No key' : 'BYOK'}
+                  </span>
                 </div>
               </Link>
               <FavoriteButton apiId={api.id} initialIsFavorite={isFavorited} />
@@ -270,7 +276,7 @@ export default function BrowseGrid({
         <div className="text-center py-16">
           <p className="text-[var(--muted)] text-lg mb-2">No APIs match your search.</p>
           <button
-            onClick={() => { setSearch(''); setActiveCategory(null); setActiveTier(null); }}
+            onClick={() => { setSearch(''); setActiveCategory(null); setActiveKeyTier(null); }}
             className="text-sm text-[var(--accent)] hover:underline"
           >
             Clear filters
