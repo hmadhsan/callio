@@ -21,6 +21,29 @@ interface Api {
   endpointsCount: number;
 }
 
+// Emoji per canonical category. Falls back to ✨ for anything unmapped.
+const CATEGORY_EMOJI: Record<string, string> = {
+  'AI & LLMs': '🧠',
+  'Search': '🔎',
+  'Communications': '💬',
+  'Data & Scraping': '📊',
+  'Developer Tools': '🛠️',
+  'Productivity': '✅',
+  'Sales & CRM': '💼',
+  'Finance & Payments': '💸',
+  'Maps & Weather': '🗺️',
+  'Storage & Media': '🎬',
+  'Identity & Auth': '🔐',
+  'Database': '🗄️',
+  'News & Media': '📰',
+  'Travel & Lifestyle': '✈️',
+  'eCommerce': '🛍️',
+  'Public Data': '📚',
+  'Fun & Games': '🎮',
+};
+
+const emojiFor = (cat: string) => CATEGORY_EMOJI[cat] ?? '✨';
+
 export default function BrowseGrid({
   apis,
   initialFavoritedIds = []
@@ -32,11 +55,22 @@ export default function BrowseGrid({
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
 
-  // Extract unique categories, sorted alphabetically
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(apis.map((a) => a.category))).sort();
-    return cats;
+  // Count per category (computed first so we can sort pills by it)
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    apis.forEach((a) => {
+      counts[a.category] = (counts[a.category] || 0) + 1;
+    });
+    return counts;
   }, [apis]);
+
+  // Categories sorted by count desc (busiest first), then name
+  const categories = useMemo(() => {
+    return Array.from(new Set(apis.map((a) => a.category))).sort((a, b) => {
+      const diff = (categoryCounts[b] || 0) - (categoryCounts[a] || 0);
+      return diff !== 0 ? diff : a.localeCompare(b);
+    });
+  }, [apis, categoryCounts]);
 
   // Filter APIs based on search and category
   const filtered = useMemo(() => {
@@ -59,15 +93,6 @@ export default function BrowseGrid({
 
     return result;
   }, [apis, search, activeCategory]);
-
-  // Count per category
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    apis.forEach((a) => {
-      counts[a.category] = (counts[a.category] || 0) + 1;
-    });
-    return counts;
-  }, [apis]);
 
   return (
     <>
@@ -106,12 +131,16 @@ export default function BrowseGrid({
           <button
             key={cat}
             onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition border ${activeCategory === cat
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition border ${activeCategory === cat
               ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
               : 'bg-white text-[var(--muted)] border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--ink)]'
               }`}
           >
-            {cat} ({categoryCounts[cat] || 0})
+            <span aria-hidden>{emojiFor(cat)}</span>
+            <span>{cat}</span>
+            <span className={`text-[11px] tabular-nums ${activeCategory === cat ? 'text-white/80' : 'text-[var(--muted)]'}`}>
+              {categoryCounts[cat] || 0}
+            </span>
           </button>
         ))}
       </div>
@@ -154,7 +183,8 @@ export default function BrowseGrid({
                   {api.shortDescription}
                 </p>
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="bg-[var(--soft)] text-[var(--ink)] px-2 py-0.5 rounded text-[10px] font-medium">
+                  <span className="inline-flex items-center gap-1 bg-[var(--soft)] text-[var(--ink)] px-2 py-0.5 rounded text-[10px] font-medium">
+                    <span aria-hidden>{emojiFor(api.category)}</span>
                     {api.category}
                   </span>
                   <span className="bg-[var(--soft)] px-2 py-0.5 rounded text-[10px] text-[var(--muted)]">
