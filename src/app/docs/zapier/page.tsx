@@ -158,7 +158,7 @@ export default function ZapierDocsPage() {
                 {/* Make Setup */}
                 <section className="mb-14">
                     <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                        <Webhook className="w-6 h-6 text-purple-500" /> Make (Integromat) Setup
+                        <Webhook className="w-6 h-6 text-blue-600" /> Make (Integromat) Setup
                     </h2>
                     <ol className="space-y-6">
                         {[
@@ -196,7 +196,7 @@ export default function ZapierDocsPage() {
                             },
                         ].map(({ step, title, body, mono }) => (
                             <li key={step} className="flex gap-5">
-                                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-sm">
+                                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-100 text-blue-800 font-bold flex items-center justify-center text-sm">
                                     {step}
                                 </div>
                                 <div className="flex-1">
@@ -215,7 +215,7 @@ export default function ZapierDocsPage() {
                             href="https://make.com"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm text-purple-600 hover:text-purple-700 font-medium"
+                            className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium"
                         >
                             Open Make <ExternalLink className="w-4 h-4" />
                         </a>

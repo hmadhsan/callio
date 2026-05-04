@@ -105,8 +105,8 @@ export default function Home() {
 
       {/* ── Hero ── */}
       <section id="hero" className="relative overflow-hidden">
-        {/* layered radial gradients — subtle violet wash on top of the existing neutral one */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_55%),radial-gradient(circle_at_85%_15%,rgba(124,58,237,0.10),transparent_50%),radial-gradient(circle_at_50%_90%,rgba(124,58,237,0.05),transparent_60%)]" />
+        {/* layered radial gradients — subtle blue wash on top of the existing neutral one */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_55%),radial-gradient(circle_at_85%_15%,rgba(37,99,235,0.09),transparent_50%),radial-gradient(circle_at_50%_90%,rgba(37,99,235,0.04),transparent_60%)]" />
         {/* faint dotted grid for the "infra" feel */}
         <div className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.06)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.9),transparent_85%)]" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
@@ -267,7 +267,7 @@ export default function Home() {
           </div>
           <div className="rounded-2xl bg-[#0a0a0a] text-[#e4e4e7] p-6 font-mono text-sm leading-relaxed overflow-x-auto shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
             <div className="text-[#6b7280] mb-1"># 1. Install the SDK</div>
-            <div><span className="text-[#a78bfa]">npm</span> install callio-sdk</div>
+            <div><span className="text-[#60a5fa]">npm</span> install callio-sdk</div>
 
             <div className="mt-4 text-[#6b7280]"># 2. Initialize with your single Callio key</div>
             <div><span className="text-[#60a5fa]">import</span> {`{`} CallioClient {`}`} <span className="text-[#60a5fa]">from</span> <span className="text-[#34d399]">&apos;callio-sdk&apos;</span>;</div>
@@ -324,7 +324,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/20 text-violet-300 text-xs font-semibold uppercase tracking-wide mb-5">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 text-blue-200 text-xs font-semibold uppercase tracking-wide mb-5">
                 <Sparkles className="w-3.5 h-3.5" />
                 MCP Server
               </div>
@@ -339,7 +339,7 @@ export default function Home() {
                   { tool: 'Claude Code', path: '~/.claude/claude_desktop_config.json' },
                 ].map((t) => (
                   <div key={t.tool} className="flex items-center gap-3 text-sm">
-                    <Check className="w-4 h-4 text-violet-400 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-blue-400 flex-shrink-0" />
                     <span className="text-white font-medium">{t.tool}</span>
                     <span className="text-[#6b7280]">→</span>
                     <code className="text-[#a1a1aa] text-xs">{t.path}</code>
@@ -349,7 +349,7 @@ export default function Home() {
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/mcp"
-                  className="px-6 py-3 rounded-full bg-violet-600 text-white font-semibold hover:bg-violet-500 transition inline-flex items-center gap-2"
+                  className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-500 transition inline-flex items-center gap-2"
                 >
                   Setup guide <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -371,12 +371,12 @@ export default function Home() {
                 <span className="ml-2 text-[#555] text-xs">mcp config</span>
               </div>
               <div className="text-[#6b7280]">{`{`}</div>
-              <div className="ml-4"><span className="text-[#a78bfa]">&quot;mcpServers&quot;</span>: {`{`}</div>
-              <div className="ml-8"><span className="text-[#a78bfa]">&quot;callio&quot;</span>: {`{`}</div>
-              <div className="ml-12"><span className="text-[#a78bfa]">&quot;command&quot;</span>: <span className="text-[#34d399]">&quot;npx&quot;</span>,</div>
-              <div className="ml-12"><span className="text-[#a78bfa]">&quot;args&quot;</span>: [<span className="text-[#34d399]">&quot;-y&quot;</span>, <span className="text-[#34d399]">&quot;github:hmadhsan/callio-mcp&quot;</span>],</div>
-              <div className="ml-12"><span className="text-[#a78bfa]">&quot;env&quot;</span>: {`{`}</div>
-              <div className="ml-16"><span className="text-[#a78bfa]">&quot;CALLIO_API_KEY&quot;</span>: <span className="text-[#fbbf24]">&quot;callio_your_key&quot;</span></div>
+              <div className="ml-4"><span className="text-[#60a5fa]">&quot;mcpServers&quot;</span>: {`{`}</div>
+              <div className="ml-8"><span className="text-[#60a5fa]">&quot;callio&quot;</span>: {`{`}</div>
+              <div className="ml-12"><span className="text-[#60a5fa]">&quot;command&quot;</span>: <span className="text-[#34d399]">&quot;npx&quot;</span>,</div>
+              <div className="ml-12"><span className="text-[#60a5fa]">&quot;args&quot;</span>: [<span className="text-[#34d399]">&quot;-y&quot;</span>, <span className="text-[#34d399]">&quot;github:hmadhsan/callio-mcp&quot;</span>],</div>
+              <div className="ml-12"><span className="text-[#60a5fa]">&quot;env&quot;</span>: {`{`}</div>
+              <div className="ml-16"><span className="text-[#60a5fa]">&quot;CALLIO_API_KEY&quot;</span>: <span className="text-[#fbbf24]">&quot;callio_your_key&quot;</span></div>
               <div className="ml-12">{`}`}</div>
               <div className="ml-8">{`}`}</div>
               <div className="ml-4">{`}`}</div>

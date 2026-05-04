@@ -48,7 +48,7 @@ const methodColors: Record<string, string> = {
   POST: 'bg-green-100 text-green-700',
   PUT: 'bg-orange-100 text-orange-700',
   DELETE: 'bg-red-100 text-red-700',
-  PATCH: 'bg-purple-100 text-purple-700',
+  PATCH: 'bg-slate-200 text-slate-800',
 };
 
 // Detect if a parameter is a chat messages field

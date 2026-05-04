@@ -83,13 +83,13 @@ export default function SkillsApisTabs({ apis }: SkillsApisTabsProps) {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {apis.map((api) => (
               <Link key={api.id} href={`/skills/callio/${api.slug}`}>
-                <div className="p-5 bg-gray-50 rounded-lg border border-gray-200 hover:border-purple-400 hover:shadow-md transition cursor-pointer group">
+                <div className="p-5 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer group">
                   <div className="text-3xl mb-3 group-hover:scale-110 transition">
                     {api.icon}
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-2 line-clamp-1">{api.name}</h3>
                   <p className="text-sm text-gray-600 line-clamp-2 mb-3">{api.description}</p>
-                  <span className="inline-block px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-medium">
+                  <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
                     API
                   </span>
                 </div>
@@ -101,7 +101,7 @@ export default function SkillsApisTabs({ apis }: SkillsApisTabsProps) {
         {/* View All Button */}
         <div className="text-center mt-12">
           <Link href="/skills/callio">
-            <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:opacity-90 transition shadow-lg">
+            <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold rounded-lg hover:opacity-90 transition shadow-lg">
               Browse All {apis.length} {activeTab === 'skills' ? 'Skills' : 'APIs'}
             </button>
           </Link>

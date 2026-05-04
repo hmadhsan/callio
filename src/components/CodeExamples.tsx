@@ -62,7 +62,7 @@ function SyntaxHighlightedCode({ code, language }: { code: string; language: str
           <div key={i}>
             {line.split(/(\bimport\b|\brequests\b|\bheaders\b|\bresponse\b|\bdata\b|\bjson\b|\bprint\b|\bget\b|'|"|#|\{|\}|\=)/g).map((part, j) => {
               if (['import', 'def', 'for', 'if', 'return', 'class', 'from'].includes(part)) {
-                return <span key={j} className="text-purple-400">{part}</span>;
+                return <span key={j} className="text-sky-400">{part}</span>;
               }
               if (['requests', 'headers', 'response', 'data', 'json', 'print', 'get'].includes(part)) {
                 return <span key={j} className="text-cyan-300">{part}</span>;
@@ -88,7 +88,7 @@ function SyntaxHighlightedCode({ code, language }: { code: string; language: str
           <div key={i}>
             {line.split(/(\?<|php|curl_init|curl_setopt|curl_exec|json_decode|curl_close|print_r|\$|=>|'|"|\(|\)|,|;|\{|\})/g).map((part, j) => {
               if (['php', 'curl_init', 'curl_setopt', 'curl_exec', 'json_decode', 'curl_close', 'print_r'].includes(part)) {
-                return <span key={j} className="text-purple-400">{part}</span>;
+                return <span key={j} className="text-sky-400">{part}</span>;
               }
               if (part === '$') return <span key={j} className="text-cyan-400">{part}</span>;
               if (['"', "'"].includes(part)) return <span key={j} className="text-green-400">{part}</span>;
@@ -176,7 +176,7 @@ print_r($data);`
     { id: 'curl', label: 'cURL', color: 'text-gray-600' },
     { id: 'javascript', label: 'JavaScript', color: 'text-yellow-600' },
     { id: 'python', label: 'Python', color: 'text-blue-600' },
-    { id: 'php', label: 'PHP', color: 'text-purple-600' },
+    { id: 'php', label: 'PHP', color: 'text-sky-600' },
   ] as const;
 
   return (

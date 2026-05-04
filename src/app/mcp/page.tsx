@@ -121,7 +121,7 @@ export default function McpPage() {
               </div>
               <h3 className="font-semibold text-lg mb-1">Claude Code</h3>
               <p className="text-sm text-[var(--muted)] mb-2">Anthropic&apos;s coding agent</p>
-              <code className="text-xs text-violet-600 bg-violet-50 px-2 py-1 rounded">~/.claude/claude_desktop_config.json</code>
+              <code className="text-xs text-blue-700 bg-blue-50 px-2 py-1 rounded">~/.claude/claude_desktop_config.json</code>
             </div>
             <div className="bg-white rounded-xl border border-[var(--line)] p-6 text-center flex flex-col items-center">
               <div className="w-12 h-12 mb-3 flex items-center justify-center">
@@ -129,7 +129,7 @@ export default function McpPage() {
               </div>
               <h3 className="font-semibold text-lg mb-1">Cursor</h3>
               <p className="text-sm text-[var(--muted)] mb-2">AI-powered code editor</p>
-              <code className="text-xs text-violet-600 bg-violet-50 px-2 py-1 rounded">.cursor/mcp.json</code>
+              <code className="text-xs text-blue-700 bg-blue-50 px-2 py-1 rounded">.cursor/mcp.json</code>
             </div>
             <div className="bg-white rounded-xl border border-[var(--line)] p-6 text-center flex flex-col items-center">
               <div className="w-12 h-12 mb-3 flex items-center justify-center">
@@ -137,7 +137,7 @@ export default function McpPage() {
               </div>
               <h3 className="font-semibold text-lg mb-1">Antigravity</h3>
               <p className="text-sm text-[var(--muted)] mb-2">AI development platform</p>
-              <code className="text-xs text-violet-600 bg-violet-50 px-2 py-1 rounded">MCP Settings</code>
+              <code className="text-xs text-blue-700 bg-blue-50 px-2 py-1 rounded">MCP Settings</code>
             </div>
           </div>
         </div>
@@ -229,8 +229,8 @@ export default function McpPage() {
               <p className="text-sm text-[var(--muted)]">Discover and browse 90+ APIs by name, category, or description.</p>
             </div>
             <div className="bg-white rounded-xl border border-[var(--line)] p-6">
-              <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center mb-3">
-                <Cpu className="w-5 h-5 text-violet-600" />
+              <div className="w-10 h-10 rounded-lg bg-sky-50 flex items-center justify-center mb-3">
+                <Cpu className="w-5 h-5 text-sky-600" />
               </div>
               <h3 className="font-semibold mb-1">get_api_info</h3>
               <p className="text-sm text-[var(--muted)]">Get full details — endpoints, parameters, examples, auth info.</p>

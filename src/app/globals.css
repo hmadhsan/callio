@@ -12,10 +12,10 @@
   --line: #e5e7eb;
   --soft: #f3f4f6;
   --soft-strong: #e5e7eb;
-  /* Agent accent — used sparingly for "AI" / MCP moments */
-  --violet: #7c3aed;
-  --violet-strong: #6d28d9;
-  --violet-soft: #f5f3ff;
+  /* Agent / MCP highlight — muted blue (replaces earlier purple) */
+  --violet: #2563eb;
+  --violet-strong: #1d4ed8;
+  --violet-soft: #eff6ff;
   --font-display: "Instrument Serif", "Times New Roman", serif;
   --font-body: "Space Grotesk", "Segoe UI", sans-serif;
 }

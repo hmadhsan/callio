@@ -12,7 +12,7 @@ export default function AnimatedHeroSVG() {
     <div className="relative w-full max-w-5xl mx-auto rounded-3xl bg-[#09090b] border border-[#27272a] shadow-2xl overflow-hidden my-12 hidden lg:block" style={{ aspectRatio: '840/320' }}>
 
       {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-violet-500/10 blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-blue-500/10 blur-[100px] pointer-events-none" />
 
       <svg className="absolute inset-0 w-full h-full" viewBox="0 0 840 320" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -34,7 +34,7 @@ export default function AnimatedHeroSVG() {
           </linearGradient>
 
           <linearGradient id="hub-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#2e1065" />
+            <stop offset="0%" stopColor="#1e3a8a" />
             <stop offset="100%" stopColor="#09090b" />
           </linearGradient>
 
@@ -43,9 +43,9 @@ export default function AnimatedHeroSVG() {
             <stop offset="100%" stopColor="#2563eb" />
           </linearGradient>
 
-          <linearGradient id="btn-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#a855f7" />
-            <stop offset="100%" stopColor="#7e22ce" />
+          <linearGradient id="btn-mcp" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#3b82f6" />
+            <stop offset="100%" stopColor="#1d4ed8" />
           </linearGradient>
 
           <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -161,8 +161,8 @@ export default function AnimatedHeroSVG() {
               .agent-output { animation: agentOutput 10s cubic-bezier(0.34, 1.56, 0.64, 1) infinite; }
 
               @keyframes hubBorderGlow {
-                0%, 100% { stroke: #a855f7; stroke-opacity: 0.5; }
-                50% { stroke: #c084fc; stroke-opacity: 1; filter: drop-shadow(0 0 8px rgba(168,85,247,0.5)); }
+                0%, 100% { stroke: #3b82f6; stroke-opacity: 0.5; }
+                50% { stroke: #60a5fa; stroke-opacity: 1; filter: drop-shadow(0 0 8px rgba(59,130,246,0.45)); }
               }
               .hub-border { animation: hubBorderGlow 3s ease-in-out infinite; }
             `}
@@ -182,12 +182,12 @@ export default function AnimatedHeroSVG() {
 
           <g className="agent-key-placeholder">
             <text x="40" y="100" fill="#a1a1aa" fontFamily="monospace" fontSize="12">
-              <tspan fill="#c084fc">const</tspan> API_KEY = "<tspan fill="#52525b">paste_key</tspan>";
+              <tspan fill="#93c5fd">const</tspan> API_KEY = "<tspan fill="#52525b">paste_key</tspan>";
             </text>
           </g>
           <g className="agent-key-actual">
             <text x="40" y="100" fill="#a1a1aa" fontFamily="monospace" fontSize="12">
-              <tspan fill="#c084fc">const</tspan> API_KEY = "<tspan fill="#10b981">callio_sk_xyz</tspan>";
+              <tspan fill="#93c5fd">const</tspan> API_KEY = "<tspan fill="#10b981">callio_sk_xyz</tspan>";
             </text>
           </g>
 
@@ -224,22 +224,22 @@ export default function AnimatedHeroSVG() {
         <line x1="570" y1="210" x2="510" y2="210" stroke="#3f3f46" strokeWidth="2" strokeDasharray="4 4" />
 
         <circle cy="130" r="4" fill="#3b82f6" className="p1" />
-        <circle cy="130" r="4" fill="#a855f7" className="p2" />
+        <circle cy="130" r="4" fill="#38bdf8" className="p2" />
         <circle cy="210" r="4" fill="#10b981" className="p3" />
         <circle cy="210" r="4" fill="#10b981" className="p4" />
 
         {/* --- Window 2: Callio Hub --- */}
         <g>
           {/* Glow behind the hub */}
-          <rect x="330" y="50" width="180" height="220" rx="16" fill="#a855f7" opacity="0.05" filter="url(#glow)" />
+          <rect x="330" y="50" width="180" height="220" rx="16" fill="#3b82f6" opacity="0.06" filter="url(#glow)" />
           <rect x="340" y="60" width="160" height="200" rx="12" fill="url(#hub-bg)" strokeWidth="2" className="hub-border" filter="url(#shadow)" />
 
           {/* Header */}
           <text x="420" y="90" fill="#fff" fontFamily="sans-serif" fontSize="15" fontWeight="bold" textAnchor="middle" letterSpacing="0.5">Callio Proxy</text>
-          <text x="420" y="110" fill="#a78bfa" fontFamily="sans-serif" fontSize="11" textAnchor="middle" opacity="0.8">Target: Any API</text>
+          <text x="420" y="110" fill="#93c5fd" fontFamily="sans-serif" fontSize="11" textAnchor="middle" opacity="0.85">Target: Any API</text>
 
           {/* Connect Button */}
-          <rect x="360" y="130" width="120" height="32" rx="6" fill="url(#btn-purple)" className="btn-gen shadow-sm" />
+          <rect x="360" y="130" width="120" height="32" rx="6" fill="url(#btn-mcp)" className="btn-gen shadow-sm" />
           <text x="420" y="150" fill="#fff" fontFamily="sans-serif" fontSize="12" fontWeight="600" textAnchor="middle">Add to Agent</text>
 
           {/* Key Output Box */}
@@ -284,7 +284,7 @@ export default function AnimatedHeroSVG() {
             </g>
             <g transform="translate(0, 84)">
               <rect width="180" height="30" rx="6" fill="#27272a" stroke="#3f3f46" strokeWidth="1" />
-              <circle cx="15" cy="15" r="4" fill="#a855f7" filter="url(#glow)" className="api-pulse" style={{ animationDelay: '0.6s' }} />
+              <circle cx="15" cy="15" r="4" fill="#38bdf8" filter="url(#glow)" className="api-pulse" style={{ animationDelay: '0.6s' }} />
               <rect x="30" y="13" width="100" height="4" rx="2" fill="#52525b" />
               <rect x="140" y="13" width="24" height="4" rx="2" fill="#3f3f46" />
             </g>
