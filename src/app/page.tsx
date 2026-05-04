@@ -202,10 +202,14 @@ export default async function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {/* Step 1 */}
             <div className="relative group">
-              <div className="absolute -top-3 -left-2 text-6xl font-display italic text-[var(--violet)]/15 select-none group-hover:text-[var(--violet)]/30 transition">1</div>
-              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full hover:border-[var(--violet)]/30 transition">
-                <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center mb-4">
-                  <Key className="w-5 h-5" />
+              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 h-full hover:border-[var(--violet)]/30 transition">
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center shrink-0">
+                    <Key className="w-5 h-5" />
+                  </div>
+                  <span className="text-5xl sm:text-6xl font-display italic font-semibold text-[var(--violet)]/25 tabular-nums leading-none select-none group-hover:text-[var(--violet)]/40 transition">
+                    1
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Get one key</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
@@ -215,10 +219,14 @@ export default async function Home() {
             </div>
             {/* Step 2 */}
             <div className="relative group">
-              <div className="absolute -top-3 -left-2 text-6xl font-display italic text-[var(--violet)]/15 select-none group-hover:text-[var(--violet)]/30 transition">2</div>
-              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full hover:border-[var(--violet)]/30 transition">
-                <div className="w-10 h-10 rounded-lg bg-[var(--violet)] text-white flex items-center justify-center mb-4">
-                  <Terminal className="w-5 h-5" />
+              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 h-full hover:border-[var(--violet)]/30 transition">
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-[var(--violet)] text-white flex items-center justify-center shrink-0">
+                    <Terminal className="w-5 h-5" />
+                  </div>
+                  <span className="text-5xl sm:text-6xl font-display italic font-semibold text-[var(--violet)]/25 tabular-nums leading-none select-none group-hover:text-[var(--violet)]/40 transition">
+                    2
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Install in your agent</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
@@ -228,10 +236,14 @@ export default async function Home() {
             </div>
             {/* Step 3 */}
             <div className="relative group">
-              <div className="absolute -top-3 -left-2 text-6xl font-display italic text-[var(--violet)]/15 select-none group-hover:text-[var(--violet)]/30 transition">3</div>
-              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 pt-10 h-full hover:border-[var(--violet)]/30 transition">
-                <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center mb-4">
-                  <Workflow className="w-5 h-5" />
+              <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 h-full hover:border-[var(--violet)]/30 transition">
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center shrink-0">
+                    <Workflow className="w-5 h-5" />
+                  </div>
+                  <span className="text-5xl sm:text-6xl font-display italic font-semibold text-[var(--violet)]/25 tabular-nums leading-none select-none group-hover:text-[var(--violet)]/40 transition">
+                    3
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Ship to production</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
