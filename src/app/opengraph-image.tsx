@@ -134,16 +134,16 @@ export default function OGImage() {
                 lineHeight: 1.34,
               }}
             >
-              Discover, authenticate, and call 90+ APIs through one unified interface.
+              Discover, authenticate, and call the full API catalog through one unified interface.
             </div>
           </div>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
             <div style={{ display: "flex", gap: 14 }}>
               {[
-                { value: "90+", label: "APIs" },
-                { value: "399", label: "Endpoints" },
-                { value: "One Key", label: "Unified Auth" },
+                { value: "MCP", label: "Agent-native" },
+                { value: "BYOK", label: "Secure keys" },
+                { value: "One", label: "Gateway" },
               ].map((item) => (
                 <div
                   key={item.label}

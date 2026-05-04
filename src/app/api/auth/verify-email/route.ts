@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { createSession, getSessionCookieOptions, SESSION_COOKIE } from '@/lib/auth';
+import { getCatalogApiCount } from '@/lib/catalog-count';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -32,6 +33,7 @@ export async function GET(request: NextRequest) {
 
         // Send Welcome email
         try {
+            const apiCount = await getCatalogApiCount();
             const { Resend } = await import('resend');
             const resendKey = process.env.RESEND_API_KEY;
             if (resendKey) {
@@ -45,7 +47,7 @@ export async function GET(request: NextRequest) {
                         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
                             <h2 style="color: #000;">Welcome to Callio!</h2>
                             <p>Hi ${user.name || 'there'},</p>
-                            <p>Your email is verified and your account is ready. Callio is the API gateway for AI agents — one key, one proxy, 90+ APIs for whatever your agent needs to do.</p>
+                            <p>Your email is verified and your account is ready. Callio is the API gateway for AI agents — one key, one proxy, and ${apiCount} APIs in the catalog for whatever your agent needs to do.</p>
                             <p><strong>Three steps to your first agent call:</strong></p>
                             <ol>
                                 <li><strong>Generate a key</strong> — start with a sandbox key so tests don't count toward your plan quota.</li>

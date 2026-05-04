@@ -3,8 +3,13 @@ import { Terminal, Copy, Zap, ArrowRight, Check, Box, Cpu, Sparkles } from 'luci
 import UserNav from '@/components/UserNav';
 import CallioLogo from '@/components/CallioLogo';
 import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
+import { getCatalogApiCount } from '@/lib/catalog-count';
 
-export default function McpPage() {
+export const revalidate = 300;
+
+export default async function McpPage() {
+  const apiCount = await getCatalogApiCount();
+
   const configJson = `{
   "mcpServers": {
     "callio": {
@@ -42,7 +47,7 @@ export default function McpPage() {
             One MCP server. Every API your agent needs.
           </h1>
           <p className="text-lg text-[var(--muted)] max-w-2xl mx-auto mb-8">
-            Drop the Callio MCP server into Cursor, Claude, Antigravity, or any MCP-compatible client and your agent can call 90+ APIs through one Callio key.
+            Drop the Callio MCP server into Cursor, Claude, Antigravity, or any MCP-compatible client and your agent can call {apiCount} APIs through one Callio key.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
@@ -226,7 +231,7 @@ export default function McpPage() {
                 <Box className="w-5 h-5 text-blue-600" />
               </div>
               <h3 className="font-semibold mb-1">search_apis</h3>
-              <p className="text-sm text-[var(--muted)]">Discover and browse 90+ APIs by name, category, or description.</p>
+              <p className="text-sm text-[var(--muted)]">Discover and browse {apiCount} APIs by name, category, or description.</p>
             </div>
             <div className="bg-white rounded-xl border border-[var(--line)] p-6">
               <div className="w-10 h-10 rounded-lg bg-sky-50 flex items-center justify-center mb-3">

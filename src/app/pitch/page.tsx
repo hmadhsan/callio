@@ -38,7 +38,7 @@ const slides = [
                 A unified API gateway that gives developers and AI agents authenticated, rate-limited access to any third-party API through a single credential.
             </p>
             <div style={{ display: 'flex', gap: 0, border: `1px solid ${C.border}`, borderRadius: 14, overflow: 'hidden', background: C.card, width: 'fit-content' }}>
-                {[['90+', 'APIs integrated'], ['$20/mo', 'Starting price'], ['Live', 'In production']].map(([num, lbl], i) => (
+                {[['130+', 'APIs integrated'], ['$20/mo', 'Starting price'], ['Live', 'In production']].map(([num, lbl], i) => (
                     <div key={lbl} style={{ padding: '20px 36px', borderRight: i < 2 ? `1px solid ${C.border}` : 'none', textAlign: 'center' }}>
                         <div style={{ fontSize: 26, fontWeight: 900, color: C.accent, marginBottom: 2 }}>{num}</div>
                         <div style={{ fontSize: 12, color: C.faint, fontWeight: 500 }}>{lbl}</div>
@@ -165,7 +165,7 @@ const slides = [
                     {[
                         ['Full-Stack Engineer', 'Built Callio end-to-end — API proxy, AES-256-GCM encryption, Stripe billing, team workspaces, and AI agent integrations — solo and in production.'],
                         ['International Conference Speaker', 'Speaker at developer and technology conferences across multiple countries, focused on AI, APIs, and modern software engineering.'],
-                        ['Fast Shipper', 'Took Callio from concept to a live product with 90+ integrations, real billing, and an MCP-compatible agent marketplace.'],
+                        ['Fast Shipper', 'Took Callio from concept to a live product with 130+ integrations, real billing, and an MCP-compatible agent marketplace.'],
                     ].map(([title, desc]) => (
                         <div key={title} style={{ display: 'grid', gridTemplateColumns: '4px 1fr', gap: 20, alignItems: 'start' }}>
                             <div style={{ width: 4, height: '100%', minHeight: 52, background: C.accent, borderRadius: 2, marginTop: 3 }} />

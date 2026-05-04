@@ -11,6 +11,10 @@ import AuthAwareCTA from '@/components/AuthAwareCTA';
 import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
+import { getCatalogApiCount } from '@/lib/catalog-count';
+
+/** Bumps when ISR rebuilds; catalog count uses its own 5-minute cache. */
+export const revalidate = 300;
 
 const API_CATEGORIES = [
   { icon: Search, name: 'Search', desc: 'Web, news, products' },
@@ -26,48 +30,50 @@ const API_CATEGORIES = [
   { icon: Layers, name: 'Storage', desc: 'Files, S3, CDN' },
 ];
 
-const FAQS: { q: string; a: ReactNode }[] = [
-  {
-    q: 'What is Callio?',
-    a: 'Callio is the API gateway for AI agents and AI-native apps. One key and one interface in front of 90+ external APIs your agent or product needs to call.',
-  },
-  {
-    q: 'How is this different from calling each API directly?',
-    a: 'Instead of writing a client, auth flow, retry policy, and key rotation for every provider, you point your agent at Callio. We handle routing, auth injection, errors, and observability so you don\u2019t maintain N integrations yourself.',
-  },
-  {
-    q: 'Who is Callio for?',
-    a: 'Teams building AI agents, AI-native SaaS, and dev tools that lean on a lot of external APIs. Typical user: a founder or engineer who wants to ship features instead of maintaining a folder full of API clients.',
-  },
-  {
-    q: 'How does the MCP integration work?',
-    a: (
-      <>
-        Drop our MCP server into Cursor, Claude, Antigravity, or any MCP-compatible client and your agent can call every API in the catalog with the same Callio key.{' '}
-        <Link href="/mcp" className="text-[var(--accent)] underline font-medium">
-          See setup
-        </Link>
-        .
-      </>
-    ),
-  },
-  {
-    q: 'Do I need provider keys for the upstream APIs?',
-    a: 'For most providers you bring your own key once and Callio injects it on each request (BYOK). Some public APIs work without one. Either way, your provider credentials are encrypted at rest.',
-  },
-  {
-    q: 'How much does it cost to start?',
-    a: (
-      <>
-        There\u2019s a free tier with 500 proxy requests and 2 sandbox keys so you can actually build and test before paying. Paid plans start at $19/month (Builder) for real product traffic.{' '}
-        <Link href="/pricing" className="text-[var(--accent)] underline font-medium">
-          See pricing
-        </Link>
-        .
-      </>
-    ),
-  },
-];
+function buildFaqs(apiCount: number): { q: string; a: ReactNode }[] {
+  return [
+    {
+      q: 'What is Callio?',
+      a: `Callio is the API gateway for AI agents and AI-native apps. One key and one interface in front of ${apiCount} external APIs your agent or product needs to call.`,
+    },
+    {
+      q: 'How is this different from calling each API directly?',
+      a: 'Instead of writing a client, auth flow, retry policy, and key rotation for every provider, you point your agent at Callio. We handle routing, auth injection, errors, and observability so you don\u2019t maintain N integrations yourself.',
+    },
+    {
+      q: 'Who is Callio for?',
+      a: 'Teams building AI agents, AI-native SaaS, and dev tools that lean on a lot of external APIs. Typical user: a founder or engineer who wants to ship features instead of maintaining a folder full of API clients.',
+    },
+    {
+      q: 'How does the MCP integration work?',
+      a: (
+        <>
+          Drop our MCP server into Cursor, Claude, Antigravity, or any MCP-compatible client and your agent can call every API in the catalog with the same Callio key.{' '}
+          <Link href="/mcp" className="text-[var(--accent)] underline font-medium">
+            See setup
+          </Link>
+          .
+        </>
+      ),
+    },
+    {
+      q: 'Do I need provider keys for the upstream APIs?',
+      a: 'For most providers you bring your own key once and Callio injects it on each request (BYOK). Some public APIs work without one. Either way, your provider credentials are encrypted at rest.',
+    },
+    {
+      q: 'How much does it cost to start?',
+      a: (
+        <>
+          There\u2019s a free tier with 500 proxy requests and 2 sandbox keys so you can actually build and test before paying. Paid plans start at $19/month (Builder) for real product traffic.{' '}
+          <Link href="/pricing" className="text-[var(--accent)] underline font-medium">
+            See pricing
+          </Link>
+          .
+        </>
+      ),
+    },
+  ];
+}
 
 function FAQItem({ q, a }: { q: string; a: ReactNode }) {
   return (
@@ -81,7 +87,10 @@ function FAQItem({ q, a }: { q: string; a: ReactNode }) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const apiCount = await getCatalogApiCount();
+  const faqs = buildFaqs(apiCount);
+
   return (
     <div className="min-h-screen bg-[var(--page-bg)] text-[var(--ink)]">
       {/* Nav */}
@@ -118,7 +127,7 @@ export default function Home() {
             Every tool your agent needs.<br className="hidden sm:block" /> <span className="italic text-[var(--ink)]">One key. One gateway.</span>
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
-            Callio is the API gateway for teams shipping AI agents and AI-native products. One key, MCP-native install, and 90+ APIs your agent can call in production from day one.
+            Callio is the API gateway for teams shipping AI agents and AI-native products. One key, MCP-native install, and {apiCount} APIs your agent can call in production from day one.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <AuthAwareCTA
@@ -137,7 +146,7 @@ export default function Home() {
           {/* Stats row */}
           <div id="stats" className="mt-12 flex flex-wrap gap-8 text-sm">
             <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">90+</div>
+              <div className="text-2xl font-semibold text-[var(--ink)]">{apiCount}</div>
               <div className="text-[var(--muted)]">APIs in the catalog</div>
             </div>
             <div className="w-px bg-[var(--line)]" />
@@ -330,7 +339,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl sm:text-4xl font-display">Connect Antigravity, Cursor &amp; more</h2>
               <p className="mt-4 text-[#a1a1aa] text-lg">
-                Install the MCP server and your AI agent gets instant access to 90+ APIs through the same unified gateway.
+                Install the MCP server and your AI agent gets instant access to {apiCount} APIs through the same unified gateway.
               </p>
               <div className="mt-6 space-y-3">
                 {[
@@ -450,7 +459,7 @@ export default function Home() {
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--violet-strong)] bg-[var(--violet-soft)] px-2 py-0.5 rounded-full">MCP</span>
                 </h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
-                  Install our MCP server once and your editor or assistant can hit 90+ APIs through Callio with the same key.
+                  Install our MCP server once and your editor or assistant can hit {apiCount} APIs through Callio with the same key.
                 </p>
               </div>
             </div>
@@ -463,7 +472,7 @@ export default function Home() {
         <div className="max-w-3xl mx-auto px-5 sm:px-8">
           <h2 className="text-3xl sm:text-4xl font-display text-center mb-10">Frequently asked questions</h2>
           <div className="divide-y divide-[var(--line)] border-t border-[var(--line)]">
-            {FAQS.map((faq) => (
+            {faqs.map((faq) => (
               <FAQItem key={faq.q} q={faq.q} a={faq.a} />
             ))}
           </div>
@@ -507,7 +516,7 @@ export default function Home() {
                 </svg>
                 <span className="text-white font-semibold">Callio</span>
               </div>
-              <p className="text-sm max-w-xs">The API gateway for AI agents. One unified interface to discover, authenticate, and call 90+ APIs.</p>
+              <p className="text-sm max-w-xs">The API gateway for AI agents. One unified interface to discover, authenticate, and call {apiCount} APIs.</p>
             </div>
             <div className="flex gap-12 text-sm">
               <div>

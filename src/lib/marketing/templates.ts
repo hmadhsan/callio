@@ -8,11 +8,11 @@ type Template = {
 const TEMPLATES: Template[] = [
   {
     topic: 'positioning',
-    x: `AI agents are only as useful as the APIs they can reach.\n\nCallio is the API gateway for AI agents.\n\nOne interface to discover, authenticate, and call 90+ APIs without stitching integrations together one by one.\n\nhttps://callio.dev`,
+    x: `AI agents are only as useful as the APIs they can reach.\n\nCallio is the API gateway for AI agents.\n\nOne interface to discover, authenticate, and call the full API catalog without stitching integrations together one by one.\n\nhttps://callio.dev`,
   },
   {
     topic: 'pain-point',
-    x: `Every new agent capability usually means another API, another auth flow, and more plumbing.\n\nCallio removes that overhead.\n\nOne gateway. 90+ APIs. Faster shipping.\n\nhttps://callio.dev`,
+    x: `Every new agent capability usually means another API, another auth flow, and more plumbing.\n\nCallio removes that overhead.\n\nOne gateway. Full catalog. Faster shipping.\n\nhttps://callio.dev`,
   },
   {
     topic: 'developer-speed',
@@ -20,7 +20,7 @@ const TEMPLATES: Template[] = [
   },
   {
     topic: 'mcp',
-    x: `MCP is making agents more useful.\n\nBut useful agents still need reliable access to APIs.\n\nCallio connects that layer: install the MCP server and your agent gets access to 90+ APIs through one gateway.\n\nhttps://callio.dev/mcp`,
+    x: `MCP is making agents more useful.\n\nBut useful agents still need reliable access to APIs.\n\nCallio connects that layer: install the MCP server and your agent gets the same catalog through one gateway.\n\nhttps://callio.dev/mcp`,
   },
   {
     topic: 'use-case-email',
@@ -36,7 +36,7 @@ const TEMPLATES: Template[] = [
   },
   {
     topic: 'product',
-    x: `Callio is not trying to be another generic wrapper.\n\nThe product is simple:\nOne API gateway for AI agents.\n\nDevelopers discover, authenticate, and call 90+ APIs through one interface.\n\nhttps://callio.dev`,
+    x: `Callio is not trying to be another generic wrapper.\n\nThe product is simple:\nOne API gateway for AI agents.\n\nDevelopers discover, authenticate, and call upstream APIs through one interface.\n\nhttps://callio.dev`,
   },
   {
     topic: 'auth',
