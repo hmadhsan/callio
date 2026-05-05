@@ -27,7 +27,7 @@ export default async function SettingsPage() {
                     <CallioLogo size={30} />
                     <div className="flex items-center gap-4">
                         <Link href="/dashboard" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Dashboard</Link>
-                        <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Browse</Link>
+                        <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Integrations</Link>
                         <Link href="/keys" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Keys</Link>
                         <UserNav />
                     </div>

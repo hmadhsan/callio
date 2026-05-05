@@ -151,8 +151,7 @@ export default async function Home() {
             </div>
             <div className="w-px bg-[var(--line)]" />
             <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">1</div>
-              <div className="text-[var(--muted)]">key for everything</div>
+              <div className="text-2xl font-semibold text-[var(--ink)]">One key for everything</div>
             </div>
             <div className="w-px bg-[var(--line)]" />
             <div>
@@ -197,16 +196,17 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-14">
             <h2 className="text-3xl sm:text-4xl font-display">From signup to a calling agent in minutes</h2>
-            <p className="mt-3 text-[var(--muted)] text-lg max-w-xl mx-auto">Three steps. No SDK sprawl, no per-API auth flows.</p>
+            <p className="mt-3 text-[var(--muted)] text-lg max-w-xl mx-auto">Quick setup. No SDK sprawl, no per-API auth flows.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {/* Step 1 */}
             <div className="relative group">
               <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 h-full hover:border-[var(--violet)]/30 transition">
-                <div className="flex items-start gap-3 mb-4">
+                <div className="flex items-start justify-between gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center shrink-0">
                     <Key className="w-5 h-5" />
                   </div>
+                  {/* number removed */}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Get one key</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
@@ -217,10 +217,11 @@ export default async function Home() {
             {/* Step 2 */}
             <div className="relative group">
               <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 h-full hover:border-[var(--violet)]/30 transition">
-                <div className="flex items-start gap-3 mb-4">
+                <div className="flex items-start justify-between gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg bg-[var(--violet)] text-white flex items-center justify-center shrink-0">
                     <Terminal className="w-5 h-5" />
                   </div>
+                  {/* number removed */}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Install in your agent</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
@@ -231,10 +232,11 @@ export default async function Home() {
             {/* Step 3 */}
             <div className="relative group">
               <div className="relative bg-[var(--page-bg)] rounded-2xl border border-[var(--line)] p-6 h-full hover:border-[var(--violet)]/30 transition">
-                <div className="flex items-start gap-3 mb-4">
+                <div className="flex items-start justify-between gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center shrink-0">
                     <Workflow className="w-5 h-5" />
                   </div>
+                  {/* number removed */}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Ship to production</h3>
                 <p className="text-sm text-[var(--muted)] leading-relaxed">
@@ -278,14 +280,14 @@ export default async function Home() {
             </div>
           </div>
           <div className="rounded-2xl bg-[#0a0a0a] text-[#e4e4e7] p-6 font-mono text-sm leading-relaxed overflow-x-auto shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-            <div className="text-[#6b7280] mb-1"># 1. Install the SDK</div>
+            <div className="text-[#6b7280] mb-1">Install the SDK</div>
             <div><span className="text-[#60a5fa]">npm</span> install callio-sdk</div>
 
-            <div className="mt-4 text-[#6b7280]"># 2. Initialize with your single Callio key</div>
+            <div className="mt-4 text-[#6b7280]">Initialize with your single Callio key</div>
             <div><span className="text-[#60a5fa]">import</span> {`{`} CallioClient {`}`} <span className="text-[#60a5fa]">from</span> <span className="text-[#34d399]">&apos;callio-sdk&apos;</span>;</div>
             <div className="mt-2"><span className="text-[#60a5fa]">const</span> callio = <span className="text-[#60a5fa]">new</span> <span className="text-[#fbbf24]">CallioClient</span>(<span className="text-[#34d399]">&apos;callio_your_api_key&apos;</span>);</div>
 
-            <div className="mt-4 text-[#6b7280]"># 3. Call ANY API through the unified proxy</div>
+            <div className="mt-4 text-[#6b7280]">Call ANY API through the unified proxy</div>
             <div><span className="text-[#6b7280]">{'/* OpenAI */'}</span></div>
             <div><span className="text-[#60a5fa]">await</span> callio.<span className="text-[#fbbf24]">post</span>(<span className="text-[#34d399]">&apos;openai&apos;</span>, <span className="text-[#34d399]">&apos;v1/chat/completions&apos;</span>, {`{`}</div>
             <div className="ml-4">model: <span className="text-[#34d399]">&apos;gpt-4&apos;</span>,</div>

@@ -26,10 +26,10 @@ export default async function NewApiPage() {
 
       <div className="max-w-4xl mx-auto px-6 py-10">
         <h1 className="text-3xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-          List a New API
+          Register an upstream tool
         </h1>
         <p className="text-[var(--muted)] mb-8">
-          Share your API with the Callio marketplace. Developers and AI agents will be able to discover and integrate it.
+          Add your own HTTP API so agent traffic can flow through Callio&apos;s proxy—same logging, quotas, and secret injection as managed integrations.
         </p>
 
         <ApiCreateForm />

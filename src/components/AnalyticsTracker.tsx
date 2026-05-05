@@ -68,7 +68,8 @@ export default function AnalyticsTracker() {
                 text.includes('Upgrade') ||
                 text.includes('View Demo') ||
                 text.includes('Book a demo') ||
-                text.includes('Browse APIs') ||
+                text.includes('View integrations') ||
+                text.includes('Integrations') ||
                 href === '/signup' ||
                 href === '/pricing' ||
                 href === '/browse' ||
