@@ -8,6 +8,10 @@ import {
   Loader,
   Check,
   AlertCircle,
+  Bookmark,
+  Clock3,
+  RotateCcw,
+  Trash2,
 } from 'lucide-react';
 
 interface Parameter {
@@ -41,6 +45,21 @@ interface PlaygroundResponse {
   statusText: string;
   data: unknown;
   responseTime: number;
+}
+
+interface RequestSnapshot {
+  endpointId: string;
+  endpointMethod: string;
+  endpointPath: string;
+  parameters: Record<string, string>;
+  label: string;
+  createdAt: string;
+}
+
+interface HistoryEntry extends RequestSnapshot {
+  status: number;
+  responseTime: number;
+  responseLabel: string;
 }
 
 const methodColors: Record<string, string> = {
@@ -82,6 +101,46 @@ function applyPathParams(pathTemplate: string, params: Record<string, string>) {
 
 function pathTemplateHasParam(pathTemplate: string, key: string) {
   return pathTemplate.includes(`{${key}}`) || new RegExp(`:${key}(?=/|$)`).test(pathTemplate);
+}
+
+const getStorageKey = (apiSlug: string, kind: 'saved' | 'history') => `callio.playground.${kind}.${apiSlug}`;
+
+function readStoredItems<T>(key: string): T[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed as T[] : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeStoredItems<T>(key: string, items: T[]) {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(key, JSON.stringify(items));
+}
+
+function formatSnapshotLabel(endpoint: EndpointInfo, parameters: Record<string, string>) {
+  const path = applyPathParams(endpoint.path, parameters);
+  return `${endpoint.method} ${path}`;
+}
+
+function summarizeResponse(data: unknown) {
+  if (data == null) return 'No response body';
+  if (typeof data === 'string') return data.slice(0, 80);
+  if (Array.isArray(data)) return `Array(${data.length})`;
+  if (typeof data !== 'object') return String(data);
+
+  const obj = data as Record<string, unknown>;
+  const preferredKeys = ['title', 'name', 'id', 'status', 'message', 'error'];
+  for (const key of preferredKeys) {
+    if (typeof obj[key] === 'string' && obj[key]) return String(obj[key]).slice(0, 80);
+    if (typeof obj[key] === 'number') return String(obj[key]);
+  }
+
+  return 'JSON response';
 }
 
 function matchEndpointFromReplay(endpoints: EndpointInfo[], replay?: { method?: string; path?: string }) {
@@ -194,6 +253,8 @@ export default function ApiPlayground({
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [limitReached, setLimitReached] = useState<{ used: number; limit: number; plan: string } | null>(null);
+  const [savedRequests, setSavedRequests] = useState<RequestSnapshot[]>([]);
+  const [requestHistory, setRequestHistory] = useState<HistoryEntry[]>([]);
 
   useEffect(() => {
     setSelectedEndpoint(initialSelection.endpoint);
@@ -201,6 +262,197 @@ export default function ApiPlayground({
     setResponse(null);
     setError('');
   }, [initialSelection]);
+
+  useEffect(() => {
+    const savedKey = getStorageKey(apiSlug, 'saved');
+    const historyKey = getStorageKey(apiSlug, 'history');
+    setSavedRequests(readStoredItems<RequestSnapshot>(savedKey));
+    setRequestHistory(readStoredItems<HistoryEntry>(historyKey));
+  }, [apiSlug]);
+
+  useEffect(() => {
+    writeStoredItems(getStorageKey(apiSlug, 'saved'), savedRequests);
+  }, [apiSlug, savedRequests]);
+
+  useEffect(() => {
+    writeStoredItems(getStorageKey(apiSlug, 'history'), requestHistory);
+  }, [apiSlug, requestHistory]);
+
+  const getCurrentSnapshot = (): RequestSnapshot | null => {
+    if (!selectedEndpoint) return null;
+    return {
+      endpointId: selectedEndpoint.id,
+      endpointMethod: selectedEndpoint.method,
+      endpointPath: selectedEndpoint.path,
+      parameters: { ...parameters },
+      label: formatSnapshotLabel(selectedEndpoint, parameters),
+      createdAt: new Date().toISOString(),
+    };
+  };
+
+  const saveCurrentRequest = () => {
+    const snapshot = getCurrentSnapshot();
+    if (!snapshot) return;
+
+    setSavedRequests((current) => {
+      const next = [snapshot, ...current.filter((item) => !(item.endpointId === snapshot.endpointId && item.label === snapshot.label))].slice(0, 8);
+      return next;
+    });
+  };
+
+  const applySnapshot = (snapshot: RequestSnapshot) => {
+    const endpoint = endpoints.find((item) => item.id === snapshot.endpointId) || endpoints[0] || null;
+    if (!endpoint) return;
+
+    setSelectedEndpoint(endpoint);
+    setParameters({ ...snapshot.parameters });
+    setResponse(null);
+    setError('');
+  };
+
+  const executeRequest = async (
+    endpoint: EndpointInfo,
+    snapshotParameters: Record<string, string>
+  ): Promise<PlaygroundResponse | null> => {
+    const snapshot = {
+      endpointId: endpoint.id,
+      endpointMethod: endpoint.method,
+      endpointPath: endpoint.path,
+      parameters: { ...snapshotParameters },
+      label: formatSnapshotLabel(endpoint, snapshotParameters),
+      createdAt: new Date().toISOString(),
+    } satisfies RequestSnapshot;
+
+    const trimmedKey = callioApiKey.trim();
+    const recordHistory = (status: number, responseTime: number, data: unknown) => {
+      setRequestHistory((current) => {
+        const historyEntry: HistoryEntry = {
+          ...snapshot,
+          status,
+          responseTime,
+          responseLabel: summarizeResponse(data),
+        };
+        return [historyEntry, ...current].slice(0, 10);
+      });
+    };
+
+    if (!trimmedKey) {
+      setError('Add your Callio API key below (Dashboard → Keys). The playground does not use your login session for proxy auth.');
+      return null;
+    }
+    if (!trimmedKey.startsWith('callio_')) {
+      setError('Callio API keys start with callio_. Paste the key from Dashboard → Keys, not your provider key.');
+      return null;
+    }
+
+    setLoading(true);
+    setError('');
+    setResponse(null);
+    setLimitReached(null);
+
+    try {
+      const path = applyPathParams(endpoint.path, snapshotParameters);
+
+      let requestBody: string | undefined;
+      if (['POST', 'PUT', 'PATCH'].includes(endpoint.method)) {
+        const parsed: Record<string, unknown> = {};
+        for (const p of endpoint.parameters) {
+          const raw = snapshotParameters[p.name];
+          if (!raw) continue;
+          const val = transformParamValue(p, raw);
+          if (val !== undefined) parsed[p.name] = val;
+        }
+        requestBody = JSON.stringify(parsed);
+      }
+
+      let proxyPath = `/api/proxy/${apiSlug}${path}`;
+      if (['GET', 'DELETE', 'HEAD'].includes(endpoint.method)) {
+        const queryParams = new URLSearchParams();
+        for (const [key, value] of Object.entries(snapshotParameters)) {
+          if (value && !pathTemplateHasParam(endpoint.path, key)) {
+            queryParams.set(key, value);
+          }
+        }
+        const qs = queryParams.toString();
+        if (qs) proxyPath += `?${qs}`;
+      }
+
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${trimmedKey}`,
+      };
+
+      const startTime = Date.now();
+      const upstreamResponse = await fetch(proxyPath, {
+        method: endpoint.method,
+        headers,
+        body: requestBody,
+        credentials: 'omit',
+      });
+      const responseTime = Date.now() - startTime;
+
+      const responseText = await upstreamResponse.text();
+      let data: unknown;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        data = { raw: responseText || '(empty response)' };
+      }
+      const dataObject = typeof data === 'object' && data !== null ? data as Record<string, unknown> : {};
+
+      if (upstreamResponse.status === 429 && typeof dataObject.upgrade === 'string') {
+        setLimitReached({
+          used: typeof dataObject.used === 'number' ? dataObject.used : 0,
+          limit: typeof dataObject.limit === 'number' ? dataObject.limit : 0,
+          plan: typeof dataObject.plan === 'string' ? dataObject.plan : 'free'
+        });
+        setError('Monthly request limit reached');
+        recordHistory(upstreamResponse.status, responseTime, data);
+      } else if (!upstreamResponse.ok) {
+        let errorMsg;
+        if (typeof dataObject.error === 'string') {
+          errorMsg = dataObject.error;
+        } else if (typeof dataObject.message === 'string') {
+          errorMsg = dataObject.message;
+        } else if ('raw' in dataObject) {
+          const rawStr = String(dataObject.raw);
+          errorMsg = rawStr.toLowerCase().includes('<!doctype html>')
+            ? `Received HTML response instead of JSON (Status ${upstreamResponse.status}). The endpoint might differ from documentation or the URL might be malformed.`
+            : (rawStr.length > 500 ? rawStr.substring(0, 500) + '...' : rawStr);
+        } else {
+          errorMsg = JSON.stringify(data) || 'Request failed';
+        }
+
+        if (errorMsg.includes('PROVIDER_KEY_MISSING') || dataObject.code === 'PROVIDER_KEY_MISSING' || errorMsg.includes('Provider API key')) {
+          errorMsg = `You haven't saved your provider API key yet. Scroll down to "Connect your provider key" and save your actual provider key (e.g. sk-... for OpenAI). Do NOT use your callio_ key there.`;
+        } else if (dataObject.code === 'PROVIDER_KEY_INVALID' || errorMsg.includes('provider key is invalid')) {
+          errorMsg = `Your saved provider key is wrong (you may have accidentally saved your Callio key instead). Scroll down and re-save the correct provider key (e.g. sk-... for OpenAI).`;
+        } else if (errorMsg.includes('Incorrect API key') || errorMsg.includes('invalid_api_key')) {
+          errorMsg = `Your provider key is invalid. You may have saved your Callio key instead of your real provider key. Scroll down and re-save the correct key (e.g. sk-... for OpenAI).`;
+        } else if (errorMsg.includes('Invalid or missing API key')) {
+          errorMsg = `Invalid or expired Callio API key. Make sure you're using the callio_... key from the "Add to Agent" button.`;
+        }
+        setError(errorMsg);
+        recordHistory(upstreamResponse.status, responseTime, data);
+      } else {
+        const nextResponse = {
+          status: upstreamResponse.status,
+          statusText: upstreamResponse.statusText,
+          data,
+          responseTime,
+        };
+        setResponse(nextResponse);
+        recordHistory(upstreamResponse.status, responseTime, data);
+        return nextResponse;
+      }
+    } catch (err) {
+      setError(`Error: ${String(err)}`);
+    } finally {
+      setLoading(false);
+    }
+
+    return null;
+  };
 
   if (!selectedEndpoint) {
     return (
@@ -251,123 +503,24 @@ export default function ApiPlayground({
   };
 
   const handleTestRequest = async () => {
-    const trimmedKey = callioApiKey.trim();
-    if (!trimmedKey) {
-      setError('Add your Callio API key below (Dashboard → Keys). The playground does not use your login session for proxy auth.');
-      return;
-    }
-    if (!trimmedKey.startsWith('callio_')) {
-      setError('Callio API keys start with callio_. Paste the key from Dashboard → Keys, not your provider key.');
-      return;
-    }
+    if (!selectedEndpoint) return;
+    await executeRequest(selectedEndpoint, parameters);
+  };
 
-    setLoading(true);
-    setError('');
-    setResponse(null);
-    setLimitReached(null);
+  const handleRerunSnapshot = async (snapshot: RequestSnapshot) => {
+    const endpoint = endpoints.find((item) => item.id === snapshot.endpointId) || null;
+    if (!endpoint) return;
+    setSelectedEndpoint(endpoint);
+    setParameters({ ...snapshot.parameters });
+    await executeRequest(endpoint, snapshot.parameters);
+  };
 
-    try {
-      // Build the path with parameters
-      const path = applyPathParams(selectedEndpoint.path, parameters);
+  const deleteSavedRequest = (label: string) => {
+    setSavedRequests((current) => current.filter((item) => item.label !== label));
+  };
 
-      // Build the request body using smart parameter transforms
-      let requestBody: string | undefined;
-      if (['POST', 'PUT', 'PATCH'].includes(selectedEndpoint.method)) {
-        const parsed: Record<string, unknown> = {};
-        for (const p of selectedEndpoint.parameters) {
-          const raw = parameters[p.name];
-          if (!raw) continue;
-          const val = transformParamValue(p, raw);
-          if (val !== undefined) parsed[p.name] = val;
-        }
-        requestBody = JSON.stringify(parsed);
-      }
-
-      // For GET/DELETE, append non-path parameters as query string
-      let proxyPath = `/api/proxy/${apiSlug}${path}`;
-      if (['GET', 'DELETE', 'HEAD'].includes(selectedEndpoint.method)) {
-        const queryParams = new URLSearchParams();
-        for (const [key, value] of Object.entries(parameters)) {
-          if (value && !pathTemplateHasParam(selectedEndpoint.path, key)) {
-            queryParams.set(key, value);
-          }
-        }
-        const qs = queryParams.toString();
-        if (qs) proxyPath += `?${qs}`;
-      }
-
-      // Call through Callio proxy with Bearer only (no session cookie — matches curl / MCP)
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${trimmedKey}`,
-      };
-
-      const startTime = Date.now();
-      const response = await fetch(proxyPath, {
-        method: selectedEndpoint.method,
-        headers,
-        body: requestBody,
-        credentials: 'omit',
-      });
-      const responseTime = Date.now() - startTime;
-
-      // Handle non-JSON responses gracefully
-      const responseText = await response.text();
-      let data: unknown;
-      try {
-        data = JSON.parse(responseText);
-      } catch {
-        data = { raw: responseText || '(empty response)' };
-      }
-      const dataObject = typeof data === 'object' && data !== null ? data as Record<string, unknown> : {};
-
-      if (response.status === 429 && typeof dataObject.upgrade === 'string') {
-        setLimitReached({
-          used: typeof dataObject.used === 'number' ? dataObject.used : 0,
-          limit: typeof dataObject.limit === 'number' ? dataObject.limit : 0,
-          plan: typeof dataObject.plan === 'string' ? dataObject.plan : 'free'
-        });
-        setError('Monthly request limit reached');
-      } else if (!response.ok) {
-        // Convert error to string, handle various formats
-        let errorMsg;
-        if (typeof dataObject.error === 'string') {
-          errorMsg = dataObject.error;
-        } else if (typeof dataObject.message === 'string') {
-          errorMsg = dataObject.message;
-        } else if ('raw' in dataObject) {
-          const rawStr = String(dataObject.raw);
-          errorMsg = rawStr.toLowerCase().includes('<!doctype html>')
-            ? `Received HTML response instead of JSON (Status ${response.status}). The endpoint might differ from documentation or the URL might be malformed.`
-            : (rawStr.length > 500 ? rawStr.substring(0, 500) + '...' : rawStr);
-        } else {
-          errorMsg = JSON.stringify(data) || 'Request failed';
-        }
-
-        // Check if it's a provider key issue
-        if (errorMsg.includes('PROVIDER_KEY_MISSING') || dataObject.code === 'PROVIDER_KEY_MISSING' || errorMsg.includes('Provider API key')) {
-          errorMsg = `You haven't saved your provider API key yet. Scroll down to "Connect your provider key" and save your actual provider key (e.g. sk-... for OpenAI). Do NOT use your callio_ key there.`;
-        } else if (dataObject.code === 'PROVIDER_KEY_INVALID' || errorMsg.includes('provider key is invalid')) {
-          errorMsg = `Your saved provider key is wrong (you may have accidentally saved your Callio key instead). Scroll down and re-save the correct provider key (e.g. sk-... for OpenAI).`;
-        } else if (errorMsg.includes('Incorrect API key') || errorMsg.includes('invalid_api_key')) {
-          errorMsg = `Your provider key is invalid. You may have saved your Callio key instead of your real provider key. Scroll down and re-save the correct key (e.g. sk-... for OpenAI).`;
-        } else if (errorMsg.includes('Invalid or missing API key')) {
-          errorMsg = `Invalid or expired Callio API key. Make sure you're using the callio_... key from the "Add to Agent" button.`;
-        }
-        setError(errorMsg);
-      } else {
-        setResponse({
-          status: response.status,
-          statusText: response.statusText,
-          data,
-          responseTime,
-        });
-      }
-    } catch (err) {
-      setError(`Error: ${String(err)}`);
-    } finally {
-      setLoading(false);
-    }
+  const clearHistory = () => {
+    setRequestHistory([]);
   };
 
   const copyToClipboard = () => {
@@ -386,6 +539,14 @@ export default function ApiPlayground({
             <span className="text-sm text-gray-500">• {apiSlug}</span>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={saveCurrentRequest}
+              disabled={!selectedEndpoint}
+              className="px-4 py-2 border border-gray-300 hover:bg-gray-50 disabled:opacity-50 text-gray-700 font-medium rounded-lg transition flex items-center gap-2 text-sm"
+            >
+              <Bookmark className="w-4 h-4" />
+              Save Request
+            </button>
             <button
               onClick={handleTestRequest}
               disabled={loading}
@@ -437,6 +598,88 @@ export default function ApiPlayground({
                     <div className="text-xs text-gray-600 mt-1 line-clamp-2">{endpoint.description}</div>
                   </button>
                 ))}
+              </div>
+
+              <div className="mt-8 space-y-6">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+                      Saved Requests ({savedRequests.length})
+                    </h3>
+                  </div>
+                  <div className="space-y-2">
+                    {savedRequests.length === 0 ? (
+                      <p className="text-xs text-gray-500">Save a request to keep it here.</p>
+                    ) : savedRequests.map((item) => (
+                      <div key={`${item.label}-${item.createdAt}`} className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                        <button
+                          onClick={() => applySnapshot(item)}
+                          className="w-full text-left"
+                        >
+                          <div className="text-sm font-medium text-gray-900">{item.label}</div>
+                          <div className="text-xs text-gray-500 mt-1">{item.endpointMethod} • {new Date(item.createdAt).toLocaleDateString()}</div>
+                        </button>
+                        <div className="mt-2 flex items-center justify-between">
+                          <button
+                            onClick={() => deleteSavedRequest(item.label)}
+                            className="text-xs text-gray-400 hover:text-red-600 flex items-center gap-1"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                            Remove
+                          </button>
+                          <button
+                            onClick={() => applySnapshot(item)}
+                            className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                          >
+                            Load
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xs font-bold text-gray-600 uppercase tracking-wider flex items-center gap-2">
+                      <Clock3 className="w-3 h-3" />
+                      Recent Runs ({requestHistory.length})
+                    </h3>
+                    {requestHistory.length > 0 && (
+                      <button
+                        onClick={clearHistory}
+                        className="text-xs text-gray-400 hover:text-red-600"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    {requestHistory.length === 0 ? (
+                      <p className="text-xs text-gray-500">Run a request to see it here.</p>
+                    ) : requestHistory.map((item) => (
+                      <div key={`${item.label}-${item.createdAt}`} className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                        <div className="text-sm font-medium text-gray-900">{item.label}</div>
+                        <div className="text-xs text-gray-500 mt-1 flex items-center gap-2 flex-wrap">
+                          <span className={`px-1.5 py-0.5 rounded ${item.status >= 200 && item.status < 300 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            {item.status}
+                          </span>
+                          <span>{item.responseTime}ms</span>
+                          <span>{item.responseLabel}</span>
+                        </div>
+                        <div className="mt-2 flex items-center justify-end gap-3">
+                          <button
+                            onClick={() => handleRerunSnapshot(item)}
+                            className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            Rerun
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
