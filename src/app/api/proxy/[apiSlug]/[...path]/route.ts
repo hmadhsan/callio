@@ -5,6 +5,7 @@ import { hashApiKey } from '@/lib/keys';
 import { PLANS } from '@/lib/stripe';
 import { decryptProviderKey } from '@/lib/crypto';
 import { getUserFromSessionToken, getActiveWorkspace, SESSION_COOKIE, isAdmin } from '@/lib/auth';
+import { getApiBaseUrlFallback } from '@/lib/apiBaseUrlFallbacks';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -94,8 +95,13 @@ async function handler(
 
     if (targetParam) {
       targetUrl = targetParam;
-    } else if (api.baseUrl) {
-      let base = api.baseUrl.replace(/\/$/, '');
+    } else {
+      const fallbackBaseUrl = api.baseUrl || getApiBaseUrlFallback(apiSlug);
+      if (!fallbackBaseUrl) {
+        return NextResponse.json({ error: 'This API has no base URL configured' }, { status: 400 });
+      }
+
+      let base = fallbackBaseUrl.replace(/\/$/, '');
       let pathToAppend = pathStr.startsWith('/') ? pathStr : `/${pathStr}`;
 
       try {
@@ -122,8 +128,6 @@ async function handler(
       });
       const qs = queryParams.toString();
       if (qs) targetUrl += `?${qs}`;
-    } else {
-      return NextResponse.json({ error: 'This API has no base URL configured' }, { status: 400 });
     }
 
     // Build headers for upstream request
