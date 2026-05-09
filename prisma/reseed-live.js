@@ -3,9 +3,14 @@
 // This replaces the demo/placeholder data with actual API integrations
 
 const { PrismaClient } = require('@prisma/client');
+const fs = require('fs');
+const vm = require('vm');
 const prisma = new PrismaClient();
 const batch1Apis = require('./new-apis-batch1').apis;
 const batch2Apis = require('./new-apis-batch2').apis;
+const seedDataApis = require('./seed-data').apis;
+const seedDataRealApis = require('./seed-data-real').apis;
+const seedDataProductionApis = require('./seed-data-production').apis;
 
 const baseApis = [
   // ─── 1. JSONPlaceholder (Demo – actually works with no auth!) ─────
@@ -521,7 +526,20 @@ const baseApis = [
 ];
 
 const additionalApis = [...batch1Apis, ...batch2Apis];
-const apis = [...baseApis, ...additionalApis].filter((api, index, arr) => {
+const discoverSource = fs.readFileSync(require.resolve('./seed-discover'), 'utf8');
+const discoverMatch = discoverSource.match(/const newApis = \[(.|\r|\n)*?^\];/m);
+const discoverApis = discoverMatch
+  ? vm.runInNewContext(discoverMatch[0].replace(/^const newApis = /, '').replace(/;$/, ''))
+  : [];
+
+const apis = [
+  ...baseApis,
+  ...additionalApis,
+  ...seedDataApis,
+  ...seedDataRealApis,
+  ...seedDataProductionApis,
+  ...discoverApis,
+].filter((api, index, arr) => {
   return arr.findIndex((candidate) => candidate.slug === api.slug) === index;
 });
 
