@@ -337,8 +337,8 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 text-blue-200 text-xs font-semibold uppercase tracking-wide mb-5">
-                <Sparkles className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--violet-soft)] text-[var(--violet-strong)] text-xs font-semibold uppercase tracking-wide mb-5">
+                <Sparkles className="w-3.5 h-3.5 text-[var(--violet)]" />
                 MCP Server
               </div>
               <h2 className="text-3xl sm:text-4xl font-display">Connect Antigravity, Cursor &amp; more</h2>
@@ -352,7 +352,7 @@ export default async function Home() {
                   { tool: 'Claude Code', path: '~/.claude/claude_desktop_config.json' },
                 ].map((t) => (
                   <div key={t.tool} className="flex items-center gap-3 text-sm">
-                    <Check className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-[var(--violet)] flex-shrink-0" />
                     <span className="text-white font-medium">{t.tool}</span>
                     <span className="text-[#6b7280]">→</span>
                     <code className="text-[#a1a1aa] text-xs">{t.path}</code>
@@ -362,30 +362,30 @@ export default async function Home() {
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/mcp"
-                  className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-500 transition inline-flex items-center gap-2"
+                  className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition inline-flex items-center gap-2"
                 >
                   Setup guide <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
-            <div className="rounded-2xl bg-[#141414] border border-[#222] p-6 font-mono text-sm leading-relaxed overflow-x-auto">
-              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#222]">
+            <div className="rounded-2xl bg-[#0f0f0f] border border-[#1a1a1a] p-6 font-mono text-sm leading-relaxed overflow-x-auto shadow-lg">
+              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#1a1a1a]">
                 <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
                 <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
                 <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-                <span className="ml-2 text-[#555] text-xs">mcp config</span>
+                <span className="ml-2 text-[#6b7280] text-xs font-medium">mcp config</span>
               </div>
               <div className="text-[#6b7280]">{`{`}</div>
-              <div className="ml-4"><span className="text-[#60a5fa]">&quot;mcpServers&quot;</span>: {`{`}</div>
-              <div className="ml-8"><span className="text-[#60a5fa]">&quot;callio&quot;</span>: {`{`}</div>
-              <div className="ml-12"><span className="text-[#60a5fa]">&quot;command&quot;</span>: <span className="text-[#34d399]">&quot;npx&quot;</span>,</div>
-              <div className="ml-12"><span className="text-[#60a5fa]">&quot;args&quot;</span>: [<span className="text-[#34d399]">&quot;-y&quot;</span>, <span className="text-[#34d399]">&quot;github:hmadhsan/callio-mcp&quot;</span>],</div>
-              <div className="ml-12"><span className="text-[#60a5fa]">&quot;env&quot;</span>: {`{`}</div>
-              <div className="ml-16"><span className="text-[#60a5fa]">&quot;CALLIO_API_KEY&quot;</span>: <span className="text-[#fbbf24]">&quot;callio_your_key&quot;</span></div>
+              <div className="ml-4"><span className="text-[#a78bfa]">&quot;mcpServers&quot;</span>: {`{`}</div>
+              <div className="ml-8"><span className="text-[#a78bfa]">&quot;callio&quot;</span>: {`{`}</div>
+              <div className="ml-12"><span className="text-[#a78bfa]">&quot;command&quot;</span>: <span className="text-[#34d399]">&quot;npx&quot;</span>,</div>
+              <div className="ml-12"><span className="text-[#a78bfa]">&quot;args&quot;</span>: [<span className="text-[#34d399]">&quot;-y&quot;</span>, <span className="text-[#34d399]">&quot;github:hmadhsan/callio-mcp&quot;</span>],</div>
+              <div className="ml-12"><span className="text-[#a78bfa]">&quot;env&quot;</span>: {`{`}</div>
+              <div className="ml-16"><span className="text-[#a78bfa]">&quot;CALLIO_API_KEY&quot;</span>: <span className="text-[#fbbf24]">&quot;callio_your_key&quot;</span></div>
               <div className="ml-12">{`}`}</div>
               <div className="ml-8">{`}`}</div>
               <div className="ml-4">{`}`}</div>
-              <div className="text-[#6b7280]">{`}`}</div>
+              <div className="text-[#8b5cf6]">{`}`}</div>
             </div>
           </div>
         </div>
