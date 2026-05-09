@@ -367,14 +367,6 @@ export default async function Home() {
                 >
                   Setup guide <ArrowRight className="w-4 h-4" />
                 </Link>
-                <a
-                  href="https://github.com/hmadhsan/callio-mcp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 rounded-full border border-[#333] text-[#a1a1aa] hover:text-white hover:border-[#555] transition font-semibold inline-flex items-center gap-2"
-                >
-                  View source <Terminal className="w-4 h-4" />
-                </a>
               </div>
             </div>
             <div className="rounded-2xl bg-[#141414] border border-[#222] p-6 font-mono text-sm leading-relaxed overflow-x-auto">
