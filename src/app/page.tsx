@@ -120,10 +120,10 @@ export default async function Home() {
         <div className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.06)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.9),transparent_85%)]" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
           <div className="inline-flex items-center px-4 py-2 rounded-full border border-[var(--violet)]/20 bg-[var(--violet-soft)]">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--violet-strong)]">Built for AI agents &amp; AI-native apps</span>
+            <span className="text-xs font-medium uppercase tracking-wide text-[var(--violet-strong)]">Built for AI agents &amp; AI-native apps</span>
           </div>
-          <h1 className="mt-6 text-4xl sm:text-6xl font-display font-bold tracking-tight leading-[1.05] max-w-3xl">
-            Every tool your agent needs.<br className="hidden sm:block" /> <span className="italic text-[var(--ink)]">One key. One gateway.</span>
+          <h1 className="mt-6 text-4xl sm:text-6xl font-display font-semibold tracking-tight leading-[1.05] max-w-3xl">
+            Every tool your agent needs.<br className="hidden sm:block" /> <span className="italic font-normal text-[var(--ink)]">One key. One gateway.</span>
           </h1>
           <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
             Callio is the API gateway for teams shipping AI agents and AI-native products. One key, MCP-native install, and {apiCount} APIs your agent can call in production from day one.
