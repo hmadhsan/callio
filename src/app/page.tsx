@@ -8,7 +8,6 @@ import {
 import UserNav from '@/components/UserNav';
 import CallioLogoComponent from '@/components/CallioLogo';
 import AuthAwareCTA from '@/components/AuthAwareCTA';
-import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
 import { getCatalogApiCount } from '@/lib/catalog-count';
@@ -186,44 +185,9 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="relative hidden lg:block">
-              <div className="absolute -inset-8 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.12),transparent_65%)] blur-3xl pointer-events-none" />
-              <div className="absolute -left-10 top-14 z-20 w-52 rounded-2xl border border-white/70 bg-white/88 p-4 shadow-[0_20px_60px_rgba(15,23,42,0.12)] backdrop-blur animate-hero-float">
-                <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
-                  <span>Live Flow</span>
-                  <span className="inline-flex items-center gap-1 text-emerald-600">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                    healthy
-                  </span>
-                </div>
-                <div className="mt-3 text-2xl font-semibold text-[var(--ink)]">133 APIs</div>
-                <p className="mt-1 text-sm leading-relaxed text-[var(--muted)]">
-                  Requests fan out through one key with retries, auth injection, and MCP-ready access.
-                </p>
-              </div>
-              <div className="absolute -right-6 bottom-12 z-20 w-56 rounded-2xl border border-[var(--violet)]/15 bg-[linear-gradient(135deg,rgba(239,246,255,0.96),rgba(255,255,255,0.92))] p-4 shadow-[0_24px_70px_rgba(37,99,235,0.14)] backdrop-blur animate-hero-drift">
-                <div className="flex items-center gap-2 text-sm font-semibold text-[var(--violet-strong)]">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm">
-                    <Sparkles className="h-4 w-4" />
-                  </span>
-                  MCP install path
-                </div>
-                <div className="mt-3 space-y-2 text-sm text-[var(--ink)]">
-                  <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
-                    <span>Cursor</span>
-                    <span className="text-[var(--muted)]">ready</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
-                    <span>Claude</span>
-                    <span className="text-[var(--muted)]">ready</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
-                    <span>Antigravity</span>
-                    <span className="text-[var(--muted)]">ready</span>
-                  </div>
-                </div>
-              </div>
-              <AnimatedHeroSVG compact className="relative z-10 translate-y-2" />
+            <div className="relative hidden lg:block min-h-[520px]">
+              <div className="absolute inset-y-10 left-8 right-0 rounded-[40px] bg-[radial-gradient(circle_at_35%_35%,rgba(37,99,235,0.14),transparent_38%),radial-gradient(circle_at_72%_28%,rgba(14,165,233,0.12),transparent_32%),radial-gradient(circle_at_58%_70%,rgba(59,130,246,0.1),transparent_42%)] blur-2xl pointer-events-none" />
+              <div className="absolute inset-y-14 left-18 right-10 rounded-[36px] border border-white/40 bg-white/20 backdrop-blur-[2px] pointer-events-none" />
             </div>
           </div>
         </div>
