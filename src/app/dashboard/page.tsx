@@ -5,7 +5,6 @@ import { getAllApis } from '@/lib/apiService';
 import prisma from '@/lib/prisma';
 import GenerateKeyForm from '@/components/GenerateKeyForm';
 import KeyTableRow from '@/components/KeyTableRow';
-import OnboardingFlow from '@/components/OnboardingFlow';
 import OnboardingFlowWrapper from '@/components/OnboardingFlowWrapper';
 import { Key, Plus, ArrowRight, Settings, Zap, Star, Terminal, Sparkles } from 'lucide-react';
 import UserNav from '@/components/UserNav';
@@ -212,24 +211,28 @@ export default async function DashboardPage({
 
           {favoriteApis.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {favoriteApis.map(({ api }: any) => (
-                <Link
-                  key={api.id}
-                  href={`/skills/callio/${api.slug}`}
-                  className="group bg-white rounded-xl border border-[var(--line)] p-4 hover:border-[var(--accent)] hover:shadow-md transition-all relative"
-                >
-                  <div className="flex items-start gap-3 mb-2 pr-8">
-                    <span className="text-xl flex-shrink-0 w-8 h-8 flex items-center justify-center bg-[var(--soft)] rounded-lg">
-                      {api.icon}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-sm group-hover:text-[var(--accent)] transition truncate">{api.name}</h3>
-                      <p className="text-[10px] text-[var(--muted)] font-mono truncate">callio/{api.slug}</p>
+              {favoriteApis.map((favoriteApi) => {
+                const api = favoriteApi.api;
+
+                return (
+                  <Link
+                    key={api.id}
+                    href={`/skills/callio/${api.slug}`}
+                    className="group bg-white rounded-xl border border-[var(--line)] p-4 hover:border-[var(--accent)] hover:shadow-md transition-all relative"
+                  >
+                    <div className="flex items-start gap-3 mb-2 pr-8">
+                      <span className="text-xl flex-shrink-0 w-8 h-8 flex items-center justify-center bg-[var(--soft)] rounded-lg">
+                        {api.icon}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-sm group-hover:text-[var(--accent)] transition truncate">{api.name}</h3>
+                        <p className="text-[10px] text-[var(--muted)] font-mono truncate">callio/{api.slug}</p>
+                      </div>
                     </div>
-                  </div>
-                  <p className="text-xs text-[var(--muted)] line-clamp-2">{api.shortDescription}</p>
-                </Link>
-              ))}
+                    <p className="text-xs text-[var(--muted)] line-clamp-2">{api.shortDescription}</p>
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <div className="bg-white rounded-xl border border-[var(--line)] p-12 flex flex-col items-center justify-center text-center">

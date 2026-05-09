@@ -21,17 +21,21 @@ export default function OnboardingFlow({ userId, hasApiKeys, hasCredentials, onC
     const saved = localStorage.getItem(`onboarding_${userId}`);
     if (saved) {
       const progress = JSON.parse(saved);
-      setLocalProgress(progress);
-      // Auto-advance to next incomplete step
-      const nextStep = Object.entries(progress).find(([_, done]) => !done)?.[0];
-      if (nextStep) {
-        setStep(parseInt(nextStep));
-      }
+      window.setTimeout(() => {
+        setLocalProgress(progress);
+        // Auto-advance to next incomplete step
+        const nextStep = Object.entries(progress).find(([, done]) => !done)?.[0];
+        if (nextStep) {
+          setStep(parseInt(nextStep));
+        }
+      }, 0);
     }
 
     // Auto-open if user has no keys/credentials and hasn't completed
     if (!hasApiKeys && !hasCredentials && !saved) {
-      setIsOpen(true);
+      window.setTimeout(() => {
+        setIsOpen(true);
+      }, 0);
     }
   }, [userId, hasApiKeys, hasCredentials]);
 
@@ -138,7 +142,7 @@ export default function OnboardingFlow({ userId, hasApiKeys, hasCredentials, onC
             onClick={() => handleStepComplete(5)}
             className="px-4 py-2 bg-[var(--accent)] text-white rounded-lg hover:bg-[var(--accent-strong)] transition text-sm font-medium"
           >
-            I've Favorited an API
+            I&apos;ve Favorited an API
           </button>
         </div>
       ),
