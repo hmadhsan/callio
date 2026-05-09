@@ -5,6 +5,8 @@ import { getAllApis } from '@/lib/apiService';
 import prisma from '@/lib/prisma';
 import GenerateKeyForm from '@/components/GenerateKeyForm';
 import KeyTableRow from '@/components/KeyTableRow';
+import OnboardingFlow from '@/components/OnboardingFlow';
+import OnboardingFlowWrapper from '@/components/OnboardingFlowWrapper';
 import { Key, Plus, ArrowRight, Settings, Zap, Star, Terminal, Sparkles } from 'lucide-react';
 import UserNav from '@/components/UserNav';
 import CallioLogo from '@/components/CallioLogo';
@@ -72,6 +74,13 @@ export default async function DashboardPage({
 
   return (
     <div className="min-h-screen bg-[var(--page-bg)]">
+      <OnboardingFlowWrapper
+        userId={user.id}
+        hasApiKeys={apiKeys.length > 0}
+        hasCredentials={apiKeys.some(key => key.api !== null)}
+        onboardingCompleted={user.onboardingCompleted}
+      />
+
       {/* Nav */}
       <nav className="border-b border-[var(--line)] bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
