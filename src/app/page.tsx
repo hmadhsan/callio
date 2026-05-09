@@ -118,6 +118,18 @@ export default async function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,0,0,0.04),transparent_55%),radial-gradient(circle_at_85%_15%,rgba(37,99,235,0.09),transparent_50%),radial-gradient(circle_at_50%_90%,rgba(37,99,235,0.04),transparent_60%)]" />
         {/* faint dotted grid for the "infra" feel */}
         <div className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.06)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.9),transparent_85%)]" />
+        <div className="pointer-events-none absolute right-0 top-0 hidden h-[440px] w-[44%] lg:block">
+          <div className="absolute right-2 top-4 h-[380px] w-[380px] rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.24),rgba(37,99,235,0.08)_38%,transparent_72%)] blur-3xl" />
+          <div className="absolute right-24 top-20 h-[250px] w-[250px] rounded-full bg-[radial-gradient(circle,rgba(14,165,233,0.18),rgba(14,165,233,0.05)_46%,transparent_74%)] blur-2xl" />
+          <div className="absolute right-10 top-32 h-[180px] w-[180px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.16),rgba(59,130,246,0.04)_48%,transparent_76%)] blur-2xl" />
+          <div className="absolute right-18 top-14 h-[320px] w-[320px] rounded-full border border-[rgba(37,99,235,0.14)] opacity-90" />
+          <div className="absolute right-10 top-36 h-[210px] w-[210px] rounded-full border border-[rgba(37,99,235,0.12)] opacity-80" />
+          <div className="absolute right-34 top-44 h-[120px] w-[120px] rounded-full border border-[rgba(14,165,233,0.14)] opacity-80" />
+          <div className="absolute right-28 top-34 h-px w-44 bg-gradient-to-r from-transparent via-[rgba(37,99,235,0.28)] to-transparent" />
+          <div className="absolute right-10 top-64 h-px w-52 bg-gradient-to-r from-transparent via-[rgba(14,165,233,0.24)] to-transparent" />
+          <div className="absolute right-44 top-26 h-2.5 w-2.5 rounded-full bg-[rgba(37,99,235,0.6)] shadow-[0_0_18px_rgba(37,99,235,0.38)]" />
+          <div className="absolute right-30 top-60 h-2 w-2 rounded-full bg-[rgba(14,165,233,0.5)] shadow-[0_0_16px_rgba(14,165,233,0.32)]" />
+        </div>
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
           <div className="inline-flex items-center px-4 py-2 rounded-full border border-[var(--violet)]/20 bg-[var(--violet-soft)]">
             <span className="text-xs font-medium uppercase tracking-wide text-[var(--violet-strong)]">Built for AI agents &amp; AI-native apps</span>
@@ -189,6 +201,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
       <section id="how-it-works" className="py-20 sm:py-24 bg-white border-t border-[var(--line)]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-14">
