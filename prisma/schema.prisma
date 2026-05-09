@@ -47,6 +47,7 @@ model User {
   apiCredentials ApiCredential[]
   subscription   Subscription?
   usageRecords   UsageRecord[]
+  apiCallLogs    ApiCallLog[] @relation("userApiCallLogs")
   memberships    WorkspaceMember[]
   favoriteApis   FavoriteApi[]
 
@@ -236,6 +237,31 @@ model UsageRecord {
   @@index([workspaceId, environment, createdAt])
 }
 
+model ApiCallLog {
+  id            String            @id @default(cuid())
+  workspaceId   String
+  workspace     Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User              @relation("userApiCallLogs", fields: [userId], references: [id], onDelete: Cascade)
+  apiSlug       String
+  apiKeyId      String? // Which API key was used
+  method        String
+  path          String
+  status        Int
+  latencyMs     Int
+  requestSize   Int? // Request body size in bytes
+  responseSize  Int? // Response body size in bytes
+  errorMessage  String? // Error details if request failed
+  environment   ApiKeyEnvironment @default(production)
+  createdAt     DateTime          @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([workspaceId, apiSlug, createdAt])
+  @@index([apiSlug])
+  @@index([status])
+  @@index([createdAt])
+}
+
 // ── Workspaces ──────────────────────────────────────────
 
 model Workspace {
@@ -250,6 +276,7 @@ model Workspace {
   apiKeys        ApiKey[]
   usageRecords   UsageRecord[]
   apiCredentials ApiCredential[]
+  apiCallLogs    ApiCallLog[]
 }
 
 model WorkspaceMember {

@@ -239,10 +239,15 @@ async function handler(
       headers: upstreamHeaders,
     };
 
+    let requestBody = '';
+    let requestSize = 0;
     if (['POST', 'PUT', 'PATCH'].includes(request.method)) {
       try {
-        const body = await request.text();
-        if (body) fetchOptions.body = body;
+        requestBody = await request.text();
+        if (requestBody) {
+          fetchOptions.body = requestBody;
+          requestSize = new TextEncoder().encode(requestBody).length;
+        }
       } catch {
         // No body
       }
@@ -251,14 +256,43 @@ async function handler(
     const upstream = await fetch(targetUrl, fetchOptions);
     const latencyMs = Date.now() - startTime;
 
+    // Return the upstream response — intercept provider auth errors for better messaging
+    const responseBody = await upstream.text();
+    const responseSize = new TextEncoder().encode(responseBody).length;
+
+    // Log to ApiCallLog for observability (non-blocking)
+    let errorMessage: string | null = null;
+    if (upstream.status >= 400) {
+      try {
+        const errorData = JSON.parse(responseBody);
+        errorMessage = errorData?.error?.message || errorData?.message || responseBody.slice(0, 200);
+      } catch {
+        errorMessage = responseBody.slice(0, 200);
+      }
+    }
+
+    prisma.apiCallLog.create({
+      data: {
+        workspaceId: auth.workspaceId,
+        userId: auth.userId,
+        apiSlug,
+        apiKeyId: auth.keyId,
+        method: request.method,
+        path: pathStr,
+        status: upstream.status,
+        latencyMs,
+        requestSize,
+        responseSize,
+        errorMessage,
+        environment: usageEnv,
+      },
+    }).catch((err: unknown) => console.error('ApiCallLog creation error:', err));
+
     // Update usage record with actual status and latency (non-blocking)
     prisma.usageRecord.update({
       where: { id: usageRecord.id },
       data: { status: upstream.status, latencyMs },
     }).catch((err: unknown) => console.error('Usage record update error:', err));
-
-    // Return the upstream response — intercept provider auth errors for better messaging
-    const responseBody = await upstream.text();
 
     // If upstream returned 401/403 with auth error, it likely means the stored provider key is wrong
     if (upstream.status === 401 || upstream.status === 403) {

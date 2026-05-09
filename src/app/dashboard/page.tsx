@@ -80,6 +80,7 @@ export default async function DashboardPage({
             <Link href="/browse" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Browse</Link>
             <Link href="/keys" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Keys</Link>
             <Link href="/dashboard/logs" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Logs</Link>
+            <Link href="/dashboard/observability" className="text-sm text-[var(--muted)] hover:text-[var(--ink)] transition">Observability</Link>
             <UserNav />
           </div>
         </div>
