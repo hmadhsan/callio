@@ -1,15 +1,19 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-export default function AnimatedHeroSVG() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+type AnimatedHeroSVGProps = {
+  className?: string;
+  compact?: boolean;
+};
 
-  if (!mounted) return <div className="w-full h-[320px]" />;
+export default function AnimatedHeroSVG({ className = '', compact = false }: AnimatedHeroSVGProps) {
+  const frameClassName = compact
+    ? `relative w-full rounded-[28px] bg-[#09090b] border border-[#27272a] shadow-2xl overflow-hidden ${className}`
+    : `relative w-full max-w-5xl mx-auto rounded-3xl bg-[#09090b] border border-[#27272a] shadow-2xl overflow-hidden my-12 hidden lg:block ${className}`;
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto rounded-3xl bg-[#09090b] border border-[#27272a] shadow-2xl overflow-hidden my-12 hidden lg:block" style={{ aspectRatio: '840/320' }}>
+    <div className={frameClassName} style={{ aspectRatio: compact ? '760/620' : '840/320' }}>
 
       {/* Background ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-blue-500/10 blur-[100px] pointer-events-none" />
@@ -182,12 +186,12 @@ export default function AnimatedHeroSVG() {
 
           <g className="agent-key-placeholder">
             <text x="40" y="100" fill="#a1a1aa" fontFamily="monospace" fontSize="12">
-              <tspan fill="#93c5fd">const</tspan> API_KEY = "<tspan fill="#52525b">paste_key</tspan>";
+              <tspan fill="#93c5fd">const</tspan> API_KEY = &quot;<tspan fill="#52525b">paste_key</tspan>&quot;;
             </text>
           </g>
           <g className="agent-key-actual">
             <text x="40" y="100" fill="#a1a1aa" fontFamily="monospace" fontSize="12">
-              <tspan fill="#93c5fd">const</tspan> API_KEY = "<tspan fill="#10b981">callio_sk_xyz</tspan>";
+              <tspan fill="#93c5fd">const</tspan> API_KEY = &quot;<tspan fill="#10b981">callio_sk_xyz</tspan>&quot;;
             </text>
           </g>
 
@@ -195,7 +199,7 @@ export default function AnimatedHeroSVG() {
             <tspan fill="#60a5fa">const</tspan> resp = <tspan fill="#60a5fa">await</tspan> fetch(
           </text>
           <text x="40" y="145" fill="#34d399" fontFamily="monospace" fontSize="12">
-            'callio/any_api'
+            &apos;callio/any_api&apos;
           </text>
           <text x="40" y="165" fill="#a1a1aa" fontFamily="monospace" fontSize="12">
             auth: API_KEY
@@ -211,7 +215,7 @@ export default function AnimatedHeroSVG() {
             <rect x="110" y="200" width="140" height="60" rx="8" fill="#18181b" stroke="#3f3f46" filter="url(#shadow)" />
             <text x="120" y="220" fill="#10b981" fontFamily="monospace" fontSize="11" fontWeight="bold">200 OK</text>
             <text x="120" y="240" fill="#e4e4e7" fontFamily="monospace" fontSize="11">{"{"}</text>
-            <text x="130" y="252" fill="#e4e4e7" fontFamily="monospace" fontSize="11">"content": "Hi!"</text>
+            <text x="130" y="252" fill="#e4e4e7" fontFamily="monospace" fontSize="11">&quot;content&quot;: &quot;Hi!&quot;</text>
             <text x="120" y="252" fill="#e4e4e7" fontFamily="monospace" fontSize="11">{"}"}</text>
           </g>
         </g>

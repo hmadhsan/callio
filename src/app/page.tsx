@@ -119,75 +119,112 @@ export default async function Home() {
         {/* faint dotted grid for the "infra" feel */}
         <div className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.06)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.9),transparent_85%)]" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
-          <div className="inline-flex items-center px-4 py-2 rounded-full border border-[var(--violet)]/20 bg-[var(--violet-soft)]">
-            <span className="text-xs font-medium uppercase tracking-wide text-[var(--violet-strong)]">Built for AI agents &amp; AI-native apps</span>
-          </div>
-          <h1 className="mt-6 text-4xl sm:text-6xl font-display font-semibold tracking-tight leading-[1.05] max-w-3xl">
-            Every tool your agent needs.<br className="hidden sm:block" /> <span className="italic font-normal text-[var(--ink)]">One key. One gateway.</span>
-          </h1>
-          <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
-            Callio is the API gateway for teams shipping AI agents and AI-native products. One key, MCP-native install, and {apiCount} APIs your agent can call in production from day one.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <AuthAwareCTA
-              className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition"
-            />
-            <Link
-              href="/mcp"
-              className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
-            >
-              Install MCP server <Terminal className="w-4 h-4" />
-            </Link>
-          </div>
-
-
-
-          {/* Stats row */}
-          <div id="stats" className="mt-12 flex flex-wrap gap-8 text-sm">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(380px,0.95fr)] lg:items-center">
             <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">{apiCount}</div>
-              <div className="text-[var(--muted)]">APIs in the catalog</div>
-            </div>
-            <div className="w-px bg-[var(--line)]" />
-            <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">One key for everything</div>
-            </div>
-            <div className="w-px bg-[var(--line)]" />
-            <div>
-              <div className="text-2xl font-semibold text-[var(--violet-strong)]">MCP-native</div>
-              <div className="text-[var(--muted)]">in Cursor, Claude, Antigravity</div>
-            </div>
-            <div className="w-px bg-[var(--line)] hidden sm:block" />
-            <div className="hidden sm:block">
-              <div className="text-2xl font-semibold text-[var(--ink)]">Sandbox + prod</div>
-              <div className="text-[var(--muted)]">environments built in</div>
-            </div>
-          </div>
+              <div className="inline-flex items-center px-4 py-2 rounded-full border border-[var(--violet)]/20 bg-[var(--violet-soft)]">
+                <span className="text-xs font-medium uppercase tracking-wide text-[var(--violet-strong)]">Built for AI agents &amp; AI-native apps</span>
+              </div>
+              <h1 className="mt-6 text-4xl sm:text-6xl font-display font-semibold tracking-tight leading-[1.05] max-w-3xl">
+                Every tool your agent needs.<br className="hidden sm:block" /> <span className="italic font-normal text-[var(--ink)]">One key. One gateway.</span>
+              </h1>
+              <p className="mt-5 text-lg sm:text-xl text-[var(--muted)] max-w-2xl">
+                Callio is the API gateway for teams shipping AI agents and AI-native products. One key, MCP-native install, and {apiCount} APIs your agent can call in production from day one.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <AuthAwareCTA
+                  className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition"
+                />
+                <Link
+                  href="/mcp"
+                  className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
+                >
+                  Install MCP server <Terminal className="w-4 h-4" />
+                </Link>
+              </div>
 
-          {/* Works with bar */}
-          <div className="mt-10 flex flex-wrap items-center gap-4 text-sm text-[var(--muted)]">
-            <span className="font-medium">Plugs into</span>
-            <div className="flex items-center gap-5">
-              <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
-                <ClaudeLogo className="w-5 h-5" />
-                <span className="font-semibold text-[var(--ink)]">Claude</span>
+              {/* Stats row */}
+              <div id="stats" className="mt-12 flex flex-wrap gap-8 text-sm">
+                <div>
+                  <div className="text-2xl font-semibold text-[var(--ink)]">{apiCount}</div>
+                  <div className="text-[var(--muted)]">APIs in the catalog</div>
+                </div>
+                <div className="w-px bg-[var(--line)]" />
+                <div>
+                  <div className="text-2xl font-semibold text-[var(--ink)]">One key for everything</div>
+                </div>
+                <div className="w-px bg-[var(--line)]" />
+                <div>
+                  <div className="text-2xl font-semibold text-[var(--violet-strong)]">MCP-native</div>
+                  <div className="text-[var(--muted)]">in Cursor, Claude, Antigravity</div>
+                </div>
+                <div className="w-px bg-[var(--line)] hidden sm:block" />
+                <div className="hidden sm:block">
+                  <div className="text-2xl font-semibold text-[var(--ink)]">Sandbox + prod</div>
+                  <div className="text-[var(--muted)]">environments built in</div>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
-                <CursorLogo className="w-5 h-5" />
-                <span className="font-semibold text-[var(--ink)]">Cursor</span>
-              </div>
-              <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
-                <AntigravityLogo className="w-5 h-5" />
-                <span className="font-semibold text-[var(--ink)]">Antigravity</span>
+
+              {/* Works with bar */}
+              <div className="mt-10 flex flex-wrap items-center gap-4 text-sm text-[var(--muted)]">
+                <span className="font-medium">Plugs into</span>
+                <div className="flex items-center gap-5">
+                  <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
+                    <ClaudeLogo className="w-5 h-5" />
+                    <span className="font-semibold text-[var(--ink)]">Claude</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
+                    <CursorLogo className="w-5 h-5" />
+                    <span className="font-semibold text-[var(--ink)]">Cursor</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
+                    <AntigravityLogo className="w-5 h-5" />
+                    <span className="font-semibold text-[var(--ink)]">Antigravity</span>
+                  </div>
+                </div>
+                <span className="text-[var(--line)]">|</span>
+                <Link href="/mcp" className="hover:text-[var(--accent)] transition font-medium">All MCP setups →</Link>
               </div>
             </div>
-            <span className="text-[var(--line)]">|</span>
-            <Link href="/mcp" className="hover:text-[var(--accent)] transition font-medium">All MCP setups →</Link>
-          </div>
 
-          {/* Animated Hero Diagram */}
-          <div className="mt-16 w-full hidden md:block">
-            <AnimatedHeroSVG />
+            <div className="relative hidden lg:block">
+              <div className="absolute -inset-8 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.12),transparent_65%)] blur-3xl pointer-events-none" />
+              <div className="absolute -left-10 top-14 z-20 w-52 rounded-2xl border border-white/70 bg-white/88 p-4 shadow-[0_20px_60px_rgba(15,23,42,0.12)] backdrop-blur animate-hero-float">
+                <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
+                  <span>Live Flow</span>
+                  <span className="inline-flex items-center gap-1 text-emerald-600">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                    healthy
+                  </span>
+                </div>
+                <div className="mt-3 text-2xl font-semibold text-[var(--ink)]">133 APIs</div>
+                <p className="mt-1 text-sm leading-relaxed text-[var(--muted)]">
+                  Requests fan out through one key with retries, auth injection, and MCP-ready access.
+                </p>
+              </div>
+              <div className="absolute -right-6 bottom-12 z-20 w-56 rounded-2xl border border-[var(--violet)]/15 bg-[linear-gradient(135deg,rgba(239,246,255,0.96),rgba(255,255,255,0.92))] p-4 shadow-[0_24px_70px_rgba(37,99,235,0.14)] backdrop-blur animate-hero-drift">
+                <div className="flex items-center gap-2 text-sm font-semibold text-[var(--violet-strong)]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm">
+                    <Sparkles className="h-4 w-4" />
+                  </span>
+                  MCP install path
+                </div>
+                <div className="mt-3 space-y-2 text-sm text-[var(--ink)]">
+                  <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
+                    <span>Cursor</span>
+                    <span className="text-[var(--muted)]">ready</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
+                    <span>Claude</span>
+                    <span className="text-[var(--muted)]">ready</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
+                    <span>Antigravity</span>
+                    <span className="text-[var(--muted)]">ready</span>
+                  </div>
+                </div>
+              </div>
+              <AnimatedHeroSVG compact className="relative z-10 translate-y-2" />
+            </div>
           </div>
         </div>
       </section>
