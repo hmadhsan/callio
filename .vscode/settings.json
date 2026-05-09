@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^node scripts/add-more-apis\\.mjs$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
