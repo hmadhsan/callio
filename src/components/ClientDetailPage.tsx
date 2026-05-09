@@ -72,9 +72,24 @@ export default function ClientDetailPage({ api, endpoints }: ClientDetailPagePro
     const shouldOpen = searchParams.get('playground') === '1';
     if (!shouldOpen) return null;
 
+    const runParam = searchParams.get('run');
+    if (runParam) {
+      try {
+        const parsed = JSON.parse(decodeURIComponent(runParam));
+        return {
+          method: typeof parsed.method === 'string' ? parsed.method : undefined,
+          path: typeof parsed.path === 'string' ? parsed.path : undefined,
+          params: parsed.params && typeof parsed.params === 'object' ? parsed.params : undefined,
+        };
+      } catch {
+        // Fall through to the method/path format below.
+      }
+    }
+
     return {
       method: searchParams.get('method') || undefined,
       path: searchParams.get('path') || undefined,
+      params: undefined,
     };
   }, [searchParams]);
 

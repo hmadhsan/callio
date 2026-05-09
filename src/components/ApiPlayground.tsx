@@ -36,6 +36,7 @@ interface ApiPlaygroundProps {
   initialReplay?: {
     method?: string;
     path?: string;
+    params?: Record<string, string>;
   };
   onClose?: () => void;
 }
@@ -143,7 +144,7 @@ function summarizeResponse(data: unknown) {
   return 'JSON response';
 }
 
-function matchEndpointFromReplay(endpoints: EndpointInfo[], replay?: { method?: string; path?: string }) {
+function matchEndpointFromReplay(endpoints: EndpointInfo[], replay?: { method?: string; path?: string; params?: Record<string, string> }) {
   if (!replay?.path) return { endpoint: endpoints[0] || null, parameters: {} as Record<string, string> };
 
   const replayMethod = replay.method?.toUpperCase();
@@ -181,7 +182,7 @@ function matchEndpointFromReplay(endpoints: EndpointInfo[], replay?: { method?: 
     }
 
     if (matches) {
-      return { endpoint, parameters: extracted };
+      return { endpoint, parameters: { ...extracted, ...(replay.params || {}) } };
     }
   }
 
@@ -255,6 +256,23 @@ export default function ApiPlayground({
   const [limitReached, setLimitReached] = useState<{ used: number; limit: number; plan: string } | null>(null);
   const [savedRequests, setSavedRequests] = useState<RequestSnapshot[]>([]);
   const [requestHistory, setRequestHistory] = useState<HistoryEntry[]>([]);
+
+  const currentRunLink = useMemo(() => {
+    if (!selectedEndpoint || typeof window === 'undefined') return '';
+
+    const payload = encodeURIComponent(JSON.stringify({
+      method: selectedEndpoint.method,
+      path: applyPathParams(selectedEndpoint.path, parameters),
+      params: parameters,
+    }));
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('playground', '1');
+    url.searchParams.set('run', payload);
+    url.searchParams.delete('method');
+    url.searchParams.delete('path');
+    return url.toString();
+  }, [parameters, selectedEndpoint]);
 
   useEffect(() => {
     setSelectedEndpoint(initialSelection.endpoint);
@@ -529,6 +547,13 @@ export default function ApiPlayground({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const copyShareLink = () => {
+    if (!currentRunLink) return;
+    navigator.clipboard.writeText(currentRunLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center overflow-auto">
       <div className="bg-white shadow-2xl w-full h-full max-h-screen max-w-7xl flex flex-col">
@@ -539,6 +564,14 @@ export default function ApiPlayground({
             <span className="text-sm text-gray-500">• {apiSlug}</span>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={copyShareLink}
+              disabled={!currentRunLink}
+              className="px-4 py-2 border border-gray-300 hover:bg-gray-50 disabled:opacity-50 text-gray-700 font-medium rounded-lg transition flex items-center gap-2 text-sm"
+            >
+              <Copy className="w-4 h-4" />
+              Share Link
+            </button>
             <button
               onClick={saveCurrentRequest}
               disabled={!selectedEndpoint}
