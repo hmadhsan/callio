@@ -119,8 +119,7 @@ export default async function Home() {
         {/* faint dotted grid for the "infra" feel */}
         <div className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.06)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.9),transparent_85%)]" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--violet)]/20 bg-[var(--violet-soft)]">
-            <Sparkles className="w-4 h-4 text-[var(--violet)]" />
+          <div className="inline-flex items-center px-4 py-2 rounded-full border border-[var(--violet)]/20 bg-[var(--violet-soft)]">
             <span className="text-xs font-semibold uppercase tracking-wide text-[var(--violet-strong)]">Built for AI agents &amp; AI-native apps</span>
           </div>
           <h1 className="mt-6 text-4xl sm:text-6xl font-display font-bold tracking-tight leading-[1.05] max-w-3xl">
