@@ -4,8 +4,10 @@
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const batch1Apis = require('./new-apis-batch1').apis;
+const batch2Apis = require('./new-apis-batch2').apis;
 
-const apis = [
+const baseApis = [
   // ─── 1. JSONPlaceholder (Demo – actually works with no auth!) ─────
   {
     slug: 'jsonplaceholder',
@@ -517,6 +519,11 @@ const apis = [
     ],
   },
 ];
+
+const additionalApis = [...batch1Apis, ...batch2Apis];
+const apis = [...baseApis, ...additionalApis].filter((api, index, arr) => {
+  return arr.findIndex((candidate) => candidate.slug === api.slug) === index;
+});
 
 async function main() {
   console.log('🔄 Reseeding database with real APIs...\n');

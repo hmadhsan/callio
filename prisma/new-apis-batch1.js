@@ -13,7 +13,7 @@ const apis = [
     },
     {
         slug: 'cohere-ai', name: 'Cohere', category: 'AI',
-        icon: '🤖', featured: false,
+        icon: '🤖', featured: true,
         shortDescription: 'NLP models for embeddings, classification, and generation',
         fullDescription: 'Cohere provides enterprise-grade NLP APIs for text generation, embeddings, semantic search, and classification at scale.',
         useCases: ['Semantic search', 'Text embeddings', 'Content classification', 'Summarisation', 'Intent detection'],
@@ -37,7 +37,7 @@ const apis = [
     },
     {
         slug: 'groq-llm', name: 'Groq', category: 'AI',
-        icon: '⚡', featured: false,
+        icon: '⚡', featured: true,
         shortDescription: 'Ultra-fast LLM inference for Llama, Mixtral, and Gemma',
         fullDescription: 'Groq delivers the fastest LLM inference available — run Llama 3, Mixtral, Gemma and more at hundreds of tokens per second.',
         useCases: ['Real-time chat applications', 'Low-latency agents', 'Streaming text', 'Fast summarisation', 'Code completion'],
@@ -61,7 +61,7 @@ const apis = [
     },
     {
         slug: 'perplexity-ai', name: 'Perplexity', category: 'AI',
-        icon: '🔎', featured: false,
+        icon: '🔎', featured: true,
         shortDescription: 'AI-powered search with real-time web grounding',
         fullDescription: 'Perplexity\'s API provides LLM responses grounded in real-time web search — ideal for up-to-date information retrieval in agents.',
         useCases: ['Real-time web search', 'Research automation', 'Fact checking', 'News summarisation', 'Grounded Q&A'],
@@ -145,7 +145,7 @@ const apis = [
     },
     {
         slug: 'coingecko', name: 'CoinGecko', category: 'Finance',
-        icon: '🦎', featured: false,
+        icon: '🦎', featured: true,
         shortDescription: 'Cryptocurrency prices, market data, and coin info',
         fullDescription: 'CoinGecko is the world\'s largest independent crypto data aggregator. Get real-time prices, market caps, volume, and coin metadata for 10,000+ coins.',
         useCases: ['Crypto price tracking', 'Portfolio valuation', 'Market cap data', 'Historical prices', 'DeFi protocol data'],
@@ -241,7 +241,7 @@ const apis = [
     },
     {
         slug: 'linear-issues', name: 'Linear', category: 'Developer Tools',
-        icon: '📋', featured: false,
+        icon: '📋', featured: true,
         shortDescription: 'Issue tracking, project management, and engineering workflows',
         fullDescription: 'Linear is the tool teams use to plan, build, and track software. Its API lets you create issues, manage projects, and sync with your codebase.',
         useCases: ['Create and update issues', 'Manage sprints', 'Sync with GitHub PRs', 'Track milestones', 'Automate triage'],

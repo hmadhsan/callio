@@ -205,7 +205,7 @@ const apis = [
     },
     {
         slug: 'asana-tasks', name: 'Asana', category: 'Productivity',
-        icon: '✅', featured: false,
+        icon: '✅', featured: true,
         shortDescription: 'Project management, task tracking, and teamwork',
         fullDescription: 'The Asana API lets you programmatically manage workspaces, projects, and tasks. Ideal for syncing work across tools or automating task creation from external triggers.',
         useCases: ['Create automated tasks', 'Sync projects', 'Report on team workload', 'Attach files to tasks', 'Manage goals'],
@@ -229,7 +229,7 @@ const apis = [
     },
     {
         slug: 'plausible', name: 'Plausible Analytics', category: 'Analytics',
-        icon: '📈', featured: false,
+        icon: '📈', featured: true,
         shortDescription: 'Privacy-friendly, lightweight web analytics',
         fullDescription: 'Plausible provides a privacy-focused alternative to Google Analytics. Use the API to query visitors, pageviews, sources, and custom events programmatically.',
         useCases: ['Dashboards', 'Client reporting', 'Conversion tracking', 'Pageview counters', 'Traffic automation'],
