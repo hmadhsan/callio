@@ -84,13 +84,11 @@ const CATEGORY_EMOJI: Record<string, string> = {
 
 const emojiFor = (cat: string) => CATEGORY_EMOJI[cat] ?? '✨';
 
-// "no-key"   = works without any upstream provider key.
-// "free-key" = upstream provider offers a free plan / free key.
-// "byok"     = user must bring a provider key without a clear free tier.
-type KeyTier = 'no-key' | 'free-key' | 'byok';
+// "free" = works without any upstream provider key.
+// "byok" = user must bring a provider key.
+type KeyTier = 'free' | 'byok';
 const keyTierOf = (api: { allowUnauthenticated: boolean; pricing: string }): KeyTier => {
-  if (api.allowUnauthenticated) return 'no-key';
-  return /\bfree\b/i.test(api.pricing) ? 'free-key' : 'byok';
+  return api.allowUnauthenticated ? 'free' : 'byok';
 };
 
 export default function BrowseGrid({
@@ -104,18 +102,16 @@ export default function BrowseGrid({
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeKeyTier, setActiveKeyTier] = useState<KeyTier | null>(null);
 
-  // No-key vs BYOK counts across the whole catalog
+  // Free APIs vs BYOK counts across the whole catalog
   const keyTierCounts = useMemo(() => {
-    let noKey = 0;
-    let freeKey = 0;
+    let free = 0;
     let byok = 0;
     apis.forEach((a) => {
       const tier = keyTierOf(a);
-      if (tier === 'no-key') noKey++;
-      else if (tier === 'free-key') freeKey++;
+      if (tier === 'free') free++;
       else byok++;
     });
-    return { noKey, freeKey, byok };
+    return { free, byok };
   }, [apis]);
 
   // Count per category (computed first so we can sort pills by it)
@@ -183,7 +179,7 @@ export default function BrowseGrid({
         )}
       </div>
 
-      {/* Key tier filter (no-key vs BYOK) */}
+      {/* Key tier filter (Free APIs vs BYOK) */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
         <span className="text-xs font-medium text-[var(--muted)] mr-1">Setup:</span>
         <button
@@ -196,30 +192,19 @@ export default function BrowseGrid({
           All <span className="tabular-nums opacity-70">{apis.length}</span>
         </button>
         <button
-          onClick={() => setActiveKeyTier(activeKeyTier === 'no-key' ? null : 'no-key')}
-          title="Works with just a Callio key — no provider account needed"
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeKeyTier === 'no-key'
+          onClick={() => setActiveKeyTier(activeKeyTier === 'free' ? null : 'free')}
+          title="Works without any provider key"
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeKeyTier === 'free'
             ? 'bg-emerald-600 text-white border-emerald-600'
             : 'bg-white text-emerald-700 border-emerald-200 hover:border-emerald-500'
             }`}
         >
-          <span className={`w-1.5 h-1.5 rounded-full ${activeKeyTier === 'no-key' ? 'bg-white' : 'bg-emerald-500'}`} />
-          No key needed <span className="tabular-nums opacity-70">{keyTierCounts.noKey}</span>
-        </button>
-        <button
-          onClick={() => setActiveKeyTier(activeKeyTier === 'free-key' ? null : 'free-key')}
-          title="Provider offers a free API key or free tier for getting started"
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeKeyTier === 'free-key'
-            ? 'bg-sky-600 text-white border-sky-600'
-            : 'bg-white text-sky-700 border-sky-200 hover:border-sky-500'
-            }`}
-        >
-          <span className={`w-1.5 h-1.5 rounded-full ${activeKeyTier === 'free-key' ? 'bg-white' : 'bg-sky-500'}`} />
-          Free key <span className="tabular-nums opacity-70">{keyTierCounts.freeKey}</span>
+          <span className={`w-1.5 h-1.5 rounded-full ${activeKeyTier === 'free' ? 'bg-white' : 'bg-emerald-500'}`} />
+          Free APIs <span className="tabular-nums opacity-70">{keyTierCounts.free}</span>
         </button>
         <button
           onClick={() => setActiveKeyTier(activeKeyTier === 'byok' ? null : 'byok')}
-          title="Bring your own provider API key — Callio injects it for you"
+          title="Bring your own provider API key"
           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition border ${activeKeyTier === 'byok'
             ? 'bg-amber-600 text-white border-amber-600'
             : 'bg-white text-amber-700 border-amber-200 hover:border-amber-500'
@@ -265,17 +250,13 @@ export default function BrowseGrid({
           {filtered.length} {filtered.length === 1 ? 'API' : 'APIs'} found
           {activeKeyTier && (
             <span> · <strong className={
-              activeKeyTier === 'no-key'
+              activeKeyTier === 'free'
                 ? 'text-emerald-700'
-                : activeKeyTier === 'free-key'
-                  ? 'text-sky-700'
-                  : 'text-amber-700'
+                : 'text-amber-700'
             }>{
-                activeKeyTier === 'no-key'
-                  ? 'No key needed'
-                  : activeKeyTier === 'free-key'
-                    ? 'Free key'
-                    : 'BYOK'
+                activeKeyTier === 'free'
+                  ? 'Free APIs'
+                  : 'BYOK'
               }</strong></span>
           )}
           {activeCategory && <span> in <strong className="text-[var(--ink)]">{activeCategory}</strong></span>}
@@ -292,10 +273,8 @@ export default function BrowseGrid({
           const isFavorited = initialFavoritedIds.includes(api.id);
           const keyTier = keyTierOf(api);
           const keyChipClass =
-            keyTier === 'no-key'
+            keyTier === 'free'
               ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
-              : keyTier === 'free-key'
-                ? 'bg-sky-50 text-sky-700 ring-1 ring-sky-200'
               : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200';
 
           return (
@@ -328,24 +307,20 @@ export default function BrowseGrid({
                   </span>
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium ${keyChipClass}`}
-                      title={
-                      keyTier === 'no-key'
-                        ? `Works with just a Callio key. Pricing: ${api.pricing || 'Free'}`
-                        : keyTier === 'free-key'
-                          ? `Provider offers a free key/tier. Pricing: ${api.pricing || 'Free tier available'}`
-                          : `Bring your own provider key. Pricing: ${api.pricing || 'Varies'}`
+                    title={
+                      keyTier === 'free'
+                        ? `Free API — no provider key needed. Pricing: ${api.pricing || 'Free'}`
+                        : `Bring your own provider key. Pricing: ${api.pricing || 'Varies'}`
                     }
                   >
                     <span
                       className={`w-1 h-1 rounded-full ${
-                        keyTier === 'no-key'
+                        keyTier === 'free'
                           ? 'bg-emerald-500'
-                          : keyTier === 'free-key'
-                            ? 'bg-sky-500'
-                            : 'bg-amber-500'
+                          : 'bg-amber-500'
                       }`}
                     />
-                    {keyTier === 'no-key' ? 'No key' : keyTier === 'free-key' ? 'Free key' : 'BYOK'}
+                    {keyTier === 'free' ? 'Free API' : 'BYOK'}
                   </span>
                 </div>
               </Link>
