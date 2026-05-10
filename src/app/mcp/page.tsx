@@ -56,14 +56,6 @@ export default async function McpPage() {
             >
               Get API Key <ArrowRight className="w-4 h-4" />
             </Link>
-            <a
-              href="https://github.com/hmadhsan/callio-mcp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
-            >
-              View on GitHub <Terminal className="w-4 h-4" />
-            </a>
           </div>
         </div>
       </section>
