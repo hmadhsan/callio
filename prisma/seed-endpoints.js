@@ -121,6 +121,13 @@ const ENDPOINTS = {
     { method: 'GET', path: '/v3.1/subregion/:subregion', description: 'Get countries by subregion', parameters: [{name:'subregion',type:'string',required:true}] },
   ],
 
+  // ── World Bank ──
+  worldbank: [
+    { method: 'GET', path: '/country/all', description: 'Get all countries and metadata', parameters: [{name:'format',type:'string',required:false,description:'json or xml'}] },
+    { method: 'GET', path: '/country/:code', description: 'Get country information by ISO code', parameters: [{name:'code',type:'string',required:true},{name:'format',type:'string',required:false,description:'json or xml'}] },
+    { method: 'GET', path: '/indicator/:indicator', description: 'List indicator data by country and year', parameters: [{name:'indicator',type:'string',required:true},{name:'format',type:'string',required:false,description:'json or xml'},{name:'per_page',type:'integer',required:false}] },
+  ],
+
   // ── Cat Facts ──
   catfacts: [
     { method: 'GET', path: '/fact', description: 'Get a random cat fact', parameters: [{name:'max_length',type:'integer',required:false}] },
