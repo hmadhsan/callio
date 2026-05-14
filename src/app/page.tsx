@@ -256,20 +256,10 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Product Hunt Badges */}
-          <div className="mt-16 flex justify-center gap-3 flex-wrap">
-            <a href="https://www.producthunt.com/products/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gray-900 hover:bg-gray-800 text-white font-semibold text-sm transition-all hover:shadow-lg hover:scale-105">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
-                <path d="M12 7v5l4 2.5" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
-              </svg>
-              Featured on Product Hunt
-            </a>
-            <a href="https://www.producthunt.com/products/callio-3?utm_source=badge-follow&utm_medium=badge&utm_source=badge-callio-3" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gray-900 hover:bg-gray-800 text-white font-semibold text-sm transition-all hover:shadow-lg hover:scale-105">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
-              Follow
+          {/* Product Hunt Badge */}
+          <div className="mt-16 flex justify-center">
+            <a href="https://www.producthunt.com/products/callio-3/launches/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer">
+              <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1083879&theme=light&t=1773491181328" alt="Callio - Connect any API with AI Agent under 1 minute | Product Hunt" width="250" height="54" />
             </a>
           </div>
         </div>
