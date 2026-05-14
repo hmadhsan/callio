@@ -257,7 +257,8 @@ export default async function Home() {
           </div>
 
           {/* Product Hunt Badge */}
-          <div className="mt-16 flex justify-center">
+          <div className="mt-16 flex justify-center items-center gap-3">
+            <span className="text-3xl">🐱</span>
             <a href="https://www.producthunt.com/products/callio-3/launches/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer">
               <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1083879&theme=light&t=1773491181328" alt="Callio - Connect any API with AI Agent under 1 minute | Product Hunt" width="250" height="54" />
             </a>
