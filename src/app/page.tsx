@@ -257,12 +257,18 @@ export default async function Home() {
           </div>
 
           {/* Product Hunt Badges */}
-          <div className="mt-16 flex justify-center gap-4">
-            <a href="https://www.producthunt.com/products/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer">
-              <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1083879&theme=dark&t=1778795187326" alt="Callio - Connect any API with AI Agent under 1 minute | Product Hunt" width="250" height="54" />
+          <div className="mt-16 flex justify-center gap-3">
+            <a href="https://www.producthunt.com/products/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[var(--accent)] to-[var(--violet)] text-white font-semibold text-sm hover:shadow-lg transition">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+              </svg>
+              Featured on Product Hunt
             </a>
-            <a href="https://www.producthunt.com/products/callio-3?utm_source=badge-follow&utm_medium=badge&utm_source=badge-callio-3" target="_blank" rel="noopener noreferrer">
-              <img src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1168527&theme=dark&size=small" alt="Callio - Connect any API with AI Agents with one key | Product Hunt" style={{width: '86px', height: '32px'}} width="86" height="32" />
+            <a href="https://www.producthunt.com/products/callio-3?utm_source=badge-follow&utm_medium=badge&utm_source=badge-callio-3" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[var(--violet)] to-[var(--accent)] text-white font-semibold text-sm hover:shadow-lg transition">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+              </svg>
+              Follow
             </a>
           </div>
         </div>
