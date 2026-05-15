@@ -13,7 +13,13 @@ export async function POST(request: NextRequest) {
     }
 
     const CALLIO_BASE_URL = process.env.CALLIO_BASE_URL ?? 'https://callio.dev';
-    const CALLIO_API_KEY = process.env.CALLIO_API_KEY;
+    let CALLIO_API_KEY = process.env.CALLIO_API_KEY;
+
+    // Development override: allow passing a one-off API key via header `x-callio-api-key`
+    if (!CALLIO_API_KEY && process.env.NODE_ENV !== 'production') {
+      const headerKey = request.headers.get('x-callio-api-key') || request.headers.get('X-Callio-Api-Key');
+      if (headerKey) CALLIO_API_KEY = headerKey;
+    }
 
     if (!CALLIO_API_KEY) {
       return NextResponse.json({ error: 'Server missing CALLIO_API_KEY. Set env to run test-run.' }, { status: 400 });

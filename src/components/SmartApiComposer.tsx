@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Check, ClipboardCopy, Loader2, Sparkles, Wand2 } from 'lucide-react';
 
 type Language = 'typescript' | 'python';
@@ -62,6 +62,7 @@ export default function SmartApiComposer() {
   const [result, setResult] = useState<ComposerResponse | null>(null);
   const [runResults, setRunResults] = useState<unknown[] | null>(null);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [workspaceId, setWorkspaceId] = useState<string | null>(null);
 
   const tabContent = useMemo(() => {
     if (!result) {
@@ -126,6 +127,19 @@ export default function SmartApiComposer() {
     setTimeout(() => setCopiedTab(null), 1500);
   }
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/auth/context');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data?.workspace?.id) setWorkspaceId(data.workspace.id);
+      } catch {
+        // ignore
+      }
+    })();
+  }, []);
+
   async function onRun() {
     if (!result) return;
     setRunResults(null);
@@ -155,9 +169,13 @@ export default function SmartApiComposer() {
     if (!result) return;
     setSaveStatus(null);
 
-    // require a workspace id for now
-    const workspaceId = window.prompt('Enter workspaceId to save workflow into:');
-    if (!workspaceId) {
+    let targetWorkspace = workspaceId;
+    if (!targetWorkspace) {
+      // eslint-disable-next-line no-alert
+      targetWorkspace = window.prompt('Enter workspaceId to save workflow into:');
+    }
+
+    if (!targetWorkspace) {
       setSaveStatus('Save cancelled (workspaceId required).');
       return;
     }
@@ -166,7 +184,7 @@ export default function SmartApiComposer() {
       const res = await fetch('/api/composer/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ workflow: result.workflow, workspaceId, name: result.workflow.name, description: result.workflow.description }),
+        body: JSON.stringify({ workflow: result.workflow, workspaceId: targetWorkspace, name: result.workflow.name, description: result.workflow.description }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -181,11 +199,11 @@ export default function SmartApiComposer() {
 
   async function onLoad() {
     // prompt workspace and then show simple selection flow
-    const workspaceId = window.prompt('Enter workspaceId to load workflows from:');
-    if (!workspaceId) return;
+    const ws = workspaceId ?? window.prompt('Enter workspaceId to load workflows from:');
+    if (!ws) return;
 
     try {
-      const res = await fetch(`/api/composer/list?workspaceId=${encodeURIComponent(workspaceId)}`);
+      const res = await fetch(`/api/composer/list?workspaceId=${encodeURIComponent(ws)}`);
       const data = await res.json();
       if (!res.ok) {
         setSaveStatus(data.error || 'Failed to list workflows');
