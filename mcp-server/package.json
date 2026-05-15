@@ -1,7 +1,15 @@
 {
-  "name": "callio-mcp-server",
+  "name": "callio-mcp",
   "version": "1.0.0",
-  "description": "Callio MCP Server — Give AI agents access to 90+ APIs through one tool",
+  "description": "Callio MCP Server — Give AI agents access to 143+ APIs through the Model Context Protocol",
+  "homepage": "https://callio.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hmadhsan/callio-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hmadhsan/callio-mcp/issues"
+  },
   "main": "index.js",
   "bin": {
     "callio-mcp": "./index.js"
@@ -9,10 +17,17 @@
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": ["mcp", "callio", "api", "ai-agents", "claude", "cursor", "antigravity"],
-  "author": "Callio",
+  "keywords": ["mcp", "callio", "api", "ai-agents", "claude", "cursor", "antigravity", "model-context-protocol", "ai"],
+  "author": {
+    "name": "Callio",
+    "email": "hmadhsan97@gmail.com",
+    "url": "https://callio.dev"
+  },
   "license": "MIT",
   "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0"
   }

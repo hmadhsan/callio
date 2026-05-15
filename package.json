@@ -14,6 +14,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@vercel/analytics": "^1.6.1",
     "bcryptjs": "^3.0.3",
+    "callio-sdk": "^1.0.0",
     "lucide-react": "^0.574.0",
     "next": "16.1.6",
     "prisma": "^5.22.0",

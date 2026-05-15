@@ -153,24 +153,30 @@ export default async function Home() {
           </div>
 
           {/* Stats row */}
-          <div id="stats" className="mt-12 flex flex-wrap gap-8 text-sm">
-            <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">{apiCount}</div>
-              <div className="text-[var(--muted)]">APIs in the catalog</div>
+          <div id="stats" className="mt-12 flex flex-nowrap gap-6 text-sm overflow-x-auto">
+            <div className="shrink-0">
+              <div className="text-lg font-semibold text-[var(--ink)]">{apiCount}</div>
+              <div className="text-xs text-[var(--muted)]">APIs in catalog</div>
             </div>
-            <div className="w-px bg-[var(--line)]" />
-            <div>
-              <div className="text-2xl font-semibold text-[var(--ink)]">One key for everything</div>
+            <div className="w-px bg-[var(--line)] shrink-0" />
+            <div className="shrink-0">
+              <div className="text-lg font-semibold text-[var(--ink)]">One key</div>
+              <div className="text-xs text-[var(--muted)]">for everything</div>
             </div>
-            <div className="w-px bg-[var(--line)]" />
-            <div>
-              <div className="text-2xl font-semibold text-[var(--violet-strong)]">MCP-native</div>
-              <div className="text-[var(--muted)]">in Cursor, Claude, Antigravity</div>
+            <div className="w-px bg-[var(--line)] shrink-0" />
+            <div className="shrink-0">
+              <div className="text-lg font-semibold text-[var(--violet-strong)]">MCP-native</div>
+              <div className="text-xs text-[var(--muted)]">Cursor, Claude</div>
             </div>
-            <div className="w-px bg-[var(--line)] hidden sm:block" />
-            <div className="hidden sm:block">
-              <div className="text-2xl font-semibold text-[var(--ink)]">Sandbox + prod</div>
-              <div className="text-[var(--muted)]">environments built in</div>
+            <div className="w-px bg-[var(--line)] shrink-0" />
+            <div className="shrink-0">
+              <div className="text-lg font-semibold text-[var(--ink)]">Sandbox + prod</div>
+              <div className="text-xs text-[var(--muted)]">built in</div>
+            </div>
+            <div className="w-px bg-[var(--line)] shrink-0" />
+            <div className="shrink-0">
+              <div className="text-lg font-semibold text-[var(--accent)]">Ship 10x faster</div>
+              <div className="text-xs text-[var(--muted)]">no plumbing</div>
             </div>
           </div>
 
@@ -261,8 +267,6 @@ export default async function Home() {
             <a href="https://www.producthunt.com/products/callio-3/launches/callio-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-callio-3" target="_blank" rel="noopener noreferrer">
               <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1083879&theme=light&t=1778796622475" alt="Callio - Connect any API with AI Agent under 1 minute | Product Hunt" width="250" height="54" />
             </a>
-          </div>
-
           </div>
         </div>
       </section>

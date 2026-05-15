@@ -6,7 +6,11 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc --watch",
+    "demo": "node sdk-demo.js",
+    "examples": "ts-node examples.ts",
+    "test": "jest",
+    "test:integration": "ts-node integration-test.ts"
   },
   "keywords": [
     "callio",

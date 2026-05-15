@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "callio": {
+      "type": "stdio",
+      "command": "node",
+      "cwd": "${workspaceFolder}/mcp-server",
+      "args": ["index.js"],
+      "env": {
+        "CALLIO_API_KEY": "callio_live_db7aa0cf57bc26226babced89e3ac034c9139b8758020393",
+        "CALLIO_BASE_URL": "https://www.callio.dev"
+      }
+    }
+  }
+}
