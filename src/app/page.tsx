@@ -102,6 +102,7 @@ export default async function Home() {
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--violet)] inline-block" />
               MCP
             </Link>
+            <Link href="/compose" className="hover:text-[var(--accent)] transition">Composer</Link>
             <Link href="/browse" className="hover:text-[var(--accent)] transition">Browse APIs</Link>
             <Link href="/pricing" className="hover:text-[var(--accent)] transition">Pricing</Link>
             <Link href="/docs" className="hover:text-[var(--accent)] transition">Docs</Link>
@@ -144,6 +145,12 @@ export default async function Home() {
             <AuthAwareCTA
               className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition"
             />
+            <Link
+              href="/compose"
+              className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
+            >
+              Smart API Composer <Workflow className="w-4 h-4" />
+            </Link>
             <Link
               href="/mcp"
               className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
