@@ -196,19 +196,6 @@ model ApiCredential {
   @@index([workspaceId])
 }
 
-model Workflow {
-  id          String   @id @default(cuid())
-  workspaceId String
-  name        String
-  description String?
-  data        Json
-  createdAt   DateTime @default(now())
-
-  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
-  @@index([workspaceId])
-}
-
 // ── Stripe Billing ──────────────────────────────────────
 
 model Subscription {
@@ -291,7 +278,6 @@ model Workspace {
   usageRecords   UsageRecord[]
   apiCredentials ApiCredential[]
   apiCallLogs    ApiCallLog[]
-  workflows      Workflow[]
 }
 
 model WorkspaceMember {
