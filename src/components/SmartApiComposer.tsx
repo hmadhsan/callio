@@ -179,6 +179,56 @@ export default function SmartApiComposer() {
     }
   }
 
+  async function onLoad() {
+    // prompt workspace and then show simple selection flow
+    const workspaceId = window.prompt('Enter workspaceId to load workflows from:');
+    if (!workspaceId) return;
+
+    try {
+      const res = await fetch(`/api/composer/list?workspaceId=${encodeURIComponent(workspaceId)}`);
+      const data = await res.json();
+      if (!res.ok) {
+        setSaveStatus(data.error || 'Failed to list workflows');
+        return;
+      }
+
+      const list = data.workflows as Array<{ id: string; name: string; description?: string }>; // simple
+      if (!Array.isArray(list) || list.length === 0) {
+        setSaveStatus('No workflows found for workspace');
+        return;
+      }
+
+      const choices = list.map((w, i) => `${i + 1}. ${w.name} — ${w.description ?? ''}`).join('\n');
+      const pick = window.prompt(`Select workflow by number:\n${choices}`);
+      if (!pick) return;
+      const idx = parseInt(pick, 10) - 1;
+      if (Number.isNaN(idx) || idx < 0 || idx >= list.length) {
+        setSaveStatus('Invalid selection');
+        return;
+      }
+
+      const id = list[idx].id;
+      const getRes = await fetch(`/api/composer/get/${id}`);
+      const wfData = await getRes.json();
+      if (!getRes.ok) {
+        setSaveStatus(wfData.error || 'Failed to fetch workflow');
+        return;
+      }
+
+      // load into composer
+      setResult({
+        workflow: wfData.workflow.data,
+        code: '',
+        mcpConfig: '',
+        executionPrompt: '',
+      });
+      setActiveTab('workflow');
+      setSaveStatus(`Loaded ${wfData.workflow.name}`);
+    } catch {
+      setSaveStatus('Network error while loading workflows.');
+    }
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
       <section className="rounded-3xl border border-[var(--line)] bg-white p-5 sm:p-7 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
@@ -299,6 +349,14 @@ export default function SmartApiComposer() {
               className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent)] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[var(--accent-strong)] disabled:opacity-50"
             >
               Run
+            </button>
+            <button
+              type="button"
+              onClick={onLoad}
+              disabled={false}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--muted)] transition hover:text-[var(--ink)]"
+            >
+              Load
             </button>
             <button
               type="button"
