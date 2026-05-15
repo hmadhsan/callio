@@ -291,6 +291,7 @@ model Workspace {
   usageRecords   UsageRecord[]
   apiCredentials ApiCredential[]
   apiCallLogs    ApiCallLog[]
+  workflows      Workflow[]
 }
 
 model WorkspaceMember {
