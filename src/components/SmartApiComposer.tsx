@@ -60,6 +60,8 @@ export default function SmartApiComposer() {
   const [copiedTab, setCopiedTab] = useState<TabKey | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>('workflow');
   const [result, setResult] = useState<ComposerResponse | null>(null);
+  const [runResults, setRunResults] = useState<unknown[] | null>(null);
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
   const tabContent = useMemo(() => {
     if (!result) {
@@ -122,6 +124,59 @@ export default function SmartApiComposer() {
     await navigator.clipboard.writeText(tabContent);
     setCopiedTab(activeTab);
     setTimeout(() => setCopiedTab(null), 1500);
+  }
+
+  async function onRun() {
+    if (!result) return;
+    setRunResults(null);
+    setSaveStatus(null);
+
+    try {
+      const res = await fetch('/api/composer/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workflow: result.workflow, input: {} }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setRunResults([{ error: data.error || 'Run failed' }]);
+        return;
+      }
+
+      setRunResults(data.results ?? null);
+      setActiveTab('prompt');
+    } catch {
+      setRunResults([{ error: 'Network error running workflow' }]);
+    }
+  }
+
+  async function onSave() {
+    if (!result) return;
+    setSaveStatus(null);
+
+    // require a workspace id for now
+    const workspaceId = window.prompt('Enter workspaceId to save workflow into:');
+    if (!workspaceId) {
+      setSaveStatus('Save cancelled (workspaceId required).');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/composer/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workflow: result.workflow, workspaceId, name: result.workflow.name, description: result.workflow.description }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setSaveStatus(data.error || 'Save failed');
+        return;
+      }
+      setSaveStatus(`Saved (id: ${data.id})`);
+    } catch {
+      setSaveStatus('Network error while saving.');
+    }
   }
 
   return (
@@ -227,7 +282,8 @@ export default function SmartApiComposer() {
           <h3 className="text-lg font-semibold" style={{ fontFamily: 'var(--font-display)' }}>
             Generated Artifacts
           </h3>
-          <button
+          <div className="flex items-center gap-2">
+            <button
             type="button"
             onClick={copyCurrentTab}
             disabled={!result}
@@ -236,6 +292,23 @@ export default function SmartApiComposer() {
             {copiedTab === activeTab ? <Check className="h-3.5 w-3.5 text-green-600" /> : <ClipboardCopy className="h-3.5 w-3.5" />}
             {copiedTab === activeTab ? 'Copied' : 'Copy'}
           </button>
+            <button
+              type="button"
+              onClick={onRun}
+              disabled={!result}
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent)] px-3 py-1.5 text-xs font-medium text-white transition hover:bg-[var(--accent-strong)] disabled:opacity-50"
+            >
+              Run
+            </button>
+            <button
+              type="button"
+              onClick={onSave}
+              disabled={!result}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--muted)] transition hover:text-[var(--ink)] disabled:opacity-40"
+            >
+              Save
+            </button>
+          </div>
         </div>
 
         <div className="mb-4 flex flex-wrap gap-2">
@@ -261,6 +334,18 @@ export default function SmartApiComposer() {
           <div className="rounded-2xl border border-dashed border-[var(--line)] bg-white p-8 text-center text-sm text-[var(--muted)]">
             Your generated workflow artifacts will appear here.
           </div>
+        )}
+        {runResults && (
+          <div className="mt-4 space-y-2">
+            <h4 className="text-sm font-semibold">Run results</h4>
+            {runResults.map((r, i) => (
+              <pre key={i} className="rounded-lg border border-[var(--line)] bg-white p-3 text-xs">{JSON.stringify(r, null, 2)}</pre>
+            ))}
+          </div>
+        )}
+
+        {saveStatus && (
+          <div className="mt-4 rounded-lg border border-[var(--line)] bg-white p-3 text-sm">{saveStatus}</div>
         )}
       </section>
     </div>

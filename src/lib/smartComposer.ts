@@ -18,6 +18,7 @@ export interface ComposerStep {
   score: number;
   rationale: string;
   inputSchema: Record<string, string>;
+  condition?: string | null; // natural-language condition (e.g. "if payment succeeded")
 }
 
 export interface ComposerResult {
@@ -122,6 +123,24 @@ function detectPreferredMethod(stepText: string): string | null {
   return null;
 }
 
+function detectCondition(stepText: string): { condition: string | null; remainder: string } {
+  // Capture leading conditional clauses like "if X, do Y" or "when X happens, do Y".
+  const m = stepText.match(/^\s*(if|when|when the|when a|when an)\b([^,;:]*)[,;:]?\s*(.*)$/i);
+  if (m) {
+    const condition = m[1] + ' ' + m[2];
+    const remainder = m[3] || '';
+    return { condition: condition.trim(), remainder: remainder.trim() };
+  }
+
+  // Also allow trailing clauses like "do X only if Y" -> capture "only if Y"
+  const m2 = stepText.match(/(.*)\bonly if\b(.*)$/i);
+  if (m2) {
+    return { condition: `only if ${m2[2].trim()}`, remainder: m2[1].trim() };
+  }
+
+  return { condition: null, remainder: stepText };
+}
+
 function tokenOverlapScore(tokensA: string[], tokensB: string[]): number {
   if (tokensA.length === 0 || tokensB.length === 0) {
     return 0;
@@ -142,7 +161,9 @@ function tokenOverlapScore(tokensA: string[], tokensB: string[]): number {
 }
 
 function pickBestEndpoint(stepText: string, apis: ApiRecord[]): ComposerStep {
-  const stepTokens = tokenize(stepText);
+  const cond = detectCondition(stepText);
+  const cleanedStep = cond.remainder;
+  const stepTokens = tokenize(cleanedStep);
   const preferredMethod = detectPreferredMethod(stepText);
 
   let bestMatch: {
@@ -172,7 +193,7 @@ function pickBestEndpoint(stepText: string, apis: ApiRecord[]): ComposerStep {
     return {
       id: 'step_1',
       title: 'Fallback API lookup',
-      instruction: stepText,
+      instruction: cleanedStep,
       apiSlug: 'jsonplaceholder',
       apiName: 'JSONPlaceholder',
       method: preferredMethod ?? 'GET',
@@ -182,14 +203,15 @@ function pickBestEndpoint(stepText: string, apis: ApiRecord[]): ComposerStep {
       inputSchema: {
         payload: 'object',
       },
+      condition: cond.condition,
     };
   }
 
-  const compactTitle = stepText.length > 72 ? `${stepText.slice(0, 69)}...` : stepText;
+  const compactTitle = cleanedStep.length > 72 ? `${cleanedStep.slice(0, 69)}...` : cleanedStep;
   return {
     id: 'step_1',
     title: compactTitle,
-    instruction: stepText,
+    instruction: cleanedStep,
     apiSlug: bestMatch.api.slug,
     apiName: bestMatch.api.name,
     method: bestMatch.endpoint.method.toUpperCase(),
@@ -200,6 +222,7 @@ function pickBestEndpoint(stepText: string, apis: ApiRecord[]): ComposerStep {
       payload: 'object',
       previousStepOutput: 'unknown',
     },
+    condition: cond.condition,
   };
 }
 
@@ -207,7 +230,8 @@ function buildTypescriptCode(result: ComposerResult): string {
   const stepCalls = result.workflow.steps
     .map((step, index) => {
       const previousRef = index === 0 ? 'input' : `step${index}`;
-      return `  const step${index + 1} = await callCallio({\n    slug: \"${step.apiSlug}\",\n    method: \"${step.method}\",\n    path: \"${step.path}\",\n    payload: ${previousRef},\n  });\n`;
+      const condComment = step.condition ? `// CONDITION: ${step.condition}\n  ` : '';
+      return `${condComment}  const step${index + 1} = await callCallio({\n    slug: \"${step.apiSlug}\",\n    method: \"${step.method}\",\n    path: \"${step.path}\",\n    payload: ${previousRef},\n  });\n`;
     })
     .join('\n');
 
@@ -218,7 +242,8 @@ function buildPythonCode(result: ComposerResult): string {
   const stepCalls = result.workflow.steps
     .map((step, index) => {
       const previousRef = index === 0 ? 'input_payload' : `step_${index}`;
-      return `    step_${index + 1} = call_callio(\n        slug=\"${step.apiSlug}\",\n        method=\"${step.method}\",\n        path=\"${step.path}\",\n        payload=${previousRef},\n    )\n`;
+      const condComment = step.condition ? `# CONDITION: ${step.condition}\n    ` : '';
+      return `${condComment}    step_${index + 1} = call_callio(\n        slug=\"${step.apiSlug}\",\n        method=\"${step.method}\",\n        path=\"${step.path}\",\n        payload=${previousRef},\n    )\n`;
     })
     .join('\n');
 
@@ -243,6 +268,7 @@ function buildMcpConfig(result: ComposerResult): string {
       method: step.method,
       path: step.path,
       instruction: step.instruction,
+      condition: step.condition ?? null,
     })),
   };
 
