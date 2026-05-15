@@ -63,6 +63,7 @@ export default function SmartApiComposer() {
   const [runResults, setRunResults] = useState<unknown[] | null>(null);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
   const [workspaceId, setWorkspaceId] = useState<string | null>(null);
+  const [devApiKey, setDevApiKey] = useState<string>('');
 
   const tabContent = useMemo(() => {
     if (!result) {
@@ -146,9 +147,14 @@ export default function SmartApiComposer() {
     setSaveStatus(null);
 
     try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (devApiKey && devApiKey.trim()) {
+        headers['x-callio-api-key'] = devApiKey.trim();
+      }
+
       const res = await fetch('/api/composer/run', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ workflow: result.workflow, input: {} }),
       });
 
@@ -350,16 +356,26 @@ export default function SmartApiComposer() {
           <h3 className="text-lg font-semibold" style={{ fontFamily: 'var(--font-display)' }}>
             Generated Artifacts
           </h3>
-          <div className="flex items-center gap-2">
-            <button
-            type="button"
-            onClick={copyCurrentTab}
-            disabled={!result}
-            className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--muted)] transition hover:text-[var(--ink)] disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {copiedTab === activeTab ? <Check className="h-3.5 w-3.5 text-green-600" /> : <ClipboardCopy className="h-3.5 w-3.5" />}
-            {copiedTab === activeTab ? 'Copied' : 'Copy'}
-          </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={copyCurrentTab}
+                disabled={!result}
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-white px-3 py-1.5 text-xs font-medium text-[var(--muted)] transition hover:text-[var(--ink)] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {copiedTab === activeTab ? <Check className="h-3.5 w-3.5 text-green-600" /> : <ClipboardCopy className="h-3.5 w-3.5" />}
+                {copiedTab === activeTab ? 'Copied' : 'Copy'}
+              </button>
+              <div className="flex items-center gap-2">
+                <input
+                  aria-label="Dev Callio API Key"
+                  placeholder="Dev-only: x-callio-api-key"
+                  value={devApiKey}
+                  onChange={(e) => setDevApiKey(e.target.value)}
+                  className="h-8 rounded-md border border-[var(--line)] bg-white px-2 text-xs text-[var(--muted)]"
+                />
+                <span className="text-xs text-[var(--muted)]">(dev only)</span>
+              </div>
             <button
               type="button"
               onClick={onRun}
