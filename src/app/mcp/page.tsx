@@ -63,6 +63,12 @@ export default async function McpPage() {
             >
               Get on Cursor
             </a>
+            <Link
+              href="/mcp/install"
+              className="px-6 py-3 rounded-full bg-white border border-[var(--line)] text-[var(--muted)] hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
+            >
+              Installation instructions
+            </Link>
           </div>
         </div>
       </section>
