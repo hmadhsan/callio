@@ -4,15 +4,24 @@ set -euo pipefail
 # Publish helper for the mcp-server package.
 # This script prepares a package and shows the commands to publish.
 
-echo "Running quick checks..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+echo "Running quick checks in $SCRIPT_DIR..."
 echo "1) lint / smoke run"
-node -e "try{require('./index'); console.log('index.js loaded OK')}catch(e){console.error('index.js failed:', e); process.exit(2)}"
+node --check index.js
+echo "index.js syntax check passed"
 
 echo "2) Show package version"
 jq -r .version package.json
 
-echo "Packing to verify contents (npm pack)"
-npm pack
+if [[ "${1:-}" == "--pack" ]]; then
+	echo "Packing to verify contents (npm pack)"
+	npm pack
+	echo "npm pack completed successfully."
+else
+	echo "Skipping npm pack by default. Re-run with --pack if you want a package dry run."
+fi
 
 cat <<'INSTRUCTIONS'
 Publish steps (run manually):

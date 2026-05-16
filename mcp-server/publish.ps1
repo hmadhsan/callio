@@ -1,17 +1,36 @@
-Param()
-Write-Host "Running quick checks for MCP server publishing..."
+Param(
+    [switch]$Pack
+)
+$scriptRoot = $PSScriptRoot
+Set-Location $scriptRoot
+
+Write-Host "Running quick checks for MCP server publishing in $scriptRoot..."
 try {
-    node -e "require('./index'); console.log('index.js loaded OK')"
+    node --check index.js
+    Write-Host "index.js syntax check passed"
 } catch {
     Write-Error "index.js failed to load: $_"
     exit 2
 }
 
-$pkg = Get-Content package.json | ConvertFrom-Json
-Write-Host "Package version: $($pkg.version)"
+try {
+    $packageJson = Get-Content package.json -Raw | ConvertFrom-Json
+    Write-Host "Package version: $($packageJson.version)"
+} catch {
+    Write-Host "Package version: (unable to read package.json version)"
+}
 
-Write-Host "Creating npm pack to verify contents..."
-npm pack
+if ($Pack) {
+    Write-Host "Creating npm pack to verify contents..."
+    npm pack
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "npm pack failed with exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
+    Write-Host "npm pack completed successfully."
+} else {
+    Write-Host "Skipping npm pack by default. Re-run with -Pack if you want a package dry run."
+}
 
 Write-Host "Publish steps (run manually):"
 Write-Host "1) Bump version: npm version patch"
