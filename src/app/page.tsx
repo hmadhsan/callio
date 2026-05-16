@@ -146,12 +146,6 @@ export default async function Home() {
               className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition"
             />
             <Link
-              href="/contact"
-              className="px-6 py-3 rounded-full bg-[#1a1a1a] text-white font-semibold hover:bg-[#2a2a2a] transition inline-flex items-center gap-2"
-            >
-              Get a demo
-            </Link>
-            <Link
               href="/mcp"
               className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
             >
