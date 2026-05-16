@@ -10,6 +10,7 @@ import CallioLogoComponent from '@/components/CallioLogo';
 import AuthAwareCTA from '@/components/AuthAwareCTA';
 import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
+import ScheduleDemoSection from '@/components/ScheduleDemoSection';
 import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
 import { getCatalogApiCount } from '@/lib/catalog-count';
 
@@ -271,6 +272,8 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ── Schedule Demo ── */}
+      <ScheduleDemoSection />
 
       {/* ── Code snippet ── */}
       <section id="code-snippet" className="py-20 sm:py-24 border-t border-[var(--line)]">
