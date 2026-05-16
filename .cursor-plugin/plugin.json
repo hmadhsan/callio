@@ -1,0 +1,14 @@
+{
+  "name": "callio-mcp",
+  "description": "Callio MCP server for Cursor and other MCP-compatible clients.",
+  "version": "1.0.1",
+  "author": {
+    "name": "Callio"
+  },
+  "homepage": "https://callio.dev/mcp",
+  "repository": "https://github.com/hmadhsan/callio",
+  "license": "MIT",
+  "keywords": ["mcp", "cursor", "api", "gateway", "tools"],
+  "logo": "public/favicon.svg",
+  "mcpServers": "mcp-server/mcp.json"
+}

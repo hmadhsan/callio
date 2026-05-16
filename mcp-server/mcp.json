@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "callio": {
+      "command": "node",
+      "args": ["./index.js"],
+      "env": {
+        "CALLIO_API_KEY": "callio_your_key_here"
+      }
+    }
+  }
+}
