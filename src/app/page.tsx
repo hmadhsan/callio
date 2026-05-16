@@ -10,7 +10,7 @@ import CallioLogoComponent from '@/components/CallioLogo';
 import AuthAwareCTA from '@/components/AuthAwareCTA';
 import AnimatedHeroSVG from '@/components/AnimatedHeroSVG';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
-import ScheduleDemoSection from '@/components/ScheduleDemoSection';
+
 import { ClaudeLogo, CursorLogo, AntigravityLogo } from '@/components/BrandLogos';
 import { getCatalogApiCount } from '@/lib/catalog-count';
 
@@ -146,6 +146,12 @@ export default async function Home() {
               className="px-6 py-3 rounded-full bg-[var(--accent)] text-white font-semibold hover:bg-[var(--accent-strong)] transition"
             />
             <Link
+              href="/contact"
+              className="px-6 py-3 rounded-full bg-[#1a1a1a] text-white font-semibold hover:bg-[#2a2a2a] transition inline-flex items-center gap-2"
+            >
+              Get a demo
+            </Link>
+            <Link
               href="/mcp"
               className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
             >
@@ -272,8 +278,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Schedule Demo ── */}
-      <ScheduleDemoSection />
 
       {/* ── Code snippet ── */}
       <section id="code-snippet" className="py-20 sm:py-24 border-t border-[var(--line)]">
