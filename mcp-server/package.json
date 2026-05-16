@@ -1,6 +1,6 @@
 {
   "name": "@hmadhsan/mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Callio MCP Server — Give AI agents access to 143+ APIs through the Model Context Protocol",
   "homepage": "https://callio.dev",
   "repository": {
@@ -17,7 +17,17 @@
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": ["mcp", "callio", "api", "ai-agents", "claude", "cursor", "antigravity", "model-context-protocol", "ai"],
+  "keywords": [
+    "mcp",
+    "callio",
+    "api",
+    "ai-agents",
+    "claude",
+    "cursor",
+    "antigravity",
+    "model-context-protocol",
+    "ai"
+  ],
   "author": {
     "name": "Callio",
     "email": "hmadhsan97@gmail.com",
