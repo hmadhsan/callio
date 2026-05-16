@@ -56,13 +56,6 @@ export default async function McpPage() {
             >
               Get API Key <ArrowRight className="w-4 h-4" />
             </Link>
-            <a
-              href="/callio-cursor-mcp.json"
-              download="callio-cursor-mcp.json"
-              className="px-6 py-3 rounded-full border border-[var(--line)] bg-white hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
-            >
-              Get on Cursor
-            </a>
             <Link
               href="/mcp/install"
               className="px-6 py-3 rounded-full bg-white border border-[var(--line)] text-[var(--muted)] hover:bg-[var(--soft)] transition font-semibold inline-flex items-center gap-2"
