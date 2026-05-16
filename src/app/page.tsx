@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import {
-  Sparkles, Lock, Rocket, Gauge, Check, ArrowRight,
+  Sparkles, Lock, Rocket, Gauge, Check, ArrowRight, Shield,
   Search, Cpu, Globe, MessageSquare, Database, BarChart3,
   Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow, Key,
 } from 'lucide-react';
