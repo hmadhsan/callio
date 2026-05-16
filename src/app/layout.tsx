@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Callio \u2014 The API Gateway for AI Agents",
   description: "One key. One gateway. Every tool your agent needs. MCP-native and production-ready for teams shipping AI agents and AI-native apps.",
   metadataBase: new URL("https://callio.dev"),
+  icons: {
+    icon: "/icon.svg",
+  },
   openGraph: {
     title: "Callio \u2014 The API Gateway for AI Agents",
     description: "One key. One gateway. Every tool your agent needs. MCP-native and production-ready for teams shipping AI agents and AI-native apps.",
