@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import {
   Sparkles, Lock, Rocket, Gauge, Check, ArrowRight,
-  Search, Shield, Cpu, Globe, MessageSquare, Database, BarChart3,
+  Search, Cpu, Globe, MessageSquare, Database, BarChart3,
   Mail, Cloud, Code2, ChevronDown, Terminal, Layers, Workflow, Key,
 } from 'lucide-react';
 import UserNav from '@/components/UserNav';
@@ -196,10 +196,6 @@ export default async function Home() {
               <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
                 <AntigravityLogo className="w-5 h-5" />
                 <span className="font-semibold text-[var(--ink)]">Antigravity</span>
-              </div>
-              <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
-                <Shield className="w-5 h-5" />
-                <Link href="/security" className="font-semibold text-[var(--ink)]">Security & Compliance</Link>
               </div>
             </div>
             <span className="text-[var(--line)]">|</span>
