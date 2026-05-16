@@ -12,16 +12,17 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 100,
+          fontSize: 120,
           background: '#000000',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: '48px',
+          borderRadius: '40px',
           color: '#ffffff',
-          fontWeight: 'bold',
+          fontWeight: 900,
+          fontFamily: 'system-ui, -apple-system, sans-serif',
         }}
       >
         C
