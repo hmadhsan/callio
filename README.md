@@ -6,6 +6,10 @@ A modern, premium SaaS landing page for Callio, an API marketplace designed spec
 
 Callio enables developers to convert any API into an AI-discoverable, agent-usable tool in minutes. This landing page showcases the platform's value proposition with a clean, developer-focused design.
 
+## MCP / Cursor Marketplace
+
+The Callio MCP server is packaged separately under `mcp-server/` and submitted through Cursor's official marketplace flow. The repository root also includes the Cursor plugin manifest used for that submission.
+
 ## ✨ Features
 
 ### Sections

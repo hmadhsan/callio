@@ -4,6 +4,8 @@ Give AI agents access to **90+ APIs** through one tool — powered by the [Model
 
 Works with **Claude Code**, **Cursor**, **Antigravity**, and any MCP-compatible AI tool.
 
+This package powers Callio's official Cursor Marketplace submission. The marketplace manifest lives at [/.cursor-plugin/plugin.json](../.cursor-plugin/plugin.json) and points here for the MCP server bundle.
+
 ## How it works
 
 1. **MCP** lets a client (Cursor, Antigravity, etc.) spawn a small server and expose **tools** to the model. This repo implements that server in Node (`stdio` transport).
