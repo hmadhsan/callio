@@ -197,6 +197,10 @@ export default async function Home() {
                 <AntigravityLogo className="w-5 h-5" />
                 <span className="font-semibold text-[var(--ink)]">Antigravity</span>
               </div>
+              <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
+                <Shield className="w-5 h-5" />
+                <Link href="/security" className="font-semibold text-[var(--ink)]">Security & Compliance</Link>
+              </div>
             </div>
             <span className="text-[var(--line)]">|</span>
             <Link href="/mcp" className="hover:text-[var(--accent)] transition font-medium">All MCP setups →</Link>
