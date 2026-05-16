@@ -1,0 +1,30 @@
+{
+  "name": "Callio",
+  "description": "Search and call any API instantly with Callio's unified API gateway and MCP integration",
+  "version": "1.0.1",
+  "author": "Callio",
+  "homepage": "https://callio.dev/mcp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hmadhsan/callio-mcp"
+  },
+  "bugs": "https://github.com/hmadhsan/callio-mcp/issues",
+  "license": "MIT",
+  "keywords": ["mcp", "api", "gateway", "cursor", "tools"],
+  "command": "node",
+  "args": ["./index.js"],
+  "tools": [
+    {
+      "name": "search_apis",
+      "description": "Search for APIs and endpoints in the Callio catalog"
+    },
+    {
+      "name": "get_api_info",
+      "description": "Get detailed information about a specific API"
+    },
+    {
+      "name": "call_api",
+      "description": "Execute API calls through Callio's gateway"
+    }
+  ]
+}
